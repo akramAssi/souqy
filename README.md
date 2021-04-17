@@ -1,2 +1,2 @@
 # souqy
- Car dealership application
+ Car Selling application
