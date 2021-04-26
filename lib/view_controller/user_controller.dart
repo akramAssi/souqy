@@ -56,7 +56,7 @@ class UserController {
   }
 
   Future<void> getDownloadUrl() async {
-    if (_currentUser.uid == null) {
+    if (_currentUser?.uid != null) {
       _currentUser.avatarUrl =
           await _storageRepo.getUserProfileImage(currentUser);
     }

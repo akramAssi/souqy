@@ -23,7 +23,7 @@ class StorageRepo {
   }
 
   Future<String> getUserProfileImage(UserModel user) async {
-    if (user.uid == null) {
+    if (user?.uid == null) {
       return null;
     }
     var file = _storage.ref().child("user/profile/${user.uid}");
