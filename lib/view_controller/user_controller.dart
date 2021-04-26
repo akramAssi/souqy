@@ -26,11 +26,18 @@ class UserController {
     return _currentUser;
   }
 
+//user tool
+
   UserModel get currentUser => _currentUser;
 
-  Future<void> uploadProfilePicture(PickedFile image) async {
-    _currentUser.avatarUrl = await _storageRepo.uploadFile(File(image.path));
+  void updateDisplayName(String displayName) {
+    _currentUser.displayName = displayName;
+    _authRepo.updateDisplayName(displayName);
   }
+
+  Stream<User> authStateChanges() => _authRepo.authStateChanges();
+
+// sign tool
 
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
@@ -55,13 +62,6 @@ class UserController {
     }
   }
 
-  Future<void> getDownloadUrl() async {
-    if (_currentUser?.uid != null) {
-      _currentUser.avatarUrl =
-          await _storageRepo.getUserProfileImage(currentUser);
-    }
-  }
-
   Future<void> signInWithEmailAndPassword(
       {String email, String password}) async {
     User user = await _authRepo.signInWithEmailAndPassword(email, password);
@@ -80,21 +80,6 @@ class UserController {
     _currentUser = UserModel.user(user);
   }
 
-  void updateDisplayName(String displayName) {
-    _currentUser.displayName = displayName;
-    _authRepo.updateDisplayName(displayName);
-  }
-
-  Future<void> signOut() async {
-    try {
-      await _authRepo.signOut();
-      // locator.popScope();
-      // setupServices();
-    } catch (e) {
-      print(e);
-    }
-  }
-
   Future<void> singInAnonmymous() async {
     try {
       await _authRepo.singInAnonmymous();
@@ -103,5 +88,25 @@ class UserController {
     }
   }
 
-  Stream<User> authStateChanges() => _authRepo.authStateChanges();
+  Future<void> signOut() async {
+    try {
+      await _authRepo.signOut();
+      locator.popScope();
+      setupServices();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //storage
+  Future<void> uploadProfilePicture(PickedFile image) async {
+    _currentUser.avatarUrl = await _storageRepo.uploadFile(File(image.path));
+  }
+
+  Future<void> getDownloadUrl() async {
+    if (_currentUser?.uid != null) {
+      _currentUser.avatarUrl =
+          await _storageRepo.getUserProfileImage(currentUser);
+    }
+  }
 }
