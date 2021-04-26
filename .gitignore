@@ -19,3 +19,8 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+ios/Runner/.DS_Store
+ios/.DS_Store
+.DS_Store
+.DS_Store
+.DS_Store
