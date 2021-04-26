@@ -1,46 +1,30 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:souqy/landingPages/landing_page.dart';
+import 'package:souqy/res/color.dart';
 
-void main() {
+import 'package:souqy/service/locator.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  setupServices();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  //
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      locale: Locale("ar"),
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: primeCOLOR,
       ),
-      home: Scaffold(
-        body: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                  Color.fromRGBO(39, 35, 167, 1),
-                  Color.fromRGBO(58, 68, 137, 1)
-                ])),
-            child: Center(
-              child: Container(
-                height: 250,
-                width: 250,
-                // color: Color.fromRGBO(252, 252, 252, 1),
-                child: Center(
-                    child: Text(
-                  "SOUQY",
-                  style: TextStyle(
-                      color: Color.fromRGBO(33, 47, 145, 1), fontSize: 50),
-                )),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color.fromRGBO(252, 252, 252, 1),
-                ),
-              ),
-            )),
-      ),
+      home: LandingPage(),
+      // home: buildScaffold(),
     );
   }
 }
