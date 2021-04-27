@@ -36,6 +36,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
   void initState() {
     super.initState();
     locator.get<UserController>().readAddres();
+    currentUser = locator.get<UserController>().initUser();
     _nameController.text = currentUser?.displayName ?? "";
     _emailController.text = currentUser?.email ?? "";
     _phoneController.text = currentUser?.phone ?? "";
@@ -62,10 +63,6 @@ class _ProfileSettingState extends State<ProfileSetting> {
 
   @override
   Widget build(BuildContext context) {
-    // print("---4--");
-    // String currentUser1 = locator.get<UserController>().currentUser.avatarUrl;
-    // print(currentUser1);
-    // print("---4--");
     return Scaffold(
       backgroundColor: backgroundCOLOR,
       appBar: souqyAppBar("profileSettin", context),
