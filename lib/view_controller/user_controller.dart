@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:souqy/model/user_model.dart';
 import 'package:souqy/service/Auth.dart';
+import 'package:souqy/service/database_repo.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/service/storage_repo.dart';
 
@@ -12,7 +13,7 @@ class UserController {
   UserModel _currentUser;
   Auth _authRepo = locator.get<Auth>();
   StorageRepo _storageRepo = locator.get<StorageRepo>();
-
+  FirestoreDatabase _databaseRepo = locator.get<FirestoreDatabase>();
   Future init;
 
   UserController() {
@@ -43,6 +44,7 @@ class UserController {
     try {
       User user = await _authRepo.mysignInWithGoogle(context);
       _currentUser = UserModel.user(user);
+      await getDownloadUrl();
     } catch (e) {
       print(e.toString());
     }
@@ -52,11 +54,7 @@ class UserController {
     try {
       User user = await _authRepo.signInWithFacebook();
       _currentUser = UserModel.user(user);
-      if (user.photoURL != null) {
-        _currentUser.avatarUrl = user.photoURL;
-      } else {
-        print(user.photoURL);
-      }
+      getDownloadUrl();
     } catch (e) {
       print(e.toString());
     }
@@ -108,5 +106,23 @@ class UserController {
       _currentUser.avatarUrl =
           await _storageRepo.getUserProfileImage(currentUser);
     }
+  }
+
+  //database
+
+  Future<void> storeAddress(
+      {@required String phone,
+      @required String city,
+      @required String area}) async {
+    _currentUser.phone = phone;
+    _currentUser.city = city;
+    _currentUser.area = area;
+    await _databaseRepo.storeUserInfo(_currentUser);
+  }
+
+  void readAddres() {
+    _databaseRepo.readUserInfo(_currentUser);
+    print(
+        "phone: ${_currentUser.phone}, city: ${_currentUser.city}, area: ${_currentUser.area})");
   }
 }
