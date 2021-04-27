@@ -25,10 +25,28 @@ class _ProfileSettingState extends State<ProfileSetting> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _areaController = TextEditingController();
 
+  String get name => _nameController.text;
+  String get email => _emailController.text;
+  String get password => _passwordController.text;
+  String get phone => _phoneController.text;
+  String get city => _cityController.text;
+  String get area => _areaController.text;
+
   @override
   void initState() {
     super.initState();
+    locator.get<UserController>().readAddres();
     _nameController.text = currentUser?.displayName ?? "";
+    _emailController.text = currentUser?.email ?? "";
+    _phoneController.text = currentUser?.phone ?? "";
+    _cityController.text = currentUser?.city ?? "";
+    _areaController.text = currentUser?.area ?? "";
+  }
+
+  Future<void> saveAddress({String phone, String city, String area}) async {
+    await locator
+        .get<UserController>()
+        .storeAddress(phone: phone, city: city, area: area);
   }
 
   @override
@@ -87,13 +105,13 @@ class _ProfileSettingState extends State<ProfileSetting> {
                         lable: "البريد الالكتروني",
                         controller: _emailController,
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SouqyTextField(
-                        lable: "كلمة المرور",
-                        controller: _passwordController,
-                      ),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+                      // SouqyTextField(
+                      //   lable: "كلمة المرور",
+                      //   controller: _passwordController,
+                      // ),
                       SizedBox(
                         height: 10,
                       ),
@@ -118,7 +136,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
                       Row(
                         children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              saveAddress(phone: phone, area: area, city: city);
+                            },
                             child: Text("حفظ"),
                           ),
                         ],
