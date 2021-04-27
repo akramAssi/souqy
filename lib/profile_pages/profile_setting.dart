@@ -34,14 +34,8 @@ class _ProfileSettingState extends State<ProfileSetting> {
 
   @override
   void initState() {
+    setDefalut();
     super.initState();
-    locator.get<UserController>().readAddres();
-    currentUser = locator.get<UserController>().initUser();
-    _nameController.text = currentUser?.displayName ?? "";
-    _emailController.text = currentUser?.email ?? "";
-    _phoneController.text = currentUser?.phone ?? "";
-    _cityController.text = currentUser?.city ?? "";
-    _areaController.text = currentUser?.area ?? "";
   }
 
   Future<void> saveAddress({String phone, String city, String area}) async {
@@ -63,6 +57,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
 
   @override
   Widget build(BuildContext context) {
+    setDefalut();
     return Scaffold(
       backgroundColor: backgroundCOLOR,
       appBar: souqyAppBar("profileSettin", context),
@@ -149,5 +144,15 @@ class _ProfileSettingState extends State<ProfileSetting> {
         ),
       ),
     );
+  }
+
+  void setDefalut() {
+    currentUser = locator.get<UserController>().currentUser;
+    // locator.get<UserController>().readAddres();
+    _nameController.text = currentUser?.displayName ?? "";
+    _emailController.text = currentUser?.email ?? "";
+    _phoneController.text = currentUser?.phone ?? "";
+    _cityController.text = currentUser?.city ?? "";
+    _areaController.text = currentUser?.area ?? "";
   }
 }
