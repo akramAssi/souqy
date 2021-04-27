@@ -62,6 +62,7 @@ class LoginPage extends StatelessWidget {
                         height: 38,
                       ),
                       SouqySubmitBotton(
+                        label: "تسجيل الدخول",
                         onPress: () =>
                             {_signInWithEmailAndPassword(email, password)},
                       ),
