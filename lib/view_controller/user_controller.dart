@@ -89,8 +89,8 @@ class UserController {
   Future<void> signOut() async {
     try {
       await _authRepo.signOut();
-      locator.popScope();
-      setupServices();
+      // locator.popScope();
+      // setupServices();
     } catch (e) {
       print(e);
     }
@@ -122,7 +122,5 @@ class UserController {
 
   void readAddres() {
     _databaseRepo.readUserInfo(_currentUser);
-    print(
-        "phone: ${_currentUser.phone}, city: ${_currentUser.city}, area: ${_currentUser.area})");
   }
 }

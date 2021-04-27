@@ -21,7 +21,6 @@ class FirestoreDatabase implements Database {
     final String path = "/user/${user.uid}";
     final firestoreRef = _firestore.doc(path);
     final snapshot = firestoreRef.snapshots();
-    print("dsdadasdas");
     snapshot.map(
       // (snapshot) => snapshot.docs.map(
       (snapshot) {
