@@ -7,7 +7,10 @@ class SouqySubmitBotton extends StatelessWidget {
   //     {Key key, @required this.lable, @required this.onPress})
   //     : super(key: key);
   final VoidCallback onPress;
-  const SouqySubmitBotton({Key key, @required this.onPress}) : super(key: key);
+  final String label;
+  const SouqySubmitBotton(
+      {Key key, @required this.onPress, @required this.label})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class SouqySubmitBotton extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 9.0, horizontal: 61.0),
           child: Text(
-            "تسجيل الدخول",
+            label,
             style: TextStyle(fontSize: 11),
           ),
         ),
