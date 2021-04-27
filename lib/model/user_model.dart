@@ -6,7 +6,7 @@ class UserModel {
   String displayName;
   String email;
   String avatarUrl;
-  int phone;
+  String phone;
   String city;
   String area;
 
@@ -20,7 +20,7 @@ class UserModel {
     }
   }
   void setAddress(
-      {@required int phone, @required String city, @required String area}) {
+      {@required String phone, @required String city, @required String area}) {
     this.phone = phone;
     this.area = area;
     this.city = city;
