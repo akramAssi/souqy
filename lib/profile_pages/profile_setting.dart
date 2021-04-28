@@ -4,6 +4,7 @@ import 'package:souqy/model/user_model.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
+import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_TextFiled.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
@@ -38,10 +39,11 @@ class _ProfileSettingState extends State<ProfileSetting> {
     super.initState();
   }
 
-  Future<void> saveAddress({String phone, String city, String area}) async {
+  Future<void> saveAddress(
+      {BuildContext context, String phone, String city, String area}) async {
     await locator
         .get<UserController>()
-        .storeAddress(phone: phone, city: city, area: area);
+        .storeAddress(context, phone: phone, city: city, area: area);
   }
 
   @override
@@ -57,7 +59,12 @@ class _ProfileSettingState extends State<ProfileSetting> {
 
   @override
   Widget build(BuildContext context) {
+    // showExeptionDilog(context,
+    //     title: Text("download failure"), content: "sadasdasdas");
+    //
+
     setDefalut();
+
     return Scaffold(
       backgroundColor: backgroundCOLOR,
       appBar: souqyAppBar("profileSettin", context),
