@@ -28,7 +28,7 @@ class EmailRegisterForm extends StatelessWidget {
           email: email,
           password: password,
         );
-    await locator.get<UserController>().storeAddress(phone: phone);
+    await locator.get<UserController>().storeAddress(context, phone: phone);
     Navigator.of(context).pop();
   }
 
