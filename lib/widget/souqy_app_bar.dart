@@ -48,7 +48,7 @@ AppBar souqyAppBar(String type, BuildContext context) {
   return AppBar(
     iconTheme: IconThemeData(color: primeCOLOR),
     backgroundColor: Colors.white,
-    elevation: 1,
+    elevation: .7,
     title: buildTitleText(),
     centerTitle: true,
     actions: actions,
@@ -64,9 +64,9 @@ Text buildTitleText() {
       fontFamily: "Ayuthaya",
       shadows: [
         Shadow(
-          blurRadius: 10.0,
+          blurRadius: 1.2,
           color: Color(0xff958585),
-          offset: Offset(2.0, 2.0),
+          offset: Offset(0.8, 0.8),
         ),
       ],
     ),
