@@ -31,6 +31,7 @@ class StorageRepo {
       String f = (await file.getDownloadURL()).toString();
       return f;
     } catch (e) {
+      print(e);
       return _authRepo.currentUser.photoURL;
     }
   }
