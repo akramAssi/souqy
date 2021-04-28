@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
+import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,19 +16,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future<void> _singOut() async {
-    await locator.get<UserController>().signOut();
+    // await locator.get<UserController>().signOut();
+    // showMyDialog(context);
   }
 
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle = TextStyle(
+      fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blueAccent);
   List<Widget> _widgetOptions = <Widget>[
+    SouqyHomepage(),
     Text(
-      'Index 0: Home',
+      'Index 1: Business',
       style: optionStyle,
     ),
     Text(
-      'Index 1: Business',
+      'Index 14: Business',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 21: Business',
       style: optionStyle,
     ),
   ];
@@ -39,44 +47,49 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _widgetOptions.add(Container(
-      child: TextButton(
-        child: Text("sign out"),
-        onPressed: () {
-          _singOut();
-        },
-      ),
-    ));
-    return Scaffold(
+    final ss = Scaffold(
       appBar: souqyAppBar("profile", context),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: Container(
-        margin: EdgeInsets.only(bottom: 7),
+        margin: EdgeInsets.only(bottom: 0),
         decoration: BoxDecoration(
           // borderRadius: BorderRadius.only(
           //     topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-          borderRadius: BorderRadius.all(Radius.circular(30)),
+          borderRadius: BorderRadius.vertical(
+              top: Radius.circular(30), bottom: Radius.circular(0)),
           boxShadow: [
             BoxShadow(color: Colors.black26, spreadRadius: 0, blurRadius: 10),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(30)),
+          borderRadius: BorderRadius.vertical(
+              top: Radius.circular(30), bottom: Radius.circular(0)),
           child: BottomNavigationBar(
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            type: BottomNavigationBarType.fixed,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: 'Home',
+                label: '',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.business),
-                label: 'Business',
+                icon: Icon(Icons.search),
+                label: '',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.school),
-                label: 'School',
+                icon: Icon(Icons.add),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage("images/expect.png")),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage("images/statistic.png")),
+                label: '',
               ),
             ],
             currentIndex: _selectedIndex,
@@ -86,5 +99,25 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+
+    try {
+      locator.get<UserController>().refresh(context);
+    } catch (e) {
+      // showDialog<void>(
+      //     context: context,
+      //     barrierDismissible: false, // user must tap button!
+      //     builder: (context) {
+      //       return crr(context);
+      //     });
+    }
+    _widgetOptions.add(Container(
+      child: TextButton(
+        child: Text("sign out"),
+        onPressed: () {
+          _singOut();
+        },
+      ),
+    ));
+    return ss;
   }
 }
