@@ -22,8 +22,16 @@ class UserController {
 
   UserModel initUser() {
     _currentUser = _authRepo.currentUserModel();
+    return _currentUser;
+  }
+
+  UserModel refresh(BuildContext context) {
+    _currentUser = _authRepo.currentUserModel();
 
     getDownloadUrl();
+    if (_currentUser != null) {
+      readAddres(context);
+    }
     return _currentUser;
   }
 
@@ -68,14 +76,17 @@ class UserController {
     // _currentUser.avatarUrl = await getDownloadUrl();
   }
 
-  Future<void> creatUserWithEmailAndPassword(
-      {@required String name,
-      @required String email,
-      @required String password}) async {
-    User user = await _authRepo.creatUserWithEmailAndPassword(email, password);
-    await _authRepo.updateDisplayName(name);
-
+  Future<bool> creatUserWithEmailAndPassword({
+    @required String name,
+    @required String email,
+    @required String password,
+  }) async {
+    User user =
+        await _authRepo.creatUserWithEmailAndPassword(name, email, password);
+    // user = await _authRepo.updateDisplayName(name);
     _currentUser = UserModel.user(user);
+
+    return false;
   }
 
   Future<void> singInAnonmymous() async {
@@ -110,17 +121,15 @@ class UserController {
 
   //database
 
-  Future<void> storeAddress(
-      {@required String phone,
-      @required String city,
-      @required String area}) async {
-    _currentUser.phone = phone;
-    _currentUser.city = city;
-    _currentUser.area = area;
-    await _databaseRepo.storeUserInfo(_currentUser);
+  Future<void> storeAddress(BuildContext context,
+      {@required String phone, String city, String area}) async {
+    _currentUser.phone = phone ?? "";
+    _currentUser.city = city ?? "";
+    _currentUser.area = area ?? "";
+    await _databaseRepo.storeUserInfo(context, _currentUser);
   }
 
-  void readAddres() {
-    _databaseRepo.readUserInfo(_currentUser);
+  void readAddres(BuildContext context) {
+    _databaseRepo.readUserInfo(context, _currentUser);
   }
 }
