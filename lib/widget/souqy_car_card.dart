@@ -3,13 +3,14 @@ import 'package:souqy/home_pages/souqy_Info_Circle_Card.dart';
 import 'package:souqy/home_pages/souqy_available_lable.dart';
 import 'package:souqy/home_pages/souqy_info_card.dart';
 import 'package:souqy/home_pages/souqy_thumbnail_card.dart';
+import 'package:souqy/moreInfoPage/moreInfoPage.dart';
 
 int index = 0;
 
 class SouqyCarCard extends StatelessWidget {
   // final int index;
 
-  const SouqyCarCard({
+  SouqyCarCard({
     Key key,
     @required this.size,
     // this.index,
@@ -17,11 +18,20 @@ class SouqyCarCard extends StatelessWidget {
 
   final Size size;
 
+  void _openMoreInfo(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => MoreInfoPage(),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print('Player ${index + 1}');
+        _openMoreInfo(context);
       },
       child: Container(
         margin: EdgeInsets.all(5),
