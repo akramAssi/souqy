@@ -74,19 +74,21 @@ class _ProfileSettingState extends State<ProfileSetting> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Avatar(
-                  avatarUrl: currentUser?.avatarUrl,
-                  // avatarUrl:
-                  // "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5324479827627077&height=50&width=50&ext=1621768726&hash=AeSBNiS0VjnWYrrmnJ0",
-                  onPress: () async {
-                    var file = await ImagePicker()
-                        .getImage(source: ImageSource.gallery);
-                    await locator
-                        .get<UserController>()
-                        .uploadProfilePicture(file);
-                    setState(() {});
+                avatarUrl: currentUser?.avatarUrl,
+                // avatarUrl:
+                // "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5324479827627077&height=50&width=50&ext=1621768726&hash=AeSBNiS0VjnWYrrmnJ0",
+                onPress: () async {
+                  var file =
+                      await ImagePicker().getImage(source: ImageSource.gallery);
+                  await locator
+                      .get<UserController>()
+                      .uploadProfilePicture(file);
+                  setState(() {});
 
-                    print(file.path);
-                  }),
+                  print(file.path);
+                },
+                isSetting: true,
+              ),
               Directionality(
                 textDirection: TextDirection.rtl,
                 child: Container(
