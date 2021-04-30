@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:souqy/seller_page.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
-import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,11 +25,20 @@ class _HomePageState extends State<HomePage> {
   static const TextStyle optionStyle = TextStyle(
       fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blueAccent);
   List<Widget> _widgetOptions = <Widget>[
-    SouqyHomepage(),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
+    ListView(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        SouqyHomepage(
+          shrinkWrap: false,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
     ),
+    SouqySellerList(),
     Text(
       'Index 14: Business',
       style: optionStyle,
