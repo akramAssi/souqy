@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:souqy/profile_pages/user_profile.dart';
 import 'package:souqy/res/color.dart';
 
 import '../profile_pages/profile_setting.dart';
 
 void _openProfile(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (context) => UserProfile(),
+      fullscreenDialog: true,
+    ),
+  );
+}
+
+void _openSetting(BuildContext context) {
   Navigator.of(context).push(
     MaterialPageRoute<void>(
       builder: (context) => ProfileSetting(),
@@ -37,7 +47,7 @@ AppBar souqyAppBar(String type, BuildContext context) {
                 "images/settings.png",
               ),
               onPressed: () {
-                print("sds");
+                _openSetting(context);
               }),
         );
         break;
