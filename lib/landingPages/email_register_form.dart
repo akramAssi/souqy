@@ -24,7 +24,11 @@ class EmailRegisterForm extends StatelessWidget {
   Future<void> _creatUserWithEmailAndPassword(
       BuildContext context, String name, String email, String password) async {
     await locator.get<UserController>().creatUserWithEmailAndPassword(
-        name: name, email: email, password: password);
+          name: name,
+          email: email,
+          password: password,
+        );
+    await locator.get<UserController>().storeAddress(context, phone: phone);
     Navigator.of(context).pop();
   }
 
@@ -74,6 +78,7 @@ class EmailRegisterForm extends StatelessWidget {
                         height: 30,
                       ),
                       SouqySubmitBotton(
+                        label: "انشاء حساب ",
                         onPress: () {
                           _creatUserWithEmailAndPassword(
                               context, name, email, password);

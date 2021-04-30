@@ -4,6 +4,7 @@ import 'package:souqy/model/user_model.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
+import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_TextFiled.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
@@ -25,10 +26,24 @@ class _ProfileSettingState extends State<ProfileSetting> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _areaController = TextEditingController();
 
+  String get name => _nameController.text;
+  String get email => _emailController.text;
+  String get password => _passwordController.text;
+  String get phone => _phoneController.text;
+  String get city => _cityController.text;
+  String get area => _areaController.text;
+
   @override
   void initState() {
+    setDefalut();
     super.initState();
-    _nameController.text = currentUser?.displayName ?? "";
+  }
+
+  Future<void> saveAddress(
+      {BuildContext context, String phone, String city, String area}) async {
+    await locator
+        .get<UserController>()
+        .storeAddress(context, phone: phone, city: city, area: area);
   }
 
   @override
@@ -44,10 +59,12 @@ class _ProfileSettingState extends State<ProfileSetting> {
 
   @override
   Widget build(BuildContext context) {
-    // print("---4--");
-    // String currentUser1 = locator.get<UserController>().currentUser.avatarUrl;
-    // print(currentUser1);
-    // print("---4--");
+    // showExeptionDilog(context,
+    //     title: Text("download failure"), content: "sadasdasdas");
+    //
+
+    setDefalut();
+
     return Scaffold(
       backgroundColor: backgroundCOLOR,
       appBar: souqyAppBar("profileSettin", context),
@@ -57,19 +74,21 @@ class _ProfileSettingState extends State<ProfileSetting> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Avatar(
-                  avatarUrl: currentUser?.avatarUrl,
-                  // avatarUrl:
-                  // "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5324479827627077&height=50&width=50&ext=1621768726&hash=AeSBNiS0VjnWYrrmnJ0",
-                  onPress: () async {
-                    var file = await ImagePicker()
-                        .getImage(source: ImageSource.gallery);
-                    await locator
-                        .get<UserController>()
-                        .uploadProfilePicture(file);
-                    setState(() {});
+                avatarUrl: currentUser?.avatarUrl,
+                // avatarUrl:
+                // "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5324479827627077&height=50&width=50&ext=1621768726&hash=AeSBNiS0VjnWYrrmnJ0",
+                onPress: () async {
+                  var file =
+                      await ImagePicker().getImage(source: ImageSource.gallery);
+                  await locator
+                      .get<UserController>()
+                      .uploadProfilePicture(file);
+                  setState(() {});
 
-                    print(file.path);
-                  }),
+                  print(file.path);
+                },
+                isSetting: true,
+              ),
               Directionality(
                 textDirection: TextDirection.rtl,
                 child: Container(
@@ -87,13 +106,13 @@ class _ProfileSettingState extends State<ProfileSetting> {
                         lable: "البريد الالكتروني",
                         controller: _emailController,
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SouqyTextField(
-                        lable: "كلمة المرور",
-                        controller: _passwordController,
-                      ),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+                      // SouqyTextField(
+                      //   lable: "كلمة المرور",
+                      //   controller: _passwordController,
+                      // ),
                       SizedBox(
                         height: 10,
                       ),
@@ -118,7 +137,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
                       Row(
                         children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              saveAddress(phone: phone, area: area, city: city);
+                            },
                             child: Text("حفظ"),
                           ),
                         ],
@@ -132,5 +153,15 @@ class _ProfileSettingState extends State<ProfileSetting> {
         ),
       ),
     );
+  }
+
+  void setDefalut() {
+    currentUser = locator.get<UserController>().currentUser;
+    // locator.get<UserController>().readAddres();
+    _nameController.text = currentUser?.displayName ?? "";
+    _emailController.text = currentUser?.email ?? "";
+    _phoneController.text = currentUser?.phone ?? "";
+    _cityController.text = currentUser?.city ?? "";
+    _areaController.text = currentUser?.area ?? "";
   }
 }

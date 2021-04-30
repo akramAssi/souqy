@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:souqy/model/user_model.dart';
 import 'package:souqy/service/Auth.dart';
+import 'package:souqy/service/database_repo.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/service/storage_repo.dart';
 
@@ -12,7 +13,7 @@ class UserController {
   UserModel _currentUser;
   Auth _authRepo = locator.get<Auth>();
   StorageRepo _storageRepo = locator.get<StorageRepo>();
-
+  FirestoreDatabase _databaseRepo = locator.get<FirestoreDatabase>();
   Future init;
 
   UserController() {
@@ -21,21 +22,37 @@ class UserController {
 
   UserModel initUser() {
     _currentUser = _authRepo.currentUserModel();
-
-    getDownloadUrl();
     return _currentUser;
   }
 
+  UserModel refresh(BuildContext context) {
+    _currentUser = _authRepo.currentUserModel();
+
+    getDownloadUrl();
+    if (_currentUser != null) {
+      readAddres(context);
+    }
+    return _currentUser;
+  }
+
+//user tool
+
   UserModel get currentUser => _currentUser;
 
-  Future<void> uploadProfilePicture(PickedFile image) async {
-    _currentUser.avatarUrl = await _storageRepo.uploadFile(File(image.path));
+  void updateDisplayName(String displayName) {
+    _currentUser.displayName = displayName;
+    _authRepo.updateDisplayName(displayName);
   }
+
+  Stream<User> authStateChanges() => _authRepo.authStateChanges();
+
+// sign tool
 
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
       User user = await _authRepo.mysignInWithGoogle(context);
       _currentUser = UserModel.user(user);
+      await getDownloadUrl();
     } catch (e) {
       print(e.toString());
     }
@@ -45,20 +62,9 @@ class UserController {
     try {
       User user = await _authRepo.signInWithFacebook();
       _currentUser = UserModel.user(user);
-      if (user.photoURL != null) {
-        _currentUser.avatarUrl = user.photoURL;
-      } else {
-        print(user.photoURL);
-      }
+      getDownloadUrl();
     } catch (e) {
       print(e.toString());
-    }
-  }
-
-  Future<void> getDownloadUrl() async {
-    if (_currentUser.uid == null) {
-      _currentUser.avatarUrl =
-          await _storageRepo.getUserProfileImage(currentUser);
     }
   }
 
@@ -70,19 +76,25 @@ class UserController {
     // _currentUser.avatarUrl = await getDownloadUrl();
   }
 
-  Future<void> creatUserWithEmailAndPassword(
-      {@required String name,
-      @required String email,
-      @required String password}) async {
-    User user = await _authRepo.creatUserWithEmailAndPassword(email, password);
-    await _authRepo.updateDisplayName(name);
-
+  Future<bool> creatUserWithEmailAndPassword({
+    @required String name,
+    @required String email,
+    @required String password,
+  }) async {
+    User user =
+        await _authRepo.creatUserWithEmailAndPassword(name, email, password);
+    // user = await _authRepo.updateDisplayName(name);
     _currentUser = UserModel.user(user);
+
+    return false;
   }
 
-  void updateDisplayName(String displayName) {
-    _currentUser.displayName = displayName;
-    _authRepo.updateDisplayName(displayName);
+  Future<void> singInAnonmymous() async {
+    try {
+      await _authRepo.singInAnonmymous();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> signOut() async {
@@ -95,13 +107,29 @@ class UserController {
     }
   }
 
-  Future<void> singInAnonmymous() async {
-    try {
-      await _authRepo.singInAnonmymous();
-    } catch (e) {
-      print(e.toString());
+  //storage
+  Future<void> uploadProfilePicture(PickedFile image) async {
+    _currentUser.avatarUrl = await _storageRepo.uploadFile(File(image.path));
+  }
+
+  Future<void> getDownloadUrl() async {
+    if (_currentUser?.uid != null) {
+      _currentUser.avatarUrl =
+          await _storageRepo.getUserProfileImage(currentUser);
     }
   }
 
-  Stream<User> authStateChanges() => _authRepo.authStateChanges();
+  //database
+
+  Future<void> storeAddress(BuildContext context,
+      {@required String phone, String city, String area}) async {
+    _currentUser.phone = phone ?? "";
+    _currentUser.city = city ?? "";
+    _currentUser.area = area ?? "";
+    await _databaseRepo.storeUserInfo(context, _currentUser);
+  }
+
+  void readAddres(BuildContext context) {
+    _databaseRepo.readUserInfo(context, _currentUser);
+  }
 }

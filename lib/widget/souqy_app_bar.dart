@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:souqy/profile_pages/user_profile.dart';
 import 'package:souqy/res/color.dart';
 
 import '../profile_pages/profile_setting.dart';
 
 void _openProfile(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (context) => UserProfile(),
+      fullscreenDialog: true,
+    ),
+  );
+}
+
+void _openSetting(BuildContext context) {
   Navigator.of(context).push(
     MaterialPageRoute<void>(
       builder: (context) => ProfileSetting(),
@@ -37,7 +47,7 @@ AppBar souqyAppBar(String type, BuildContext context) {
                 "images/settings.png",
               ),
               onPressed: () {
-                print("sds");
+                _openSetting(context);
               }),
         );
         break;
@@ -48,7 +58,7 @@ AppBar souqyAppBar(String type, BuildContext context) {
   return AppBar(
     iconTheme: IconThemeData(color: primeCOLOR),
     backgroundColor: Colors.white,
-    elevation: 1,
+    elevation: .7,
     title: buildTitleText(),
     centerTitle: true,
     actions: actions,
@@ -64,9 +74,9 @@ Text buildTitleText() {
       fontFamily: "Ayuthaya",
       shadows: [
         Shadow(
-          blurRadius: 10.0,
+          blurRadius: 1.2,
           color: Color(0xff958585),
-          offset: Offset(2.0, 2.0),
+          offset: Offset(0.8, 0.8),
         ),
       ],
     ),

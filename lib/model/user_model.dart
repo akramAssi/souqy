@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class UserModel {
   String uid;
-  String email;
   String displayName;
+  String email;
   String avatarUrl;
+  String phone;
+  String city;
+  String area;
 
   UserModel(this.uid, {this.displayName, this.email, this.avatarUrl});
   UserModel.user(User user) {
@@ -14,5 +18,19 @@ class UserModel {
     if (user.photoURL != null) {
       this.avatarUrl = user.photoURL;
     }
+  }
+  void setAddress(
+      {@required String phone, @required String city, @required String area}) {
+    this.phone = phone;
+    this.area = area;
+    this.city = city;
+  }
+
+  Map<String, dynamic> get address {
+    return {
+      "phone": phone,
+      "city": city,
+      "area": area,
+    };
   }
 }
