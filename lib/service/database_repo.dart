@@ -19,7 +19,7 @@ class FirestoreDatabase implements Database {
       final firestoreRef = _firestore.doc(path);
       await firestoreRef.set(user.address);
     } catch (e) {
-      showExeptionDilog(context,
+      showExceptionDialog(context,
           title: Text("Storage failure"), content: e.toString());
 
       print(e);
