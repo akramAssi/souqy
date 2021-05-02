@@ -7,6 +7,8 @@ import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
+import 'add_page/add_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({
     Key key,
@@ -39,12 +41,9 @@ class _HomePageState extends State<HomePage> {
       ],
     ),
     SouqySellerList(),
+    AddPage(),
     Text(
       'Index 14: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 21: Business',
       style: optionStyle,
     ),
   ];
