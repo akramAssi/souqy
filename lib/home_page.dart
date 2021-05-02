@@ -65,8 +65,6 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(bottom: 0),
         decoration: BoxDecoration(
-          // borderRadius: BorderRadius.only(
-          //     topRight: Radius.circular(30), topLeft: Radius.circular(30)),
           borderRadius: BorderRadius.vertical(
               top: Radius.circular(30), bottom: Radius.circular(0)),
           boxShadow: [
