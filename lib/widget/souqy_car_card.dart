@@ -50,9 +50,14 @@ class SouqyCarCard extends StatelessWidget {
           children: [
             Stack(children: <Widget>[
               SouqyThumbnailCard(path: 'images/kia-op.jpg'),
-              SouqyAvailableLable(
-                size: size,
-                available: true,
+              Positioned(
+                right: size.width / 80,
+                top: 25.0,
+                child: SouqyAvailableLable(
+                  size: size,
+                  available: true,
+                  isCard: true,
+                ),
               ),
             ]),
             Padding(
