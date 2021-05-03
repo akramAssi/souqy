@@ -43,3 +43,27 @@ List<String> brands = [
   'volkswagen',
   'volvo',
 ];
+
+List<String> arabic = [
+  'هاتشباك',
+  'صالون',
+  'رياضيه',
+  'باك اب',
+  'دفع رباعي',
+  'متعددة الاغراض',
+  'شاحنه',
+  'تجاري',
+  'اخرى'
+];
+
+List<String> english = [
+  'Hatch',
+  'Sedan',
+  'Coupe',
+  'Pickup',
+  'SUV',
+  'Minivan',
+  'Van',
+  'Truck',
+  'Other'
+];
