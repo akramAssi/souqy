@@ -41,13 +41,12 @@ class _SearchForPrandState extends State<SearchForPrand> {
   Widget build(BuildContext context) {
     var wid;
     var size = MediaQuery.of(context).size;
-    var searchFiled = SearchFiled(
-      onChange: filterBrand,
-      controller: controller,
-    );
 
     return Column(children: [
-      searchFiled,
+      SearchFiled(
+        onChange: filterBrand,
+        controller: controller,
+      ),
       Container(
         height: 100,
         child: ListView.builder(
@@ -65,10 +64,11 @@ class _SearchForPrandState extends State<SearchForPrand> {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(35),
+                      borderRadius: BorderRadius.circular(32),
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 3,
+                          spreadRadius: 3,
+                          blurRadius: 6,
                           color: BorderColor,
                         )
                       ]),
