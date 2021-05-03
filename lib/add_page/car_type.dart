@@ -15,7 +15,7 @@ class CarType extends StatefulWidget {
 
 class _CarType extends State<CarType> {
   List<String> onchangeList = [];
-  CarTypeControler type = CarTypeControler();
+
   int loc;
   String typee;
   int setSelected;
@@ -23,16 +23,16 @@ class _CarType extends State<CarType> {
   void initState() {
     super.initState();
 
-    onchangeList = type.arabic;
+    onchangeList = arabic;
   }
 
   var flag = 0;
   void filterType(String query) {
     var se;
     if (query == '') {
-      se = type.arabic;
+      se = arabic;
     } else {
-      se = type.arabic.where((element) {
+      se = arabic.where((element) {
         final queryLower = query;
         final elementLower = element;
         return elementLower == queryLower;
@@ -65,10 +65,10 @@ class _CarType extends State<CarType> {
               avatar: InkWell(
                 child: setSelected == 0
                     ? Image.asset(
-                        'images/carType/' + type.english[loc] + '.png',
+                        'images/carType/' + english[loc] + '.png',
                       )
                     : Image.asset(
-                        'images/carType/' + type.english[index] + '.png',
+                        'images/carType/' + english[index] + '.png',
                       ),
               ),
               shape: RoundedRectangleBorder(
@@ -79,7 +79,7 @@ class _CarType extends State<CarType> {
               selectedColor: Colors.grey,
               onSelected: (bool selected) {
                 if (selected) {
-                  typee = type.arabic[index];
+                  typee = arabic[index];
                   loc = index;
                   filterType(typee);
                   setSelected = 0;
