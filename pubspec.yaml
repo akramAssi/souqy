@@ -73,6 +73,7 @@ flutter:
   - images/settings.png
   - images/
   - images/carBrand/
+  - images/carType/
     # - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
