@@ -30,3 +30,7 @@ build\ios/Runner.build/Release-iphoneos/Runner.build/dgph
 .DS_Store
 .DS_Store
 .DS_Store
+.flutter-plugins-dependencies
+.flutter-plugins
+.flutter-plugins-dependencies
+.DS_Store
