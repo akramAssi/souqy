@@ -34,13 +34,16 @@ class FirestoreDatabase implements Database {
     final firestoreRef = _firestore.doc(path);
     firestoreRef.get().then((document) {
       final data = document.data();
-
-      user.setAddress(
-          phone: data["phone"] ?? "",
-          city: data["city"] ?? "",
-          area: data["area"] ?? "");
-      print("firebase : ${data["phone"]} ,  ${data["city"]} , ${data["area"]}");
-      print("obj ${user.phone} ,  ${user.city} , ${user.area}");
+      if (data != null) {
+        print(data);
+        user.setAddress(
+            phone: data["phone"] ?? "",
+            city: data["city"] ?? "",
+            area: data["area"] ?? "");
+        print(
+            "firebase : ${data["phone"]} ,  ${data["city"]} , ${data["area"]}");
+        print("obj ${user.phone} ,  ${user.city} , ${user.area}");
+      }
     });
 
     print(path);
