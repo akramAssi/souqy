@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:souqy/seller_page.dart';
+import 'package:souqy/seller_pages/seller_page.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/service/locator.dart';
@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future<void> _singOut() async {
-    // await locator.get<UserController>().signOut();
+    await locator.get<UserController>().signOut();
     // showMyDialog(context);
   }
 
