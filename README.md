@@ -1,2 +1,2 @@
 # souqy
- Car Selling application
+Flutter Car Selling Mobile application
