@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../res/color.dart';
-import '../res/color.dart';
 
 class SearchFiled extends StatefulWidget {
   final void Function(String) onChange;
@@ -21,7 +20,7 @@ class _SearchFiledState extends State<SearchFiled> {
   Widget build(BuildContext context) {
     return Container(
       height: 80,
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: TextField(
         textInputAction: TextInputAction.next,
         controller: widget.controller,
