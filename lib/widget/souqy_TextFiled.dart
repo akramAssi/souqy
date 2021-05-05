@@ -4,8 +4,14 @@ import 'package:souqy/res/color.dart';
 class SouqyTextField extends StatelessWidget {
   final String lable;
   final TextEditingController controller;
-
-  SouqyTextField({Key key, @required this.lable, this.controller})
+  final double height;
+  final bool isReadOnly;
+  SouqyTextField(
+      {Key key,
+      @required this.lable,
+      @required this.controller,
+      this.height = 60,
+      this.isReadOnly = false})
       : super(key: key);
 
   @override
@@ -17,26 +23,35 @@ class SouqyTextField extends StatelessWidget {
           lable,
           style: TextStyle(
             color: primeCOLOR,
-            fontFamily: "Arial",
-            fontSize: 15.0,
+            fontFamily: "Ayuthaya",
+            fontSize: 14.0,
           ),
         ),
         SizedBox(
-          height: 2.5,
+          height: 3,
         ),
-        TextField(
-          controller: controller,
-          textAlign: TextAlign.right,
-          //  controller: _textEdittingControler_bookName,
-          decoration: new InputDecoration(
-              border: OutlineInputBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.zero,
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-          )),
+        SizedBox(
+          height: height,
+          child: TextField(
+              readOnly: isReadOnly,
+              controller: controller,
+              style: TextStyle(
+                color: primeCOLOR,
+                fontFamily: "Ayuthaya",
+              ),
+              //  controller: _textEdittingControler_bookName,
+              decoration: InputDecoration(
+                  contentPadding: (height < 60)
+                      ? EdgeInsets.symmetric(vertical: 3, horizontal: 13)
+                      : EdgeInsets.all(20),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(20),
+                      topLeft: Radius.zero,
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
+                  ))),
         ),
       ],
     );
