@@ -44,19 +44,7 @@ List<String> brands = [
   'volvo',
 ];
 
-List<String> arabic = [
-  'هاتشباك',
-  'صالون',
-  'رياضيه',
-  'باك اب',
-  'دفع رباعي',
-  'متعددة الاغراض',
-  'شاحنه',
-  'تجاري',
-  'اخرى'
-];
-
-List<String> english = [
+List<String> carTypeList = [
   'Hatch',
   'Sedan',
   'Coupe',
