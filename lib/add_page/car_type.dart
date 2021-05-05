@@ -23,16 +23,16 @@ class _CarType extends State<CarType> {
   void initState() {
     super.initState();
 
-    onchangeList = arabic;
+    onchangeList = carTypeList;
   }
 
   var flag = 0;
   void filterType(String query) {
     var se;
     if (query == '') {
-      se = arabic;
+      se = carTypeList;
     } else {
-      se = arabic.where((element) {
+      se = carTypeList.where((element) {
         final queryLower = query;
         final elementLower = element;
         return elementLower == queryLower;
@@ -49,7 +49,7 @@ class _CarType extends State<CarType> {
     return Container(
       margin: EdgeInsets.only(top: 5),
       padding: EdgeInsets.all(10),
-      height: setSelected != 0 ? 150 : 60,
+      height: setSelected != 0 ? 170 : 80,
       child: GridView.builder(
           physics: NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -65,10 +65,10 @@ class _CarType extends State<CarType> {
               avatar: InkWell(
                 child: setSelected == 0
                     ? Image.asset(
-                        'images/carType/' + english[loc] + '.png',
+                        'images/carType/' + carTypeList[loc] + '.png',
                       )
                     : Image.asset(
-                        'images/carType/' + english[index] + '.png',
+                        'images/carType/' + carTypeList[index] + '.png',
                       ),
               ),
               shape: RoundedRectangleBorder(
@@ -79,7 +79,7 @@ class _CarType extends State<CarType> {
               selectedColor: Colors.grey,
               onSelected: (bool selected) {
                 if (selected) {
-                  typee = arabic[index];
+                  typee = carTypeList[index];
                   loc = index;
                   filterType(typee);
                   setSelected = 0;
