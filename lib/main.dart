@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       locale: Locale("ar"),
       theme: ThemeData(
+        fontFamily: "Ayuthaya",
         primarySwatch: primeCOLOR,
       ),
       home: LandingPage(),
