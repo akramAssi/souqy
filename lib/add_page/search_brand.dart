@@ -4,21 +4,24 @@ import 'package:souqy/res/car.dart';
 
 import '../res/color.dart';
 
-class SearchForPrand extends StatefulWidget {
+class SouqySearchForBrand extends StatefulWidget {
+  final TextEditingController controller;
+
+  const SouqySearchForBrand({Key key, @required this.controller})
+      : super(key: key);
   @override
-  State<StatefulWidget> createState() => _SearchForPrandState();
+  State<StatefulWidget> createState() => _SouqySearchForBrandState();
 }
 
-class _SearchForPrandState extends State<SearchForPrand> {
+class _SouqySearchForBrandState extends State<SouqySearchForBrand> {
   String count = '';
-  final controller = TextEditingController();
 
   List<String> onchangeList = [];
   @override
   void initState() {
     super.initState();
     onchangeList = brands;
-    controller.text = count;
+    widget.controller.text = count;
   }
 
   int getlength() {
@@ -26,6 +29,10 @@ class _SearchForPrandState extends State<SearchForPrand> {
   }
 
   void filterBrand(String query) {
+    if (query.isNotEmpty) {
+      query = '${query[0].toUpperCase()}${query.substring(1)}';
+      widget.controller.text = query;
+    }
     final se = brands.where((element) {
       final queryLower = query.toLowerCase();
       final elementLower = element.toLowerCase();
@@ -34,6 +41,8 @@ class _SearchForPrandState extends State<SearchForPrand> {
     setState(() {
       this.count = query;
       this.onchangeList = se;
+      widget.controller.selection = TextSelection.fromPosition(
+          TextPosition(offset: widget.controller.text.length));
     });
   }
 
@@ -45,7 +54,7 @@ class _SearchForPrandState extends State<SearchForPrand> {
     return Column(children: [
       SearchFiled(
         onChange: filterBrand,
-        controller: controller,
+        controller: widget.controller,
       ),
       Container(
         height: 100,
@@ -83,7 +92,7 @@ class _SearchForPrandState extends State<SearchForPrand> {
                 onTap: () {
                   setState(() {
                     count = onchangeList[index].toString();
-                    controller.text = count;
+                    widget.controller.text = count;
                     onchangeList = [];
                     onchangeList.add(count);
                   });
