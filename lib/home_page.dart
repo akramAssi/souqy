@@ -4,6 +4,7 @@ import 'package:souqy/seller_pages/seller_page.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/service/locator.dart';
+import 'package:souqy/trash/1.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
@@ -42,10 +43,7 @@ class _HomePageState extends State<HomePage> {
     ),
     SouqySellerList(),
     AddPage(),
-    Text(
-      'Index 14: Business',
-      style: optionStyle,
-    ),
+    abd(),
   ];
 
   void _onItemTapped(int index) {
