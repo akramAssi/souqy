@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 void showYear(
     {@required BuildContext context,
     List list,
-    final void Function(String) onPress}) {
+    final void Function(dynamic) onPress}) {
   dynamic _selectedTime;
 
   showModalBottomSheet(
@@ -12,7 +12,7 @@ void showYear(
       builder: (BuildContext context) {
         return Container(
           height: 300,
-          child: Column(
+          child: ListView(
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,7 +38,7 @@ void showYear(
                 ],
               ),
               Container(
-                  height: 200.0,
+                  height: 220.0,
                   child: Flex(
                     direction: Axis.horizontal,
                     children: <Widget>[
@@ -56,7 +56,7 @@ void showYear(
                                 .map(
                                   (item) => Center(
                                     child: Text(
-                                      item,
+                                      item.toString(),
                                       style: TextStyle(
                                         fontSize: 20,
                                       ),
