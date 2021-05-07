@@ -71,7 +71,6 @@ Text buildTitleText() {
     style: TextStyle(
       color: primeCOLOR,
       fontSize: 25,
-      fontFamily: "Ayuthaya",
       shadows: [
         Shadow(
           blurRadius: 1.2,
