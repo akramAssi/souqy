@@ -115,7 +115,6 @@ class LoginPage extends StatelessWidget {
       style: TextStyle(
         color: primeCOLOR,
         fontSize: 73,
-        fontFamily: "Ayuthaya",
         shadows: [
           Shadow(
             blurRadius: 10.0,
