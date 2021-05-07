@@ -67,3 +67,69 @@
 //     ),
 //   );
 // }
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:souqy/widget/dialog/year_dialog.dart';
+
+class abd extends StatefulWidget {
+  @override
+  _abdState createState() => _abdState();
+}
+
+class _abdState extends State<abd> {
+  List<String> timeList = [];
+  String _time;
+  _abdState() {
+    _time = DateTime.now().toString();
+  }
+  @override
+  void initState() {
+    super.initState();
+    for (int i = 0; i < 24; i++) {
+      timeList.add(i.toString().padLeft(2, '0'));
+    }
+  }
+
+  void onPress(dynamic value) {
+    print("hi0");
+    setState(() {
+      _time = value;
+      print("hi1 : " + value);
+    });
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pick a date'),
+      ),
+      body: Center(
+        child: Container(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(80.0),
+                  child: Text('Picked date and time: ' + _time),
+                ),
+                CupertinoButton(
+                  onPressed: () {
+                    showYear(
+                      context: context,
+                      list: timeList,
+                      onPress: onPress,
+                    );
+                  },
+                  child: Text('Pick'),
+                  color: Colors.blueAccent,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
