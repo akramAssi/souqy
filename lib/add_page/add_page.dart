@@ -483,7 +483,7 @@ class _AddPageState extends State<AddPage> {
                     height: 0,
                     width: 0,
                   )
-                : CarouselWithIndicatorDemo(
+                : SouqyImageSlider(
                     imageList: _myImages,
                     source: "File",
                     autoPlay: false,
