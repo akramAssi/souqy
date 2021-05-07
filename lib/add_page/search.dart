@@ -19,26 +19,30 @@ class _SearchFiledState extends State<SearchFiled> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      height: 90,
+      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 16),
       child: TextField(
         textInputAction: TextInputAction.next,
         controller: widget.controller,
         cursorColor: fontColor,
-        style: TextStyle(fontSize: 17, height: .8, color: fontColor),
-        textAlign: TextAlign.right,
+        style: TextStyle(fontSize: 17, height: 1, color: fontColor),
         decoration: InputDecoration(
+          errorStyle: TextStyle(fontSize: 10, height: 1, color: redColor),
+          errorText: "Please enter a valid make ",
           filled: true,
           fillColor: Colors.white,
           border: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: BorderColor,
+            ),
             borderRadius: BorderRadius.circular(25),
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(25),
               borderSide: BorderSide(
-                color: BorderColor,
+                color: primeCOLOR,
               )),
-          labelText: 'الشركه المصنعه',
+          labelText: "Make",
           labelStyle: TextStyle(fontSize: 18, color: primeCOLOR),
           //hintText: widget.brandText,
           prefixIcon: Icon(
