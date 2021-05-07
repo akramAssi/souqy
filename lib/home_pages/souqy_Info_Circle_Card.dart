@@ -34,7 +34,7 @@ class SouqyInfoCircleCard extends StatelessWidget {
             Text(
               value,
               style: TextStyle(
-                fontSize: 8,
+                fontSize: 6,
                 color: redColor,
               ),
             )
