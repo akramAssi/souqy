@@ -104,7 +104,6 @@ class EmailRegisterForm extends StatelessWidget {
       style: TextStyle(
         color: primeCOLOR,
         fontSize: 25,
-        fontFamily: "Ayuthaya",
         shadows: [
           Shadow(
             blurRadius: 10.0,
