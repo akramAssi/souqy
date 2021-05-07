@@ -7,7 +7,14 @@ import 'package:souqy/widget/souqy_app_bar.dart';
 
 class MoreInfoPage extends StatelessWidget {
   String lable;
-
+  final List<String> imgList = [
+    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
+    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
+    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
+    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+  ];
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -15,160 +22,160 @@ class MoreInfoPage extends StatelessWidget {
       appBar: souqyAppBar("normal", context),
       body: Container(
         color: Colors.white,
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: ListView(
-            children: [
-              Stack(
-                children: [
-                  CarouselWithIndicatorDemo(),
-                  Positioned(
-                      left: 33,
-                      // right: size.width / 80,
-                      top: 25.0,
-                      child: SouqyAvailableLable(
-                          available: true, size: size, isCard: false))
-                ],
-              ),
-              RowMainInfo(
-                size: size,
-                make: "فولكسفاغن",
-                model: "كرافتر",
-                price: "100000",
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              Wrap(
-                spacing: 50,
-                runSpacing: 25,
-                alignment: WrapAlignment.center,
-                children: [
-                  Circleinfocard(
-                    icon: "mini_car.png",
-                    lable: "خصوصي",
-                  ),
-                  Circleinfocard(
-                    icon: "kilo.png",
-                    lable: "100",
-                  ),
-                  Circleinfocard(
-                    icon: "year.png",
-                    lable: "2012",
-                  ),
-                  Circleinfocard(
-                    icon: "car_seat.png",
-                    lable: "5 مقاعد",
-                  ),
-                  Circleinfocard(
-                    icon: "color.png",
-                    lable: "اخضر",
-                  ),
-                  Circleinfocard(
-                    icon: "gear.png",
-                    lable: "عادي",
-                  ),
-                  Circleinfocard(
-                    icon: "engine.png",
-                    lable: "1800",
-                  ),
-                  Circleinfocard(icon: "gas_station.png", lable: "بنزين"),
-                  Circleinfocard(
-                    icon: "user.png",
-                    lable: "بد ٢",
-                  ),
-                ],
-              ),
-              Container(
-                  padding: EdgeInsets.only(
-                    top: 13,
-                    right: 10,
-                    left: 10,
-                  ),
-                  child: Text(
-                    "الاضافات",
-                    style: TextStyle(
-                      color: primeCOLOR,
-                      fontSize: 25,
-                    ),
-                  )),
-              Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                    border: Border.all(color: primeCOLOR),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        bottomRight: Radius.circular(25),
-                        bottomLeft: Radius.circular(25))),
-                child: Wrap(
-                  alignment: WrapAlignment.start,
-                  children: [
-                    buildItemList("فتحة سقف"),
-                    buildItemList("راعش"),
-                    buildItemList("نظام صوتي"),
-                    buildItemList("جنط مغنيسيوم"),
-                    buildItemList("ايش ما بدك ضيف"),
-                  ],
+        child: ListView(
+          children: [
+            Stack(
+              children: [
+                SouqyImageSlider(
+                  imageList: imgList,
+                  source: "Network",
                 ),
-              ),
-              Container(
+                Positioned(
+                    left: 33,
+                    // right: size.width / 80,
+                    top: 25.0,
+                    child: SouqyAvailableLable(
+                        available: true, size: size, isCard: false))
+              ],
+            ),
+            RowMainInfo(
+              size: size,
+              make: "فولكسفاغن",
+              model: "كرافتر",
+              price: "100000",
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            Wrap(
+              spacing: 50,
+              runSpacing: 25,
+              alignment: WrapAlignment.center,
+              children: [
+                Circleinfocard(
+                  icon: "mini_car.png",
+                  lable: "خصوصي",
+                ),
+                Circleinfocard(
+                  icon: "kilo.png",
+                  lable: "100",
+                ),
+                Circleinfocard(
+                  icon: "year.png",
+                  lable: "2012",
+                ),
+                Circleinfocard(
+                  icon: "car_seat.png",
+                  lable: "5 مقاعد",
+                ),
+                Circleinfocard(
+                  icon: "color.png",
+                  lable: "اخضر",
+                ),
+                Circleinfocard(
+                  icon: "gear.png",
+                  lable: "عادي",
+                ),
+                Circleinfocard(
+                  icon: "engine.png",
+                  lable: "1800",
+                ),
+                Circleinfocard(icon: "gas_station.png", lable: "بنزين"),
+                Circleinfocard(
+                  icon: "user.png",
+                  lable: "بد ٢",
+                ),
+              ],
+            ),
+            Container(
                 padding: EdgeInsets.only(
                   top: 13,
                   right: 10,
                   left: 10,
                 ),
                 child: Text(
-                  "المعلومات الاضافية",
+                  "الاضافات",
                   style: TextStyle(
                     color: primeCOLOR,
                     fontSize: 25,
                   ),
+                )),
+            Container(
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  border: Border.all(color: primeCOLOR),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25),
+                      bottomLeft: Radius.circular(25))),
+              child: Wrap(
+                alignment: WrapAlignment.start,
+                children: [
+                  buildItemList("فتحة سقف"),
+                  buildItemList("راعش"),
+                  buildItemList("نظام صوتي"),
+                  buildItemList("جنط مغنيسيوم"),
+                  buildItemList("ايش ما بدك ضيف"),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(
+                top: 13,
+                right: 10,
+                left: 10,
+              ),
+              child: Text(
+                "المعلومات الاضافية",
+                style: TextStyle(
+                  color: primeCOLOR,
+                  fontSize: 25,
                 ),
               ),
-              Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    border: Border.all(color: primeCOLOR),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        bottomRight: Radius.circular(25),
-                        bottomLeft: Radius.circular(25))),
-                child: Text(
-                    "فخامه جميع الاضافات  ترخيص 1 ، مُكيّف إغلاق مركزي، فرش جلد",
-                    style: TextStyle(fontSize: 20, color: primeCOLOR)),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  border: Border.all(color: primeCOLOR),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25),
+                      bottomLeft: Radius.circular(25))),
+              child: Text(
+                  "فخامه جميع الاضافات  ترخيص 1 ، مُكيّف إغلاق مركزي، فرش جلد",
+                  style: TextStyle(fontSize: 20, color: primeCOLOR)),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  border: Border.all(color: primeCOLOR),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25),
+                      bottomLeft: Radius.circular(25))),
+              child: Column(
+                children: [
+                  buildRowInfo("images/user.png", "ناصر شنطي"),
+                  buildRowInfo("images/phone.png", "059798544"),
+                  buildRowInfo(
+                      "images/location.png", "قلقية-شارع ما بعرف وين انا "),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Image.asset("images/whatsapp.png"),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Image.asset("images/email.png"),
+                    ],
+                  ),
+                ],
               ),
-              Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    border: Border.all(color: primeCOLOR),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        bottomRight: Radius.circular(25),
-                        bottomLeft: Radius.circular(25))),
-                child: Column(
-                  children: [
-                    buildRowInfo("images/user.png", "ناصر شنطي"),
-                    buildRowInfo("images/phone.png", "059798544"),
-                    buildRowInfo(
-                        "images/location.png", "قلقية-شارع ما بعرف وين انا "),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Image.asset("images/whatsapp.png"),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Image.asset("images/email.png"),
-                      ],
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
