@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:souqy/validators/error_text.dart';
+import 'package:souqy/validators/form_validator.dart';
 import '../res/color.dart';
 
 class SearchFiled extends StatefulWidget {
@@ -27,8 +29,8 @@ class _SearchFiledState extends State<SearchFiled> {
         cursorColor: fontColor,
         style: TextStyle(fontSize: 17, height: 1, color: fontColor),
         decoration: InputDecoration(
-          errorStyle: TextStyle(fontSize: 10, height: 1, color: redColor),
-          errorText: "Please enter a valid make ",
+          errorStyle: errorStyle,
+          // errorText: FormValidator.isBrand(widget.controller.text)&&,
           filled: true,
           fillColor: Colors.white,
           border: OutlineInputBorder(
