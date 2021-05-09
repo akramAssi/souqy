@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
-import 'package:souqy/widget/souqy_TextFiled.dart';
+import 'package:souqy/widget/souqy_text_filed.dart';
 
 class SouqyButtonDialog extends StatelessWidget {
   SouqyButtonDialog({
@@ -72,7 +72,7 @@ class SouqyButtonDialog extends StatelessWidget {
         (withIcon)
             ? Positioned(
                 top: showLable && height == 50 ? 31 : 18,
-                right: showLable && height == 50 ? 10 : 15,
+                right: showLable && height == 50 ? 8 : 15,
                 child: Icon(
                   Icons.arrow_drop_down,
                   size: 30,
