@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
-import 'package:souqy/widget/souqy_TextFiled.dart';
+import 'package:souqy/widget/souqy_text_filed.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 import 'package:souqy/widget/souqy_submit_button.dart';
 
@@ -35,7 +35,7 @@ class EmailRegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundCOLOR,
+      backgroundColor: backgroundColor,
       appBar: souqyAppBar("setttings", context),
       body: Center(
         child: SingleChildScrollView(
@@ -50,28 +50,28 @@ class EmailRegisterForm extends StatelessWidget {
                   child: Column(
                     children: [
                       SouqyTextField(
-                        lable: "الاسم",
+                        label: "الاسم",
                         controller: _nameController,
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       SouqyTextField(
-                        lable: "البريد الإلكتروني",
+                        label: "البريد الإلكتروني",
                         controller: _emailController,
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       SouqyTextField(
-                        lable: "كلمة المرور",
+                        label: "كلمة المرور",
                         controller: _passwordController,
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       SouqyTextField(
-                        lable: "رقم الهاتف",
+                        label: "رقم الهاتف",
                         controller: _phoneController,
                       ),
                       SizedBox(
