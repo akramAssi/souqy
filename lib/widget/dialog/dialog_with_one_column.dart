@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void showYear(
+void showBotomSheatDialogWithOneColumn(
     {@required BuildContext context,
     List list,
     final void Function(dynamic) onPress}) {
-  dynamic _selectedTime;
+  dynamic _selectedItem;
 
   showModalBottomSheet(
       context: context,
@@ -32,7 +32,7 @@ void showYear(
                       style: TextStyle(color: Colors.blue),
                     ),
                     onPressed: () {
-                      onPress(_selectedTime);
+                      onPress(_selectedItem);
                     },
                   )
                 ],
@@ -47,7 +47,7 @@ void showYear(
                         child: CupertinoPicker(
                             itemExtent: 38,
                             onSelectedItemChanged: (int index) {
-                              _selectedTime = list[index];
+                              _selectedItem = list[index];
                               // setState(() {
                               //   _selectedTime = list[index];
                               // });
