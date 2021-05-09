@@ -69,7 +69,7 @@
 // }
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:souqy/widget/dialog/year_dialog.dart';
+import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
 
 class abd extends StatefulWidget {
   @override
@@ -116,7 +116,7 @@ class _abdState extends State<abd> {
                 ),
                 CupertinoButton(
                   onPressed: () {
-                    showYear(
+                    showBotomSheatDialogWithOneColumn(
                       context: context,
                       list: timeList,
                       onPress: onPress,
