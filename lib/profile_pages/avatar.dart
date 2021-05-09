@@ -49,7 +49,8 @@ class Avatar extends StatelessWidget {
               style: TextStyle(color: primeCOLOR, fontSize: 16),
             ),
             style: ElevatedButton.styleFrom(
-              primary: annLable,
+              primary: annotationColor,
+              onPrimary: backgroundColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
