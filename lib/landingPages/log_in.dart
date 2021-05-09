@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
-import 'package:souqy/widget/souqy_TextFiled.dart';
+import 'package:souqy/widget/souqy_text_filed.dart';
 import 'package:souqy/widget/souqy_submit_button.dart';
 
 import 'bottom_sing_in.dart';
@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundCOLOR,
+      backgroundColor: backgroundColor,
       body: Center(
         child: SingleChildScrollView(
           child: Directionality(
@@ -48,21 +48,21 @@ class LoginPage extends StatelessWidget {
                   child: Column(
                     children: [
                       SouqyTextField(
-                        lable: "البريد الإلكتروني",
+                        label: "البريد الإلكتروني",
                         controller: _emailController,
                       ),
                       SizedBox(
                         height: 19,
                       ),
                       SouqyTextField(
-                        lable: "كلمة المرور",
+                        label: "كلمة المرور",
                         controller: _passwordController,
                       ),
                       SizedBox(
                         height: 38,
                       ),
                       SouqySubmitBotton(
-                        label: "تسجيل الدخول",
+                        label: "Login",
                         onPress: () =>
                             {_signInWithEmailAndPassword(email, password)},
                       ),
