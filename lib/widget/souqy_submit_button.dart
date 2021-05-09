@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:souqy/res/color.dart';
 
 class SouqySubmitBotton extends StatelessWidget {
   // final String lable;
@@ -14,8 +15,8 @@ class SouqySubmitBotton extends StatelessWidget {
       {Key key,
       @required this.onPress,
       @required this.label,
-      this.height = 35,
-      this.fontSize = 35})
+      this.height = 40,
+      this.fontSize = 17})
       : super(key: key);
 
   @override
@@ -28,11 +29,14 @@ class SouqySubmitBotton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 9.0, horizontal: 61.0),
           child: Text(
             label,
-            style: TextStyle(fontSize: fontSize),
+            style: TextStyle(
+              fontSize: fontSize,
+              color: backgroundColor,
+            ),
           ),
         ),
         style: ElevatedButton.styleFrom(
-          onPrimary: Colors.white,
+          onPrimary: backgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(11),
           ),
