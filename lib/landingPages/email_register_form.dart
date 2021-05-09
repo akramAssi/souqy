@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
+import 'package:souqy/res/string.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
@@ -39,59 +40,56 @@ class EmailRegisterForm extends StatelessWidget {
       appBar: souqyAppBar("setttings", context),
       body: Center(
         child: SingleChildScrollView(
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  margin:
-                      EdgeInsets.only(top: 5, left: 42, right: 42, bottom: 15),
-                  child: Column(
-                    children: [
-                      SouqyTextField(
-                        label: "الاسم",
-                        controller: _nameController,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      SouqyTextField(
-                        label: "البريد الإلكتروني",
-                        controller: _emailController,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      SouqyTextField(
-                        label: "كلمة المرور",
-                        controller: _passwordController,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      SouqyTextField(
-                        label: "رقم الهاتف",
-                        controller: _phoneController,
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      SouqySubmitBotton(
-                        label: "انشاء حساب ",
-                        onPress: () {
-                          _creatUserWithEmailAndPassword(
-                              context, name, email, password);
-                        },
-                      )
-                    ],
-                  ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                margin:
+                    EdgeInsets.only(top: 5, left: 42, right: 42, bottom: 15),
+                child: Column(
+                  children: [
+                    SouqyTextField(
+                      label: Strings.name,
+                      controller: _nameController,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    SouqyTextField(
+                      label: Strings.e_mail,
+                      controller: _emailController,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    SouqyTextField(
+                      label: Strings.e_mail,
+                      controller: _passwordController,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    SouqyTextField(
+                      label: Strings.phone,
+                      controller: _phoneController,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    SouqySubmitBotton(
+                      label: Strings.createaNewAccount,
+                      onPress: () {
+                        _creatUserWithEmailAndPassword(
+                            context, name, email, password);
+                      },
+                    )
+                  ],
                 ),
-                BottomSingIn(
-                  isLogin: false,
-                )
-              ],
-            ),
+              ),
+              BottomSingIn(
+                isLogin: false,
+              )
+            ],
           ),
         ),
       ),
@@ -100,7 +98,7 @@ class EmailRegisterForm extends StatelessWidget {
 
   Text buildTitleText() {
     return Text(
-      "SOUQY",
+      Strings.appName,
       style: TextStyle(
         color: primeCOLOR,
         fontSize: 25,
