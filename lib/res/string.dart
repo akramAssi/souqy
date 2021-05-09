@@ -7,4 +7,6 @@ class Strings {
   static const String createaNewAccount = "create a new account?";
   static const String alreadyHaveAccount = "already have account?";
   static const String visitor = "visitor";
+  static const String name = "Name";
+  static const String phone = "Phone";
 }
