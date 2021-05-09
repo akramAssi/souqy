@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:souqy/res/color.dart';
+import 'package:souqy/res/style.dart';
 
 class KiloInputCell extends StatefulWidget {
-  // final int number = 0;
-  KiloInputCell({key}) : super(key: key);
-  // int getValue() {
-  //   return number;
-  // }
+  KiloInputCell({key, @required this.controller, @required this.onTap})
+      : super(key: key);
+  final TextEditingController controller;
+  final VoidCallback onTap;
 
   @override
   State<StatefulWidget> createState() => _KiloInputCell();
 }
 
-class _KiloInputCell extends State<StatefulWidget> {
+class _KiloInputCell extends State<KiloInputCell> with SouqyTextfieldStyle {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -19,19 +20,14 @@ class _KiloInputCell extends State<StatefulWidget> {
       height: 50,
       width: size.width / 7,
       child: TextField(
-        // onChanged: (value) {
-        //   if (value.isNotEmpty)
-        //     widget.num = int.parse(value);
-        //   else if (value.isEmpty) widget.num = 0;
-        //   print(widget.num);
-        // },
+        controller: widget.controller,
         textAlignVertical: TextAlignVertical.bottom,
         textAlign: TextAlign.center,
         maxLength: 1,
-        //keyboardType: TextInputType.number,
+        readOnly: true,
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.number,
-
+        onTap: widget.onTap,
         style: TextStyle(
           fontSize: 15,
         ),
@@ -40,7 +36,12 @@ class _KiloInputCell extends State<StatefulWidget> {
           filled: true,
           fillColor: Colors.white,
           hintText: '0',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: borderTextfieldColor)),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: borderTextfieldColor)),
         ),
       ),
     );
