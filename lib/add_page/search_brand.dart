@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:souqy/add_page/search.dart';
+import 'package:souqy/add_page/souqy_search_filed.dart';
 import 'package:souqy/res/car.dart';
+import 'package:souqy/res/style.dart';
 
 import '../res/color.dart';
 
 class SouqySearchForBrand extends StatefulWidget {
   final TextEditingController controller;
-
-  const SouqySearchForBrand({Key key, @required this.controller})
-      : super(key: key);
+  final FocusNode focusNode;
+  String count = '';
+  List<String> onchangeList = [];
+  SouqySearchForBrand(
+      {Key key, @required this.controller, @required this.focusNode})
+      : super(key: key) {
+    onchangeList = brands;
+    controller.text = count;
+  }
   @override
   State<StatefulWidget> createState() => _SouqySearchForBrandState();
 }
 
-class _SouqySearchForBrandState extends State<SouqySearchForBrand> {
-  String count = '';
-
-  List<String> onchangeList = [];
-  @override
-  void initState() {
-    super.initState();
-    onchangeList = brands;
-    widget.controller.text = count;
-  }
-
+class _SouqySearchForBrandState extends State<SouqySearchForBrand>
+    with SouqyTextfieldStyle {
   int getlength() {
-    return onchangeList.length ?? 0;
+    return widget.onchangeList.length ?? 0;
   }
 
   void filterBrand(String query) {
@@ -39,10 +37,9 @@ class _SouqySearchForBrandState extends State<SouqySearchForBrand> {
       return elementLower.contains(queryLower);
     }).toList();
     setState(() {
-      this.count = query;
-      this.onchangeList = se;
-      widget.controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: widget.controller.text.length));
+      widget.count = query;
+      widget.onchangeList = se;
+      widget.controller.selection = returnToLast(widget.controller);
     });
   }
 
@@ -52,9 +49,10 @@ class _SouqySearchForBrandState extends State<SouqySearchForBrand> {
     var size = MediaQuery.of(context).size;
 
     return Column(children: [
-      SearchFiled(
+      SouqySearchFiled(
         onChange: filterBrand,
         controller: widget.controller,
+        focusNode: widget.focusNode,
       ),
       Container(
         height: 100,
@@ -76,14 +74,14 @@ class _SouqySearchForBrandState extends State<SouqySearchForBrand> {
                       borderRadius: BorderRadius.circular(32),
                       boxShadow: [
                         BoxShadow(
-                          spreadRadius: 3,
-                          blurRadius: 6,
-                          color: BorderColor,
+                          // spreadRadius: 3,
+                          blurRadius: 3,
+                          color: Colors.black26,
                         )
                       ]),
                   child: Center(
                     child: Image.asset(
-                      'images/carBrand/' + onchangeList[index] + '.png',
+                      'images/carBrand/' + widget.onchangeList[index] + '.png',
                       width: 75,
                       height: 75,
                     ),
@@ -91,10 +89,18 @@ class _SouqySearchForBrandState extends State<SouqySearchForBrand> {
                 ),
                 onTap: () {
                   setState(() {
-                    count = onchangeList[index].toString();
-                    widget.controller.text = count;
-                    onchangeList = [];
-                    onchangeList.add(count);
+                    if (widget.onchangeList.length <= 1) {
+                      widget.count = "";
+                      widget.controller.text = widget.count;
+                      widget.onchangeList = brands;
+                    } else {
+                      widget.count = widget.onchangeList[index].toString();
+                      widget.controller.text = widget.count;
+                      widget.onchangeList = [];
+                      widget.onchangeList.add(widget.count);
+                      widget.controller.selection =
+                          returnToLast(widget.controller);
+                    }
                   });
                 },
               );
