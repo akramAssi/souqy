@@ -57,7 +57,7 @@ AppBar souqyAppBar(String type, BuildContext context) {
   }
   return AppBar(
     iconTheme: IconThemeData(color: primeCOLOR),
-    backgroundColor: Colors.white,
+    backgroundColor: backgroundColor,
     elevation: .7,
     title: buildTitleText(),
     centerTitle: true,
