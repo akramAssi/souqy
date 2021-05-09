@@ -70,7 +70,7 @@ class _CarouselWithIndicatorState extends State<SouqyImageSlider> {
                               )),
                           onTap: () {
                             final snackBar = SnackBar(
-                              backgroundColor: primeCOLOR,
+                              backgroundColor: fontColor,
                               content: Text('Long press to remove image'),
                               action: SnackBarAction(
                                 textColor: Colors.white,
