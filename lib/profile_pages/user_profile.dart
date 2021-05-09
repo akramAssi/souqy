@@ -14,7 +14,7 @@ class UserProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundCOLOR,
+      backgroundColor: backgroundColor,
       appBar: souqyAppBar("settings", context),
       body: ListView(
         children: [
