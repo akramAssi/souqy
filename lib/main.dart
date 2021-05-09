@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      locale: Locale("ar"),
+      locale: Locale("en"),
+      // locale: Locale("ar"),
       theme: ThemeData(
         fontFamily: "Ayuthaya",
         primarySwatch: primeCOLOR,
