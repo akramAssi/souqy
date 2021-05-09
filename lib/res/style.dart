@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'color.dart';
 
 mixin SouqyTextfieldStyle {
-  BorderRadius radius = BorderRadius.circular(20);
+  final BorderRadius borderRadius = BorderRadius.circular(10);
+  final Radius radius = Radius.circular(10);
   //return to last TextField
   TextSelection returnToLast(controller) {
     return TextSelection.fromPosition(
@@ -24,11 +25,11 @@ mixin SouqyTextfieldStyle {
         //set backgtound
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: borderColor),
-          borderRadius: radius,
+          borderRadius: borderRadius,
         ),
         //set border in normal mode
         focusedBorder: OutlineInputBorder(
-          borderRadius: radius,
+          borderRadius: borderRadius,
           borderSide: BorderSide(color: primeCOLOR),
         ),
         //set border in foucus mode
@@ -36,19 +37,19 @@ mixin SouqyTextfieldStyle {
   OutlineInputBorder get souqyFocusBorder => OutlineInputBorder(
         borderSide: BorderSide(color: primeCOLOR),
         borderRadius: BorderRadius.only(
-          topRight: Radius.circular(20),
+          topRight: radius,
           topLeft: Radius.zero,
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
+          bottomLeft: radius,
+          bottomRight: radius,
         ),
       );
   OutlineInputBorder get souqyEnableBorder => OutlineInputBorder(
         borderSide: BorderSide(color: borderTextfieldColor),
         borderRadius: BorderRadius.only(
-          topRight: Radius.circular(20),
+          topRight: radius,
           topLeft: Radius.zero,
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
+          bottomLeft: radius,
+          bottomRight: radius,
         ),
       );
 }
