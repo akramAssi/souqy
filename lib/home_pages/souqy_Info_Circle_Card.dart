@@ -35,7 +35,7 @@ class SouqyInfoCircleCard extends StatelessWidget {
               value,
               style: TextStyle(
                 fontSize: 6,
-                color: redColor,
+                color: alertColor,
               ),
             )
           ],
@@ -71,7 +71,7 @@ class SouqyInfoCircleCardTemp extends StatelessWidget {
                 value,
                 style: TextStyle(
                   fontSize: 6,
-                  color: redColor,
+                  color: alertColor,
                 ),
               ),
             ),
