@@ -48,7 +48,7 @@ class SouqyInfoCard extends StatelessWidget {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
                   bottomLeft: Radius.circular(25)),
-              color: redColor,
+              color: alertColor,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
