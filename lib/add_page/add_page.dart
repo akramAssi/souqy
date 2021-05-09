@@ -601,7 +601,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Flexible(
-                  flex: 3,
+                  flex: 4,
                   child: SouqyTextField(
                     label: "Expected price",
                     controller: _expectedPriceController,
