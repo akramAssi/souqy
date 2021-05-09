@@ -7,10 +7,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:souqy/add_page/search_brand.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
 import 'package:souqy/res/color.dart';
+import 'package:souqy/res/style.dart';
 import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
-import 'package:souqy/widget/kilo_input_cell.dart';
-import 'package:souqy/widget/souqy_TextFiled.dart';
-import 'package:souqy/widget/dialog/year_dialog.dart';
+import 'package:souqy/widget/souqy_kilometer_textFiled.dart';
+import 'package:souqy/widget/souqy_text_filed.dart';
+import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
 import 'package:souqy/widget/souqy_submit_button.dart';
 
 import 'car_type.dart';
@@ -20,7 +21,8 @@ class AddPage extends StatefulWidget {
   _AddPageState createState() => _AddPageState();
 }
 
-class _AddPageState extends State<AddPage> {
+class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
+  //Textfor all field Controller
   TextEditingController _makeController;
   TextEditingController _modelController;
   TextEditingController _yearController;
@@ -30,9 +32,17 @@ class _AddPageState extends State<AddPage> {
   TextEditingController _colorController;
   TextEditingController _vehicleOriginController;
   TextEditingController _ownerController;
+  TextEditingController _addInfoController;
   TextEditingController _expectedPriceController;
   TextEditingController _priceController;
   TextEditingController _paymentController;
+  var souqyKilometerTextField = SouqyKilometerTextField();
+  var carType = CarType();
+  var souqySearchForBrand;
+
+  // focusNode
+  final _makeFoucs = FocusNode();
+  final _modelFoucs = FocusNode();
 
   List<int> _yearList = [];
   List<int> _engineList = [];
@@ -53,16 +63,14 @@ class _AddPageState extends State<AddPage> {
   List<String> _myImages = [];
   List<String> _checkedItemList = [];
   List<String> allItemList = [
-    'راعش',
-    'جنط',
-    'تهبيط',
-    'اضافات ستيرنغ',
-    'فتحة سقف',
-    'طبابين معدل',
-    'عطاس',
-    'عدة صوت',
-    'كراسي جلد',
-    'تدفئة مقاعد',
+    "Alarm device",
+    "Air conditioner",
+    "CD recorder",
+    "Sunroof",
+    "Leather brushes",
+    "Sentral closure",
+    "Magnesium rims",
+    "Airbag protection"
   ];
 
   _AddPageState() {
@@ -75,13 +83,18 @@ class _AddPageState extends State<AddPage> {
     _colorController = TextEditingController();
     _vehicleOriginController = TextEditingController();
     _ownerController = TextEditingController();
+    _addInfoController = TextEditingController();
     _expectedPriceController = TextEditingController();
     _priceController = TextEditingController();
     _paymentController = TextEditingController();
-    _gearController.text = "Gear";
-    _fuelController.text = "Fuel";
+    souqySearchForBrand = SouqySearchForBrand(
+      controller: _makeController,
+      focusNode: _makeFoucs,
+    );
+    // _gearController.text = "Gear";
+    // _fuelController.text = "Fuel";
     _colorController.text = "Color";
-    _vehicleOriginController.text = "Origin";
+    // _vehicleOriginController.text = "Origin";
     _ownerController.text = "0";
     final year = DateTime.now().year;
     for (int i = year; i >= 1965; i--) {
@@ -92,11 +105,19 @@ class _AddPageState extends State<AddPage> {
     }
   }
 
+  void _goNext(FocusNode nextNode) {
+    // FocusNode newNode =
+    //     widget.emailVAlidator.isValid(_email) ? _passwordFoucs : _emailFoucs;
+    FocusScope.of(context).requestFocus(nextNode);
+  }
+
   void onPressYear(dynamic value) {
     setState(() {
-      _yearController.text = value.toString();
+      print("ark" + value.toString());
+      _yearController.text = value?.toString() ?? "${DateTime.now().year}";
     });
     Navigator.of(context).pop();
+    _goNext(_modelFoucs);
   }
 
   void onPressEngine(dynamic value) {
@@ -108,7 +129,7 @@ class _AddPageState extends State<AddPage> {
 
   void _openDialog(
       {BuildContext context, List list, void Function(dynamic) onPress}) {
-    showYear(
+    showBotomSheatDialogWithOneColumn(
       context: context,
       list: list,
       onPress: onPress,
@@ -197,78 +218,49 @@ class _AddPageState extends State<AddPage> {
     });
   }
 
-  void _submit() {
+  void _submit(String type) {
     print("make : ${_makeController.text}");
+    print("type : $type");
+    print("year : ${_yearController.text}");
+    print("model : ${_modelController.text}");
+    print("model : ${souqyKilometerTextField.kilometer}");
+    print("engin : ${_engineController.text}");
+    print("gear : ${_gearController.text}");
+    print("gear : ${_gearController.text}");
+    print("fuel : ${_fuelController.text}");
+    print("color : ${currentColor.toString()}");
+    print("old owner : $owner");
+    print("origin : ${_vehicleOriginController.text}");
+    print("features ${_checkedItemList.toString()}");
+    print("origin : ${_addInfoController.text}");
+    print("price ${_priceController.text}");
+    print("payment ${_paymentController.text}");
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Container(
       color: Colors.white,
       child: ListView(
         children: [
-          SouqySearchForBrand(
-            controller: _makeController,
-          ),
-          CarType(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: SouqyTextField(
-                    lable: "Year",
-                    controller: _yearController,
-                    height: 50,
-                    isReadOnly: true,
-                    textAlign: TextAlign.center,
-                    onTop: () {
-                      _openDialog(
-                          context: context,
-                          list: _yearList,
-                          onPress: onPressYear);
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: size.width * .03,
-                ),
-                Flexible(
-                  flex: 3,
-                  child: SouqyTextField(
-                    lable: "Model",
-                    controller: _modelController,
-                    height: 50,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          souqySearchForBrand,
+          // first widget have search and brand list
+          carType,
+          // type car widget
+          rowYearAndModel(context, size),
 
           ///end 3th row year and model
-          // SizedBox(
-          //   height: 15,
-          // ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
             child: Text(
-              "kilometer",
+              "Kilometer",
               style: TextStyle(fontSize: 20),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              KiloInputCell(),
-              KiloInputCell(),
-              KiloInputCell(),
-              KiloInputCell(),
-              KiloInputCell(),
-              KiloInputCell(),
-            ],
-          ),
+          souqyKilometerTextField,
+          //kilometer textfield
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             child: Row(
@@ -383,7 +375,7 @@ class _AddPageState extends State<AddPage> {
                       Container(
                         height: 50,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black54),
+                          border: Border.all(color: borderTextfieldColor),
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(20),
                             topLeft: Radius.zero,
@@ -443,8 +435,7 @@ class _AddPageState extends State<AddPage> {
                                               _ownerController.text.length));
                                 },
                                 onTap: () => _ownerController.selection =
-                                    TextSelection.fromPosition(TextPosition(
-                                        offset: _ownerController.text.length)),
+                                    returnToLast(_ownerController),
                               ),
                             ),
                             Flexible(
@@ -469,7 +460,7 @@ class _AddPageState extends State<AddPage> {
                   child: SouqyButtonDialog(
                     gearController: _vehicleOriginController,
                     list: _vehicleOriginList,
-                    lable: "Vehicle origin",
+                    lable: "origin",
                     withIcon: false,
                   ),
                 ),
@@ -527,21 +518,20 @@ class _AddPageState extends State<AddPage> {
             ),
             width: size.width,
             child: GroupButton(
-              unselectedBorderColor: Colors.grey,
-              selectedColor: Colors.grey,
+              unselectedColor: backgroundColor,
+              unselectedBorderColor: borderTextfieldColor,
+              selectedColor: primeCOLOR,
               borderRadius: BorderRadius.circular(15),
               selectedTextStyle: TextStyle(
-                color: fontColor,
+                color: backgroundColor,
               ),
               isRadio: false,
               spacing: 10,
               onSelected: (index, isSelected) {
                 if (isSelected) {
                   _checkedItemList.add(allItemList[index]);
-                  print(_checkedItemList);
                 } else if (!isSelected) {
                   _checkedItemList.remove(allItemList[index]);
-                  print(_checkedItemList);
                 }
               },
               buttons: allItemList,
@@ -560,27 +550,17 @@ class _AddPageState extends State<AddPage> {
             width: size.width,
             margin: EdgeInsets.only(left: 10, right: 10),
             child: TextField(
-              textInputAction: TextInputAction.done,
+              controller: _addInfoController,
+              textInputAction: TextInputAction.newline,
               maxLines: null,
               textAlignVertical: TextAlignVertical.top,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.zero,
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  ),
-                ),
+                enabledBorder: souqyEnableBorder,
                 filled: true,
                 fillColor: Colors.white,
                 hintText: 'add text ..',
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: primeCOLOR,
-                    ),
-                    borderRadius: BorderRadius.circular(20)),
+                focusedBorder: souqyFocusBorder,
                 labelStyle: TextStyle(
                   fontSize: 10,
                 ),
@@ -595,7 +575,7 @@ class _AddPageState extends State<AddPage> {
               top: 20,
             ),
             decoration: BoxDecoration(
-                color: redColor,
+                color: alertColor,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(20),
                   bottomRight: Radius.circular(20),
@@ -644,7 +624,7 @@ class _AddPageState extends State<AddPage> {
                             primary: Colors.white,
                             onPrimary: primeCOLOR,
                             shape: CircleBorder(
-                              side: BorderSide(color: BorderColor),
+                              side: BorderSide(color: borderColor),
                             ),
                             padding: EdgeInsets.all(12)),
                         child: Image.asset("images/expect.png"),
@@ -665,6 +645,7 @@ class _AddPageState extends State<AddPage> {
               lable: "price",
               controller: _priceController,
               lableFontSize: 20,
+              keyboardType: TextInputType.number,
             ),
           ),
           SizedBox(
@@ -706,13 +687,49 @@ class _AddPageState extends State<AddPage> {
                 height: 45,
                 fontSize: 15,
                 onPress: () {
-                  _submit();
+                  _submit(carType.typeSelected);
                 },
               ),
             ),
           ),
           SizedBox(
             height: 40,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding rowYearAndModel(BuildContext context, Size size) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        children: [
+          Flexible(
+            flex: 1,
+            child: SouqyTextField(
+              lable: "Year",
+              controller: _yearController,
+              height: 50,
+              isReadOnly: true,
+              textAlign: TextAlign.center,
+              onTop: () {
+                _openDialog(
+                    context: context, list: _yearList, onPress: onPressYear);
+              },
+            ),
+          ),
+          SizedBox(
+            width: size.width * .03,
+          ),
+          Flexible(
+            flex: 3,
+            child: SouqyTextField(
+              lable: "Model",
+              controller: _modelController,
+              focusNode: _modelFoucs,
+              height: 50,
+            ),
           ),
         ],
       ),
