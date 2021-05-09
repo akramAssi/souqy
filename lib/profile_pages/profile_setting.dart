@@ -4,7 +4,7 @@ import 'package:souqy/model/user_model.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
-import 'package:souqy/widget/souqy_TextFiled.dart';
+import 'package:souqy/widget/souqy_text_filed.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
 import 'avatar.dart';
@@ -65,7 +65,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
     setDefalut();
 
     return Scaffold(
-      backgroundColor: backgroundCOLOR,
+      backgroundColor: backgroundColor,
       appBar: souqyAppBar("profileSettin", context),
       body: SingleChildScrollView(
         child: Center(
@@ -88,63 +88,85 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 },
                 isSetting: true,
               ),
-              Directionality(
-                textDirection: TextDirection.rtl,
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 2, horizontal: 25),
-                  child: Column(
-                    children: [
-                      SouqyTextField(
-                        lable: "الاسم",
-                        controller: _nameController,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SouqyTextField(
-                        lable: "البريد الالكتروني",
-                        controller: _emailController,
-                      ),
-                      // SizedBox(
-                      //   height: 10,
-                      // ),
-                      // SouqyTextField(
-                      //   lable: "كلمة المرور",
-                      //   controller: _passwordController,
-                      // ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SouqyTextField(
-                        lable: "رقم الهاتف",
-                        controller: _phoneController,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SouqyTextField(
-                        lable: "محافظة",
-                        controller: _cityController,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SouqyTextField(
-                        lable: "مدينة",
-                        controller: _areaController,
-                      ),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              saveAddress(phone: phone, area: area, city: city);
-                            },
-                            child: Text("حفظ"),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 2, horizontal: 25),
+                child: Column(
+                  children: [
+                    SouqyTextField(
+                      lable: "الاسم",
+                      controller: _nameController,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SouqyTextField(
+                      lable: "البريد الالكتروني",
+                      controller: _emailController,
+                    ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    // SouqyTextField(
+                    //   lable: "كلمة المرور",
+                    //   controller: _passwordController,
+                    // ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SouqyTextField(
+                      lable: "رقم الهاتف",
+                      controller: _phoneController,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SouqyTextField(
+                      lable: "محافظة",
+                      controller: _cityController,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SouqyTextField(
+                      lable: "مدينة",
+                      controller: _areaController,
+                    ),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: primeCOLOR,
+                              onPrimary: backgroundColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 20)),
+                          onPressed: () {
+                            // saveAddress(phone: phone, area: area, city: city);
+                            print("save");
+                          },
+                          child: Text("Cancel"),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: primeCOLOR,
+                              onPrimary: backgroundColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 20)),
+                          onPressed: () {
+                            // saveAddress(phone: phone, area: area, city: city);
+                            print("save");
+                          },
+                          child: Text("Save"),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               )
             ],
