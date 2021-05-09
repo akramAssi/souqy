@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
+import 'package:souqy/res/string.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
@@ -33,51 +34,48 @@ class LoginPage extends StatelessWidget {
       backgroundColor: backgroundColor,
       body: Center(
         child: SingleChildScrollView(
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: buildTitleText(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: buildTitleText(),
+              ),
+              Container(
+                margin:
+                    EdgeInsets.only(top: 40, left: 42, right: 42, bottom: 20),
+                child: Column(
+                  children: [
+                    SouqyTextField(
+                      label: Strings.e_mail,
+                      controller: _emailController,
+                    ),
+                    SizedBox(
+                      height: 19,
+                    ),
+                    SouqyTextField(
+                      label: Strings.password,
+                      controller: _passwordController,
+                    ),
+                    SizedBox(
+                      height: 38,
+                    ),
+                    SouqySubmitBotton(
+                      label: Strings.login,
+                      onPress: () =>
+                          {_signInWithEmailAndPassword(email, password)},
+                    ),
+                  ],
                 ),
-                Container(
-                  margin:
-                      EdgeInsets.only(top: 40, left: 42, right: 42, bottom: 20),
-                  child: Column(
-                    children: [
-                      SouqyTextField(
-                        label: "البريد الإلكتروني",
-                        controller: _emailController,
-                      ),
-                      SizedBox(
-                        height: 19,
-                      ),
-                      SouqyTextField(
-                        label: "كلمة المرور",
-                        controller: _passwordController,
-                      ),
-                      SizedBox(
-                        height: 38,
-                      ),
-                      SouqySubmitBotton(
-                        label: "Login",
-                        onPress: () =>
-                            {_signInWithEmailAndPassword(email, password)},
-                      ),
-                    ],
-                  ),
-                ),
-                BottomSingIn(
-                  isLogin: true,
-                ),
-                SizedBox(
-                  height: 35,
-                ),
-                buildTextButton(),
-              ],
-            ),
+              ),
+              BottomSingIn(
+                isLogin: true,
+              ),
+              SizedBox(
+                height: 35,
+              ),
+              buildTextButton(),
+            ],
           ),
         ),
       ),
@@ -93,16 +91,21 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              "دخول كزائر",
+              Strings.visitor,
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(
               width: 10,
             ),
-            Image.asset(
-              "images/leftarrow.png",
-              height: 30,
-            )
+            Icon(
+              Icons.arrow_forward_ios,
+              color: primeCOLOR,
+              size: 30,
+            ),
+            // Image.asset(
+            //   "images/leftarrow.png",
+            //   height: 30,
+            // )
           ],
         ),
       ),
@@ -111,14 +114,14 @@ class LoginPage extends StatelessWidget {
 
   Text buildTitleText() {
     return Text(
-      "SOUQY",
+      Strings.appName,
       style: TextStyle(
         color: primeCOLOR,
         fontSize: 73,
         shadows: [
           Shadow(
             blurRadius: 10.0,
-            color: Color(0xff958585),
+            color: borderColor,
             offset: Offset(2.0, 2.0),
           ),
         ],

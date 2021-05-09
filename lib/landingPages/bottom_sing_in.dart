@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
+import 'package:souqy/res/string.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 
@@ -33,7 +34,7 @@ class BottomSingIn extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> body = [
       Text(
-        "او تسجيل الدخول عن طريق",
+        Strings.orLoginWith,
         style: TextStyle(color: primeCOLOR, fontSize: 15, fontFamily: "Arial"),
       ),
       SizedBox(
@@ -62,7 +63,7 @@ class BottomSingIn extends StatelessWidget {
         ),
         TextButton(
           child: Text(
-            "انشاء حساب جديد ؟",
+            Strings.createaNewAccount,
             style: TextStyle(
               color: primeCOLOR,
               fontSize: 15,
@@ -79,7 +80,7 @@ class BottomSingIn extends StatelessWidget {
         ),
         TextButton(
           child: Text(
-            "لدي حساب ",
+            Strings.alreadyHaveAccount,
             style: TextStyle(
               color: primeCOLOR,
               fontSize: 15,
