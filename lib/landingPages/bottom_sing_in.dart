@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
@@ -63,8 +62,8 @@ class BottomSingIn extends StatelessWidget {
           height: 8,
         ),
         TextButton(
-          child: AutoSizeText(
-            Strings.createaNewAccount,
+          child: Text(
+            Strings.createNewAccount,
             style: TextStyle(
               color: primeCOLOR,
               fontSize: 15,
