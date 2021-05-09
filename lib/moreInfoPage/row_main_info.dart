@@ -50,7 +50,7 @@ class RowMainInfo extends StatelessWidget {
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(25),
                 bottomRight: Radius.circular(25)),
-            color: redColor,
+            color: alertColor,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
