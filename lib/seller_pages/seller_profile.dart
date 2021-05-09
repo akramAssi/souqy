@@ -15,7 +15,7 @@ class SellerProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundCOLOR,
+      backgroundColor: backgroundColor,
       appBar: souqyAppBar("none", context),
       body: ListView(
         children: [
