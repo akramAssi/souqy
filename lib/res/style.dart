@@ -18,7 +18,7 @@ mixin SouqyTextfieldStyle {
         //icon search
         labelText: "Make",
         labelStyle: TextStyle(fontSize: 18, color: primeCOLOR),
-        //prepare lable
+        //prepare label
         filled: true,
         fillColor: backgroundColor,
         //set backgtound

@@ -5,7 +5,7 @@ import 'package:souqy/res/style.dart';
 
 // ignore: must_be_immutable
 class SouqyTextField extends StatelessWidget with SouqyTextfieldStyle {
-  final String lable;
+  final String label;
   final TextEditingController controller;
   final double height;
   final bool isReadOnly;
@@ -13,14 +13,14 @@ class SouqyTextField extends StatelessWidget with SouqyTextfieldStyle {
   final VoidCallback onTop;
   final VoidCallback onEditingComplete;
   final bool filled;
-  final double lableFontSize;
-  final bool showLable;
+  final double labelFontSize;
+  final bool showlabel;
   final FocusNode focusNode;
   final TextInputType keyboardType;
   Color color = primeCOLOR;
   SouqyTextField(
       {Key key,
-      @required this.lable,
+      @required this.label,
       @required this.controller,
       this.height = 60,
       this.isReadOnly = false,
@@ -28,8 +28,8 @@ class SouqyTextField extends StatelessWidget with SouqyTextfieldStyle {
       this.onTop,
       this.color,
       this.filled = false,
-      this.lableFontSize = 14.0,
-      this.showLable = true,
+      this.labelFontSize = 14.0,
+      this.showlabel = true,
       this.focusNode,
       this.onEditingComplete,
       this.keyboardType = TextInputType.text})
@@ -39,14 +39,14 @@ class SouqyTextField extends StatelessWidget with SouqyTextfieldStyle {
   Widget build(BuildContext context) {
     List<Widget> widget = [];
 
-    if (showLable) {
+    if (showlabel) {
       widget.addAll(
         [
           Text(
-            lable,
+            label,
             style: TextStyle(
               color: primeCOLOR,
-              fontSize: lableFontSize,
+              fontSize: labelFontSize,
             ),
           ),
           SizedBox(

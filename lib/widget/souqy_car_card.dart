@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:souqy/home_pages/souqy_Info_Circle_Card.dart';
-import 'package:souqy/home_pages/souqy_available_lable.dart';
+import 'package:souqy/home_pages/souqy_available_label.dart';
 import 'package:souqy/home_pages/souqy_info_card.dart';
 import 'package:souqy/home_pages/souqy_thumbnail_card.dart';
 import 'package:souqy/moreInfoPage/moreInfoPage.dart';
@@ -53,9 +53,9 @@ class SouqyCarCard extends StatelessWidget {
               Positioned(
                 right: size.width / 80,
                 top: 25.0,
-                child: SouqyAvailableLable(
+                child: SouqyAvailabellabel(
                   size: size,
-                  available: true,
+                  availabel: true,
                   isCard: true,
                 ),
               ),

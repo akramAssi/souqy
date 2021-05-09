@@ -269,7 +269,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
                 Flexible(
                   flex: 1,
                   child: SouqyTextField(
-                    lable: "Engine Size",
+                    label: "Engine Size",
                     controller: _engineController,
                     height: 50,
                     textAlign: TextAlign.center,
@@ -289,7 +289,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
                   child: SouqyButtonDialog(
                     gearController: _gearController,
                     list: _gearList,
-                    lable: "Gear Type",
+                    label: "Gear Type",
                   ),
                 ),
                 SizedBox(
@@ -300,7 +300,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
                   child: SouqyButtonDialog(
                     gearController: _fuelController,
                     list: _fuelList,
-                    lable: "Fuel Type",
+                    label: "Fuel Type",
                   ),
                 ),
               ],
@@ -314,7 +314,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
                 Flexible(
                   flex: 1,
                   child: SouqyTextField(
-                    lable: "Color",
+                    label: "Color",
                     controller: _colorController,
                     height: 50,
                     isReadOnly: true,
@@ -460,7 +460,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
                   child: SouqyButtonDialog(
                     gearController: _vehicleOriginController,
                     list: _vehicleOriginList,
-                    lable: "origin",
+                    label: "origin",
                     withIcon: false,
                   ),
                 ),
@@ -584,7 +584,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
               padding:
                   const EdgeInsets.symmetric(horizontal: 12.0, vertical: 15),
               child: Text(
-                "Expected price is available to the advertiser only",
+                "Expected price is availabel to the advertiser only",
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.white,
@@ -603,9 +603,9 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
                 Flexible(
                   flex: 3,
                   child: SouqyTextField(
-                    lable: "Expected price",
+                    label: "Expected price",
                     controller: _expectedPriceController,
-                    lableFontSize: 20,
+                    labelFontSize: 20,
                     isReadOnly: true,
                   ),
                 ),
@@ -642,9 +642,9 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: SouqyTextField(
-              lable: "price",
+              label: "price",
               controller: _priceController,
-              lableFontSize: 20,
+              labelFontSize: 20,
               keyboardType: TextInputType.number,
             ),
           ),
@@ -668,8 +668,8 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
                   child: SouqyButtonDialog(
                     gearController: _paymentController,
                     list: _payment,
-                    lable: "Payment method",
-                    showLable: false,
+                    label: "Payment method",
+                    showlabel: false,
                     height: 60,
                   ),
                 ),
@@ -708,7 +708,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
           Flexible(
             flex: 1,
             child: SouqyTextField(
-              lable: "Year",
+              label: "Year",
               controller: _yearController,
               height: 50,
               isReadOnly: true,
@@ -725,7 +725,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
           Flexible(
             flex: 3,
             child: SouqyTextField(
-              lable: "Model",
+              label: "Model",
               controller: _modelController,
               focusNode: _modelFoucs,
               height: 50,

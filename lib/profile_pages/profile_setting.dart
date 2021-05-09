@@ -93,42 +93,42 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 child: Column(
                   children: [
                     SouqyTextField(
-                      lable: "الاسم",
+                      label: "الاسم",
                       controller: _nameController,
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     SouqyTextField(
-                      lable: "البريد الالكتروني",
+                      label: "البريد الالكتروني",
                       controller: _emailController,
                     ),
                     // SizedBox(
                     //   height: 10,
                     // ),
                     // SouqyTextField(
-                    //   lable: "كلمة المرور",
+                    //   label: "كلمة المرور",
                     //   controller: _passwordController,
                     // ),
                     SizedBox(
                       height: 10,
                     ),
                     SouqyTextField(
-                      lable: "رقم الهاتف",
+                      label: "رقم الهاتف",
                       controller: _phoneController,
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     SouqyTextField(
-                      lable: "محافظة",
+                      label: "محافظة",
                       controller: _cityController,
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     SouqyTextField(
-                      lable: "مدينة",
+                      label: "مدينة",
                       controller: _areaController,
                     ),
                     Row(

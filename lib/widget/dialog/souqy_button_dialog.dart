@@ -8,9 +8,9 @@ class SouqyButtonDialog extends StatelessWidget {
     Key key,
     @required TextEditingController gearController,
     @required this.list,
-    @required this.lable,
+    @required this.label,
     this.withIcon = true,
-    this.showLable = true,
+    this.showlabel = true,
     this.height = 50,
   })  : _controller = gearController,
         super(key: key) {
@@ -19,9 +19,9 @@ class SouqyButtonDialog extends StatelessWidget {
 
   final TextEditingController _controller;
   final List<String> list;
-  final String lable;
+  final String label;
   final bool withIcon;
-  final bool showLable;
+  final bool showlabel;
   final double height;
 
   @override
@@ -29,13 +29,13 @@ class SouqyButtonDialog extends StatelessWidget {
     return Stack(
       children: [
         SouqyTextField(
-          lable: lable,
+          label: label,
           controller: _controller,
           height: height,
           isReadOnly: true,
           textAlign:
-              showLable && height == 50 ? TextAlign.center : TextAlign.start,
-          showLable: showLable,
+              showlabel && height == 50 ? TextAlign.center : TextAlign.start,
+          showlabel: showlabel,
           onTop: () {
             showCupertinoModalPopup(
               context: context,
@@ -71,8 +71,8 @@ class SouqyButtonDialog extends StatelessWidget {
         ),
         (withIcon)
             ? Positioned(
-                top: showLable && height == 50 ? 31 : 18,
-                right: showLable && height == 50 ? 8 : 15,
+                top: showlabel && height == 50 ? 31 : 18,
+                right: showlabel && height == 50 ? 8 : 15,
                 child: Icon(
                   Icons.arrow_drop_down,
                   size: 30,

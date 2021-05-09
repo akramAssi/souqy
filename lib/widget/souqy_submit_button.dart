@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
 
 class SouqySubmitBotton extends StatelessWidget {
-  // final String lable;
+  // final String label;
   // final VoidCallback onPress;
   // const SouqySubmitBotton(
-  //     {Key key, @required this.lable, @required this.onPress})
+  //     {Key key, @required this.label, @required this.onPress})
   //     : super(key: key);
   final VoidCallback onPress;
   final String label;
