@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:souqy/home_pages/souqy_available_lable.dart';
+import 'package:souqy/home_pages/souqy_available_label.dart';
 import 'package:souqy/moreInfoPage/row_main_info.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
 class MoreInfoPage extends StatelessWidget {
-  String lable;
+  String label;
   final List<String> imgList = [
     'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
     'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
@@ -34,8 +34,8 @@ class MoreInfoPage extends StatelessWidget {
                     left: 33,
                     // right: size.width / 80,
                     top: 25.0,
-                    child: SouqyAvailableLable(
-                        available: true, size: size, isCard: false))
+                    child: SouqyAvailabellabel(
+                        availabel: true, size: size, isCard: false))
               ],
             ),
             RowMainInfo(
@@ -54,36 +54,36 @@ class MoreInfoPage extends StatelessWidget {
               children: [
                 Circleinfocard(
                   icon: "mini_car.png",
-                  lable: "خصوصي",
+                  label: "خصوصي",
                 ),
                 Circleinfocard(
                   icon: "kilo.png",
-                  lable: "100",
+                  label: "100",
                 ),
                 Circleinfocard(
                   icon: "year.png",
-                  lable: "2012",
+                  label: "2012",
                 ),
                 Circleinfocard(
                   icon: "car_seat.png",
-                  lable: "5 مقاعد",
+                  label: "5 مقاعد",
                 ),
                 Circleinfocard(
                   icon: "color.png",
-                  lable: "اخضر",
+                  label: "اخضر",
                 ),
                 Circleinfocard(
                   icon: "gear.png",
-                  lable: "عادي",
+                  label: "عادي",
                 ),
                 Circleinfocard(
                   icon: "engine.png",
-                  lable: "1800",
+                  label: "1800",
                 ),
-                Circleinfocard(icon: "gas_station.png", lable: "بنزين"),
+                Circleinfocard(icon: "gas_station.png", label: "بنزين"),
                 Circleinfocard(
                   icon: "user.png",
-                  lable: "بد ٢",
+                  label: "بد ٢",
                 ),
               ],
             ),
@@ -252,10 +252,10 @@ class Circleinfocard extends StatelessWidget {
   Circleinfocard({
     Key key,
     @required this.icon,
-    @required this.lable,
+    @required this.label,
   }) : super(key: key);
   final String icon;
-  final String lable;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
@@ -264,10 +264,11 @@ class Circleinfocard extends StatelessWidget {
       height: 70,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          border: Border.all(
-            color: BorderColor,
-          )),
+        borderRadius: BorderRadius.circular(50),
+        border: Border.all(
+          color: borderColor,
+        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -280,10 +281,10 @@ class Circleinfocard extends StatelessWidget {
             height: 3,
           ),
           Text(
-            lable,
+            label,
             style: TextStyle(
               fontSize: 12,
-              color: redColor,
+              color: alertColor,
             ),
           ),
         ],
