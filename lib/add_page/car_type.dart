@@ -5,28 +5,21 @@ import 'package:souqy/res/color.dart';
 // ignore: must_be_immutable
 class CarType extends StatefulWidget {
   List<String> myProducts;
+  int loc;
+  int setSelected;
+  List<String> onchangeList = [];
   CarType({
     key,
-  }) : super(key: key);
+  }) : super(key: key) {
+    onchangeList = carTypeList;
+  }
+  String typeSelected = "";
 
   @override
   State<StatefulWidget> createState() => _CarType();
 }
 
 class _CarType extends State<CarType> {
-  List<String> onchangeList = [];
-
-  int loc;
-  String typee;
-  int setSelected;
-  @override
-  void initState() {
-    super.initState();
-
-    onchangeList = carTypeList;
-  }
-
-  var flag = 0;
   void filterType(String query) {
     var se;
     if (query == '') {
@@ -39,58 +32,65 @@ class _CarType extends State<CarType> {
       }).toList();
     }
     setState(() {
-      this.onchangeList = se;
+      widget.onchangeList = se;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    print(widget.loc);
     return Container(
       margin: EdgeInsets.only(top: 5),
-      padding: EdgeInsets.all(10),
-      height: setSelected != 0 ? 170 : 80,
+      padding: EdgeInsets.symmetric(vertical: 10),
+      height: widget.setSelected != 0 ? 180 : 80,
       child: GridView.builder(
+          shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent:
                 MediaQuery.of(context).orientation == Orientation.portrait
                     ? size.width / 3
-                    : size.width / 7,
-            childAspectRatio: 3,
+                    : size.width / 6,
+            mainAxisSpacing: 15,
+            crossAxisSpacing: 10,
+            childAspectRatio: 3.8,
           ),
-          itemCount: onchangeList.length,
+          itemCount: widget.onchangeList.length,
           itemBuilder: (BuildContext ctx, index) {
             return ChoiceChip(
-              avatar: InkWell(
-                child: setSelected == 0
-                    ? Image.asset(
-                        'images/carType/' + carTypeList[loc] + '.png',
-                      )
-                    : Image.asset(
-                        'images/carType/' + carTypeList[index] + '.png',
-                      ),
-              ),
+              avatar: widget.setSelected == 0
+                  ? Image.asset(
+                      'images/carType/' + carTypeList[widget.loc] + '.png',
+                      width: 30,
+                    )
+                  : Image.asset(
+                      'images/carType/' + carTypeList[index] + '.png',
+                      width: 30,
+                    ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(color: BorderColor, width: 1.0)),
-              label: Text(onchangeList[index]),
-              selected: setSelected == index,
+                  side: BorderSide(color: borderColor, width: 1.0)),
+              label: Container(
+                alignment: Alignment.center,
+                width: 60,
+                child: Text(widget.onchangeList[index]),
+              ),
+              selected: widget.setSelected == index,
               selectedColor: Colors.grey,
               onSelected: (bool selected) {
                 if (selected) {
-                  typee = carTypeList[index];
-                  loc = index;
-                  filterType(typee);
-                  setSelected = 0;
-                  print(index);
+                  widget.typeSelected = carTypeList[index];
+                  widget.loc = index;
+                  filterType(widget.typeSelected);
+                  widget.setSelected = 0;
                 } else if (!selected) {
-                  setSelected = null;
+                  widget.setSelected = null;
                   filterType('');
-                  print(onchangeList);
+                  widget.typeSelected = "";
                 }
               },
-              backgroundColor: Colors.white,
+              backgroundColor: backgroundColor,
               labelStyle: TextStyle(color: fontColor),
             );
           }),
