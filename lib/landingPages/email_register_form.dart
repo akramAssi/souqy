@@ -77,7 +77,7 @@ class EmailRegisterForm extends StatelessWidget {
                       height: 30,
                     ),
                     SouqySubmitBotton(
-                      label: Strings.createaNewAccount,
+                      label: Strings.createAccount,
                       onPress: () {
                         _creatUserWithEmailAndPassword(
                             context, name, email, password);
