@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-const Color backgroundCOLOR = Colors.white;
-const Color annLable = Color(0xFFFFE13E);
-const Color BorderColor = Color(0x31707070);
-const Color fontColor = Color.fromARGB(255, 28, 33, 67);
-const Color redColor = Color.fromARGB(255, 198, 46, 46);
+// const Color backgroundColor = Colors.white;
+// const Color annotationColor = Color(0xFFFFE13E);
+// const Color borderColor = Color(0x31707070);
+// const Color borderTextfieldColor = Color(0xa9707070);
+// const Color fontColor = Color.fromARGB(255, 28, 33, 67);
+const Color alertColor = Color.fromARGB(255, 198, 46, 46);
 const List<Color> carColor = [
   Colors.white,
   Colors.grey,
@@ -27,7 +28,31 @@ const List<Color> carColor = [
   Colors.yellow,
   Colors.yellowAccent,
 ];
-MaterialColor primeCOLOR = MaterialColor(0xFF212F91, <int, Color>{
+// MaterialColor primeCOLOR = MaterialColor(0xFF212F91, <int, Color>{
+//   50: Color.fromRGBO(136, 14, 79, .1),
+//   100: Color.fromRGBO(136, 14, 79, .2),
+//   200: Color.fromRGBO(136, 14, 79, .3),
+//   300: Color.fromRGBO(136, 14, 79, .4),
+//   400: Color.fromRGBO(136, 14, 79, .5),
+//   500: Color.fromRGBO(136, 14, 79, .6),
+//   600: Color.fromRGBO(136, 14, 79, .7),
+//   700: Color.fromRGBO(136, 14, 79, .8),
+//   800: Color.fromRGBO(136, 14, 79, .9),
+//   900: Color.fromRGBO(136, 14, 79, 1),
+// });
+
+// prime:08535d
+// font:02333c
+// border:99bcc4
+
+const Color backgroundColor = Colors.white;
+const Color annotationColor = Color(0xFFFFE13E);
+const Color borderColor = Color(0x3199bcc4);
+const Color borderTextfieldColor = Color(0xa999bcc4);
+const Color fontColor = Color(0xff02333c);
+// const Color alertColor = Color(0xff08535d);
+
+MaterialColor primeCOLOR = MaterialColor(0xff08535d, <int, Color>{
   50: Color.fromRGBO(136, 14, 79, .1),
   100: Color.fromRGBO(136, 14, 79, .2),
   200: Color.fromRGBO(136, 14, 79, .3),
