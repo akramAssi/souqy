@@ -8,9 +8,12 @@ import 'package:souqy/service/Auth.dart';
 import 'package:souqy/service/database_repo.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/service/storage_repo.dart';
+import 'package:souqy/service/firebase_auth_exceptions_handling.dart';
 
 class UserController {
   UserModel _currentUser;
+  AuthResultStatus _status;
+
   Auth _authRepo = locator.get<Auth>();
   StorageRepo _storageRepo = locator.get<StorageRepo>();
   FirestoreDatabase _databaseRepo = locator.get<FirestoreDatabase>();
@@ -68,11 +71,23 @@ class UserController {
     }
   }
 
-  Future<void> signInWithEmailAndPassword(
+  Future<AuthResultStatus> signInWithEmailAndPassword(
       {String email, String password}) async {
-    User user = await _authRepo.signInWithEmailAndPassword(email, password);
-    _currentUser = UserModel.user(user);
-
+    try {
+      User user = await _authRepo.signInWithEmailAndPassword(email, password);
+      if (user != null) {
+        _status = AuthResultStatus.successful;
+        _currentUser = UserModel.user(user);
+        print('Exception @createAccount: 15');
+      } else {
+        _status = AuthResultStatus.undefined;
+        print('Exception @createAccount: 11');
+      }
+    } catch (e) {
+      print('Exception @createAccount: $e');
+      _status = AuthExceptionHandler.handleException(e);
+    }
+    return _status;
     // _currentUser.avatarUrl = await getDownloadUrl();
   }
 
