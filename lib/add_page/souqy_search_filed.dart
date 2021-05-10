@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../res/color.dart';
 import '../res/style.dart';
 
-class SouqySearchFiled extends StatefulWidget with SouqyTextfieldStyle {
+class SouqySearchFiled extends StatefulWidget with SouqyFormFieldStyle {
   final void Function(String) onChange;
   final FocusNode focusNode;
   final controller;

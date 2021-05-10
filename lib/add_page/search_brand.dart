@@ -21,7 +21,7 @@ class SouqySearchForBrand extends StatefulWidget {
 }
 
 class _SouqySearchForBrandState extends State<SouqySearchForBrand>
-    with SouqyTextfieldStyle {
+    with SouqyFormFieldStyle {
   int getlength() {
     return widget.onchangeList.length ?? 0;
   }

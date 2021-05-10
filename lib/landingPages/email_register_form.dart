@@ -48,28 +48,28 @@ class EmailRegisterForm extends StatelessWidget {
                     EdgeInsets.only(top: 5, left: 42, right: 42, bottom: 15),
                 child: Column(
                   children: [
-                    SouqyTextField(
+                    SouqyFormField(
                       label: Strings.name,
                       controller: _nameController,
                     ),
                     SizedBox(
                       height: 15,
                     ),
-                    SouqyTextField(
+                    SouqyFormField(
                       label: Strings.e_mail,
                       controller: _emailController,
                     ),
                     SizedBox(
                       height: 15,
                     ),
-                    SouqyTextField(
+                    SouqyFormField(
                       label: Strings.e_mail,
                       controller: _passwordController,
                     ),
                     SizedBox(
                       height: 15,
                     ),
-                    SouqyTextField(
+                    SouqyFormField(
                       label: Strings.phone,
                       controller: _phoneController,
                     ),

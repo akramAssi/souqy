@@ -28,7 +28,7 @@ class SouqyButtonDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SouqyTextField(
+        SouqyFormField(
           label: label,
           controller: _controller,
           height: height,

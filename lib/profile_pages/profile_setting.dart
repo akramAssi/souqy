@@ -92,42 +92,42 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 margin: EdgeInsets.symmetric(vertical: 2, horizontal: 25),
                 child: Column(
                   children: [
-                    SouqyTextField(
+                    SouqyFormField(
                       label: "الاسم",
                       controller: _nameController,
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    SouqyTextField(
+                    SouqyFormField(
                       label: "البريد الالكتروني",
                       controller: _emailController,
                     ),
                     // SizedBox(
                     //   height: 10,
                     // ),
-                    // SouqyTextField(
+                    // SouqyFormField(
                     //   label: "كلمة المرور",
                     //   controller: _passwordController,
                     // ),
                     SizedBox(
                       height: 10,
                     ),
-                    SouqyTextField(
+                    SouqyFormField(
                       label: "رقم الهاتف",
                       controller: _phoneController,
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    SouqyTextField(
+                    SouqyFormField(
                       label: "محافظة",
                       controller: _cityController,
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    SouqyTextField(
+                    SouqyFormField(
                       label: "مدينة",
                       controller: _areaController,
                     ),

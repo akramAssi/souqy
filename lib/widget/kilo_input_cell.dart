@@ -12,7 +12,7 @@ class KiloInputCell extends StatefulWidget {
   State<StatefulWidget> createState() => _KiloInputCell();
 }
 
-class _KiloInputCell extends State<KiloInputCell> with SouqyTextfieldStyle {
+class _KiloInputCell extends State<KiloInputCell> with SouqyFormFieldStyle {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

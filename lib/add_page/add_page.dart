@@ -21,7 +21,7 @@ class AddPage extends StatefulWidget {
   _AddPageState createState() => _AddPageState();
 }
 
-class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
+class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   //Textfor all field Controller
   TextEditingController _makeController;
   TextEditingController _modelController;
@@ -268,7 +268,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
               children: [
                 Flexible(
                   flex: 1,
-                  child: SouqyTextField(
+                  child: SouqyFormField(
                     label: "Engine Size",
                     controller: _engineController,
                     height: 50,
@@ -313,7 +313,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
               children: [
                 Flexible(
                   flex: 1,
-                  child: SouqyTextField(
+                  child: SouqyFormField(
                     label: "Color",
                     controller: _colorController,
                     height: 50,
@@ -602,7 +602,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
               children: [
                 Flexible(
                   flex: 4,
-                  child: SouqyTextField(
+                  child: SouqyFormField(
                     label: "Expected price",
                     controller: _expectedPriceController,
                     labelFontSize: 20,
@@ -641,7 +641,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: SouqyTextField(
+            child: SouqyFormField(
               label: "price",
               controller: _priceController,
               labelFontSize: 20,
@@ -707,7 +707,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
         children: [
           Flexible(
             flex: 1,
-            child: SouqyTextField(
+            child: SouqyFormField(
               label: "Year",
               controller: _yearController,
               height: 50,
@@ -724,7 +724,7 @@ class _AddPageState extends State<AddPage> with SouqyTextfieldStyle {
           ),
           Flexible(
             flex: 3,
-            child: SouqyTextField(
+            child: SouqyFormField(
               label: "Model",
               controller: _modelController,
               focusNode: _modelFoucs,

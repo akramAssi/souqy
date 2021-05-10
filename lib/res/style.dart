@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'color.dart';
 
-mixin SouqyTextfieldStyle {
+mixin SouqyFormFieldStyle {
   final BorderRadius borderRadius = BorderRadius.circular(10);
   final Radius radius = Radius.circular(10);
   //return to last TextField
@@ -52,4 +52,16 @@ mixin SouqyTextfieldStyle {
           bottomRight: radius,
         ),
       );
+  OutlineInputBorder get souqyErrorBorder => OutlineInputBorder(
+        borderSide: BorderSide(color: alertColor),
+        borderRadius: BorderRadius.only(
+          topRight: radius,
+          topLeft: Radius.zero,
+          bottomLeft: radius,
+          bottomRight: radius,
+        ),
+      );
+
+  final TextStyle errorStyle =
+      TextStyle(fontSize: 10, height: 1, color: alertColor);
 }
