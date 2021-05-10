@@ -5,6 +5,8 @@ import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
 import 'package:souqy/widget/souqy_submit_button.dart';
+import 'package:souqy/service/firebase_auth_exceptions_handling.dart';
+import 'package:wc_form_validators/wc_form_validators.dart';
 
 import 'bottom_sing_in.dart';
 
@@ -23,59 +25,92 @@ class LoginPage extends StatelessWidget {
     locator.get<UserController>().singInAnonmymous();
   }
 
-  Future<void> _signInWithEmailAndPassword(String email, String password) =>
-      locator
-          .get<UserController>()
-          .signInWithEmailAndPassword(email: email, password: password);
+  bool _signInWithEmailAndPassword(String email, String password) {
+    final status = locator
+        .get<UserController>()
+        .signInWithEmailAndPassword(email: email, password: password);
+    if (status == AuthResultStatus.successful) {
+      return true;
+    } else {
+      final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
+      print(errorMsg);
+
+      // _showAlertDialog(errorMsg);
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
+    bool _isValid = false;
+    final _formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: buildTitleText(),
-              ),
-              Container(
-                margin:
-                    EdgeInsets.only(top: 40, left: 42, right: 42, bottom: 20),
-                child: Column(
-                  children: [
-                    SouqyTextField(
-                      label: Strings.e_mail,
-                      controller: _emailController,
-                    ),
-                    SizedBox(
-                      height: 19,
-                    ),
-                    SouqyTextField(
-                      label: Strings.password,
-                      controller: _passwordController,
-                    ),
-                    SizedBox(
-                      height: 38,
-                    ),
-                    SouqySubmitBotton(
-                      label: Strings.login,
-                      onPress: () =>
-                          {_signInWithEmailAndPassword(email, password)},
-                    ),
-                  ],
+      body: Form(
+        key: _formKey,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: buildTitleText(),
                 ),
-              ),
-              BottomSingIn(
-                isLogin: true,
-              ),
-              SizedBox(
-                height: 35,
-              ),
-              buildTextButton(),
-            ],
+                Container(
+                  margin:
+                      EdgeInsets.only(top: 40, left: 42, right: 42, bottom: 20),
+                  child: Column(
+                    children: [
+                      SouqyFormField(
+                        label: Strings.e_mail,
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: Validators.required(Strings.e_mailInValid),
+                      ),
+                      SizedBox(
+                        height: 19,
+                      ),
+                      SouqyFormField(
+                        label: Strings.password,
+                        controller: _passwordController,
+                        validator: Validators.compose([
+                          Validators.required(Strings.passwordInValidRequired),
+                          Validators.minLength(
+                              8, Strings.passwordInValidLength),
+                        ]),
+                      ),
+                      SizedBox(
+                        height: 38,
+                      ),
+                      SouqySubmitBotton(
+                          label: Strings.login,
+                          onPress: () {
+                            if (_formKey.currentState.validate()) {
+                              if (_signInWithEmailAndPassword(
+                                  email, password)) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      Strings.success(Strings.login),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          }),
+                    ],
+                  ),
+                ),
+                BottomSingIn(
+                  isLogin: true,
+                ),
+                SizedBox(
+                  height: 35,
+                ),
+                buildTextButton(),
+              ],
+            ),
           ),
         ),
       ),
