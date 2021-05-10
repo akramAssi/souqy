@@ -4,7 +4,7 @@ import 'package:souqy/res/color.dart';
 import 'package:souqy/res/style.dart';
 
 // ignore: must_be_immutable
-class SouqyTextField extends StatelessWidget with SouqyTextfieldStyle {
+class SouqyFormField extends StatelessWidget with SouqyFormFieldStyle {
   final String label;
   final TextEditingController controller;
   final double height;
@@ -17,23 +17,26 @@ class SouqyTextField extends StatelessWidget with SouqyTextfieldStyle {
   final bool showlabel;
   final FocusNode focusNode;
   final TextInputType keyboardType;
+  final String Function(String) validator;
+
   Color color = primeCOLOR;
-  SouqyTextField(
-      {Key key,
-      @required this.label,
-      @required this.controller,
-      this.height = 60,
-      this.isReadOnly = false,
-      this.textAlign = TextAlign.start,
-      this.onTop,
-      this.color,
-      this.filled = false,
-      this.labelFontSize = 14.0,
-      this.showlabel = true,
-      this.focusNode,
-      this.onEditingComplete,
-      this.keyboardType = TextInputType.text})
-      : super(key: key);
+  SouqyFormField({
+    Key key,
+    @required this.label,
+    @required this.controller,
+    this.height = 60,
+    this.isReadOnly = false,
+    this.textAlign = TextAlign.start,
+    this.onTop,
+    this.color,
+    this.filled = false,
+    this.labelFontSize = 14.0,
+    this.showlabel = true,
+    this.focusNode,
+    this.onEditingComplete,
+    this.keyboardType = TextInputType.text,
+    this.validator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,17 +59,29 @@ class SouqyTextField extends StatelessWidget with SouqyTextfieldStyle {
       );
     }
     widget.add(
-      SizedBox(
-        height: height,
-        child: TextField(
+      Container(
+        constraints: BoxConstraints(minHeight: height),
+        child: TextFormField(
           controller: controller,
           focusNode: focusNode,
+          validator: (String value) {
+            if (validator == null) {
+              return null;
+            }
+            if (validator(value) == null) {
+              print("is valid");
+
+              return validator(value);
+            }
+            return validator(value);
+          },
           //controller
           textAlign: textAlign,
           readOnly: isReadOnly,
           onTap: onTop,
           onEditingComplete: onEditingComplete,
           keyboardType: keyboardType,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           inputFormatters: (keyboardType == TextInputType.number)
               ? [FilteringTextInputFormatter.allow(RegExp(r"^\d+$"))]
               : null,
@@ -83,6 +98,8 @@ class SouqyTextField extends StatelessWidget with SouqyTextfieldStyle {
                   ? EdgeInsets.symmetric(vertical: 3, horizontal: 13)
                   : EdgeInsets.all(20),
               enabledBorder: souqyEnableBorder,
+              focusedErrorBorder: souqyErrorBorder,
+              errorBorder: souqyErrorBorder,
               focusedBorder: souqyFocusBorder),
         ),
       ),
