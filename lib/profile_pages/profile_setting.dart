@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:souqy/model/user_model.dart';
 import 'package:souqy/res/color.dart';
+import 'package:souqy/res/string.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
+import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
+import 'package:wc_form_validators/wc_form_validators.dart';
 
 import 'avatar.dart';
 
@@ -18,6 +22,7 @@ class ProfileSetting extends StatefulWidget {
 
 class _ProfileSettingState extends State<ProfileSetting> {
   UserModel currentUser = locator.get<UserController>().currentUser;
+  PickedFile imageFile;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -32,6 +37,8 @@ class _ProfileSettingState extends State<ProfileSetting> {
   String get city => _cityController.text;
   String get area => _areaController.text;
 
+  bool _saving = false;
+
   @override
   void initState() {
     setDefalut();
@@ -42,7 +49,11 @@ class _ProfileSettingState extends State<ProfileSetting> {
       {BuildContext context, String phone, String city, String area}) async {
     await locator
         .get<UserController>()
-        .storeAddress(context, phone: phone, city: city, area: area);
+        .storeAddress(phone: phone, city: city, area: area)
+        .onError((error, stackTrace) {
+      showExceptionDialog(context,
+          title: Strings.signOut, content: error.toString());
+    });
   }
 
   @override
@@ -61,30 +72,43 @@ class _ProfileSettingState extends State<ProfileSetting> {
     // showExeptionDilog(context,
     //     title: Text("download failure"), content: "sadasdasdas");
     //
-
+    print(currentUser?.avatarUrl);
     setDefalut();
-
+    final _formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: souqyAppBar("profileSettin", context),
-      body: SingleChildScrollView(
-        child: Center(
+      body: ModalProgressHUD(
+          child: buildForm(context, _formKey),
+          inAsyncCall: _saving,
+          color: borderTextfieldColor,
+          progressIndicator: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(primeCOLOR),
+          )),
+    );
+  }
+
+  SingleChildScrollView buildForm(
+      BuildContext context, GlobalKey<FormState> _formKey) {
+    return SingleChildScrollView(
+      child: Center(
+        child: Form(
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Avatar(
                 avatarUrl: currentUser?.avatarUrl,
+                imageFile: imageFile,
                 // avatarUrl:
                 // "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5324479827627077&height=50&width=50&ext=1621768726&hash=AeSBNiS0VjnWYrrmnJ0",
                 onPress: () async {
-                  var file =
+                  imageFile =
                       await ImagePicker().getImage(source: ImageSource.gallery);
-                  await locator
-                      .get<UserController>()
-                      .uploadProfilePicture(file);
+
                   setState(() {});
 
-                  print(file.path);
+                  print(imageFile.path);
                 },
                 isSetting: true,
               ),
@@ -93,15 +117,23 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 child: Column(
                   children: [
                     SouqyFormField(
-                      label: "الاسم",
+                      label: Strings.name,
                       controller: _nameController,
+                      validator: Validators.required(Strings.nameRequired),
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     SouqyFormField(
-                      label: "البريد الالكتروني",
+                      label: Strings.e_mail,
                       controller: _emailController,
+                      validator: Validators.compose([
+                        Validators.required(Strings.emailRequired),
+                        Validators.patternRegExp(
+                            RegExp(
+                                r"(?:[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*|(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"),
+                            Strings.emailInValid),
+                      ]),
                     ),
                     // SizedBox(
                     //   height: 10,
@@ -114,21 +146,30 @@ class _ProfileSettingState extends State<ProfileSetting> {
                       height: 10,
                     ),
                     SouqyFormField(
-                      label: "رقم الهاتف",
+                      label: Strings.phone,
                       controller: _phoneController,
+                      validator: Validators.compose([
+                        Validators.required(Strings.phoneInValidRequired),
+                        Validators.patternRegExp(RegExp(r"^[0-9]\d*(\.\d+)?$"),
+                            Strings.phoneInValidNotString),
+                        Validators.patternRegExp(RegExp(r"^05[0-9]+\d$"),
+                            Strings.phoneInValidPrefix),
+                        Validators.minLength(10, Strings.phoneInValidLength),
+                        Validators.maxLength(10, Strings.phoneInValidLength),
+                      ]),
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     SouqyFormField(
-                      label: "محافظة",
+                      label: Strings.city,
                       controller: _cityController,
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     SouqyFormField(
-                      label: "مدينة",
+                      label: Strings.area,
                       controller: _areaController,
                     ),
                     Row(
@@ -158,8 +199,18 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                   borderRadius: BorderRadius.circular(20)),
                               padding: EdgeInsets.symmetric(
                                   vertical: 15, horizontal: 20)),
-                          onPressed: () {
+                          onPressed: () async {
                             // saveAddress(phone: phone, area: area, city: city);
+                            if (imageFile != null) {
+                              await locator
+                                  .get<UserController>()
+                                  .uploadProfilePicture(imageFile)
+                                  .onError((error, stackTrace) {
+                                showExceptionDialog(context,
+                                    title: Strings.upLoad,
+                                    content: Strings.upLoadFailed);
+                              });
+                            }
                             print("save");
                           },
                           child: Text("Save"),
