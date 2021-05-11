@@ -14,7 +14,6 @@ class StorageRepo {
   Future<String> uploadFile(File file) async {
     UserModel user = _authRepo.currentUserModel();
     var userId = user.uid;
-
     var storageRef = _storage.ref().child("user/profile/$userId");
     var uploadTask = storageRef.putFile(file);
     var completedTask = await uploadTask;
@@ -26,12 +25,12 @@ class StorageRepo {
     if (user?.uid == null) {
       return null;
     }
-    var file = _storage.ref().child("user/profile/${user.uid}");
+
     try {
+      Reference file = _storage.ref().child("user/profile/${user.uid}");
       String f = (await file.getDownloadURL()).toString();
       return f;
     } catch (e) {
-      print(e);
       return _authRepo.currentUser.photoURL;
     }
   }
