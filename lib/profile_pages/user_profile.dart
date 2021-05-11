@@ -8,8 +8,6 @@ import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
 class UserProfile extends StatelessWidget {
-  var damage = [0, 0, 0, 0, 0, 0];
-
   UserModel currentUser = locator.get<UserController>().currentUser;
   @override
   Widget build(BuildContext context) {
@@ -20,8 +18,18 @@ class UserProfile extends StatelessWidget {
         children: [
           Center(
             child: Avatar(
+              avatarUrl: currentUser?.avatarUrl,
               onPress: null,
               isSetting: false,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Text(
+              currentUser?.displayName ?? "",
+              style: TextStyle(color: fontColor, fontSize: 15),
             ),
           ),
           SizedBox(
