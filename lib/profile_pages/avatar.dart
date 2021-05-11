@@ -1,39 +1,57 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:souqy/res/color.dart';
 
 class Avatar extends StatelessWidget {
   final String avatarUrl;
   final bool isSetting;
+  final PickedFile imageFile;
   final VoidCallback onPress;
   Avatar({
     Key key,
     this.avatarUrl,
     @required this.onPress,
     this.isSetting,
+    this.imageFile,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var widget = [
-      avatarUrl == null
+      avatarUrl == null && imageFile == null
           ? Image.asset(
               "images/big_man.png",
               height: 230,
               width: 230,
             )
-          : Container(
-              height: 230.0,
-              width: 230.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: NetworkImage(
-                    avatarUrl,
+          : imageFile == null
+              ? Container(
+                  height: 230.0,
+                  width: 230.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(
+                        avatarUrl,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(
+                  height: 230.0,
+                  width: 230.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: FileImage(File(imageFile.path)),
+                    ),
                   ),
                 ),
-              ),
-            ),
       Positioned(
         right: 4,
         top: 42,
