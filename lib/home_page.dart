@@ -3,9 +3,11 @@ import 'package:flutter/rendering.dart';
 import 'package:souqy/seller_pages/seller_page.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/color.dart';
+import 'package:souqy/res/string.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/trash/1.dart';
 import 'package:souqy/view_controller/user_controller.dart';
+import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
 import 'add_page/add_page.dart';
@@ -20,7 +22,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future<void> _singOut() async {
-    await locator.get<UserController>().signOut();
+    await locator.get<UserController>().signOut().onError((error, stackTrace) {
+      showExceptionDialog(context,
+          title: Strings.signOut, content: error.toString());
+    });
     // showMyDialog(context);
   }
 
@@ -50,6 +55,15 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    locator.get<UserController>().refresh().onError((error, stackTrace) {
+      showExceptionDialog(context,
+          title: Strings.userFetchFailed, content: error.toString());
+    });
+    super.initState();
   }
 
   @override
@@ -105,16 +119,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-    try {
-      locator.get<UserController>().refresh(context);
-    } catch (e) {
-      // showDialog<void>(
-      //     context: context,
-      //     barrierDismissible: false, // user must tap button!
-      //     builder: (context) {
-      //       return crr(context);
-      //     });
-    }
     _widgetOptions.add(Container(
       child: TextButton(
         child: Text("sign out"),
