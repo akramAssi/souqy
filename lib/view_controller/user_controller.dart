@@ -4,11 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:souqy/model/user_model.dart';
+import 'package:souqy/res/string.dart';
 import 'package:souqy/service/Auth.dart';
 import 'package:souqy/service/database_repo.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/service/storage_repo.dart';
 import 'package:souqy/service/firebase_auth_exceptions_handling.dart';
+import 'package:souqy/widget/showExceptionDilog.dart';
 
 class UserController {
   UserModel _currentUser;
@@ -28,14 +30,13 @@ class UserController {
     return _currentUser;
   }
 
-  UserModel refresh(BuildContext context) {
+  Future<void> refresh() async {
     _currentUser = _authRepo.currentUserModel();
 
     getDownloadUrl();
     if (_currentUser != null) {
-      readAddres(context);
+      await readAddres();
     }
-    return _currentUser;
   }
 
 //user tool
@@ -78,48 +79,51 @@ class UserController {
       if (user != null) {
         _status = AuthResultStatus.successful;
         _currentUser = UserModel.user(user);
-        print('Exception @createAccount: 15');
       } else {
         _status = AuthResultStatus.undefined;
-        print('Exception @createAccount: 11');
       }
     } catch (e) {
-      print('Exception @createAccount: $e');
       _status = AuthExceptionHandler.handleException(e);
     }
     return _status;
     // _currentUser.avatarUrl = await getDownloadUrl();
   }
 
-  Future<bool> creatUserWithEmailAndPassword({
+  Future<AuthResultStatus> creatUserWithEmailAndPassword({
     @required String name,
     @required String email,
     @required String password,
+    @required String phone,
   }) async {
-    User user =
-        await _authRepo.creatUserWithEmailAndPassword(name, email, password);
-    // user = await _authRepo.updateDisplayName(name);
-    _currentUser = UserModel.user(user);
+    try {
+      User user =
+          await _authRepo.creatUserWithEmailAndPassword(name, email, password);
+      // user = await _authRepo.updateDisplayName(name);
+      // _currentUser = UserModel.user(user);
 
-    return false;
+      // return false;
+      storeAddress(phone: phone);
+
+      if (user != null) {
+        _status = AuthResultStatus.successful;
+        _currentUser = UserModel.user(user);
+      } else {
+        _status = AuthResultStatus.undefined;
+      }
+    } catch (e) {
+      _status = AuthExceptionHandler.handleException(e);
+    }
+    return _status;
   }
 
   Future<void> singInAnonmymous() async {
-    try {
-      await _authRepo.singInAnonmymous();
-    } catch (e) {
-      print(e.toString());
-    }
+    await _authRepo.singInAnonmymous();
   }
 
   Future<void> signOut() async {
-    try {
-      await _authRepo.signOut();
-      // locator.popScope();
-      // setupServices();
-    } catch (e) {
-      print(e);
-    }
+    await _authRepo.signOut();
+    // locator.popScope();
+    // setupServices();
   }
 
   //storage
@@ -136,15 +140,15 @@ class UserController {
 
   //database
 
-  Future<void> storeAddress(BuildContext context,
+  Future<void> storeAddress(
       {@required String phone, String city, String area}) async {
     _currentUser.phone = phone ?? "";
     _currentUser.city = city ?? "";
     _currentUser.area = area ?? "";
-    await _databaseRepo.storeUserInfo(context, _currentUser);
+    await _databaseRepo.storeUserInfo(_currentUser);
   }
 
-  void readAddres(BuildContext context) {
-    _databaseRepo.readUserInfo(context, _currentUser);
+  Future<void> readAddres() async {
+    await _databaseRepo.readUserInfo(_currentUser);
   }
 }
