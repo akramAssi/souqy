@@ -8,6 +8,8 @@ enum AuthResultStatus {
   operationNotAllowed,
   tooManyRequests,
   undefined,
+  accountAlreadyExists,
+  weakPassword,
 }
 
 class AuthExceptionHandler {
@@ -15,25 +17,31 @@ class AuthExceptionHandler {
     print(e.code);
     var status;
     switch (e.code) {
-      case "ERROR_INVALID_EMAIL":
+      case "invalid-email":
         status = AuthResultStatus.invalidEmail;
         break;
-      case "ERROR_WRONG_PASSWORD":
+      case "wrong-password":
         status = AuthResultStatus.wrongPassword;
         break;
-      case "ERROR_USER_NOT_FOUND":
+      case "weak-password":
+        status = AuthResultStatus.weakPassword;
+        break;
+      case "user-not-found":
         status = AuthResultStatus.userNotFound;
         break;
-      case "ERROR_USER_DISABLED":
+      case "user-disabled":
         status = AuthResultStatus.userDisabled;
         break;
-      case "ERROR_TOO_MANY_REQUESTS":
+      case "too-many-requests":
         status = AuthResultStatus.tooManyRequests;
         break;
-      case "ERROR_OPERATION_NOT_ALLOWED":
+      case "operation-not-allowed":
         status = AuthResultStatus.operationNotAllowed;
         break;
-      case "ERROR_EMAIL_ALREADY_IN_USE":
+      case "account-exists-with-different-credential":
+        status = AuthResultStatus.emailAlreadyExists;
+        break;
+      case "email-already-in-use":
         status = AuthResultStatus.emailAlreadyExists;
         break;
       default:
@@ -53,6 +61,9 @@ class AuthExceptionHandler {
         break;
       case AuthResultStatus.wrongPassword:
         errorMessage = "Your password is wrong.";
+        break;
+      case AuthResultStatus.weakPassword:
+        errorMessage = "Your password is weak.";
         break;
       case AuthResultStatus.userNotFound:
         errorMessage = "User with this email doesn't exist.";
