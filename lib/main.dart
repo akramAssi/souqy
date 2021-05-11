@@ -14,11 +14,12 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  //
+  final navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       title: 'Flutter Demo',
       locale: Locale("en"),
       // locale: Locale("ar"),
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: primeCOLOR,
       ),
       home: LandingPage(),
+
       // home: buildScaffold(),
     );
   }
