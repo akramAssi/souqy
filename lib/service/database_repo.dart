@@ -4,8 +4,8 @@ import 'package:souqy/model/user_model.dart';
 import 'package:souqy/widget/showExceptionDilog.dart';
 
 abstract class Database {
-  Future<void> storeUserInfo(BuildContext context, UserModel user);
-  void readUserInfo(BuildContext context, UserModel user);
+  Future<void> storeUserInfo(UserModel user);
+  void readUserInfo(UserModel user);
 }
 
 class FirestoreDatabase implements Database {
@@ -13,26 +13,19 @@ class FirestoreDatabase implements Database {
   // final String uid;
   final _firestore = FirebaseFirestore.instance;
 
-  Future<void> storeUserInfo(BuildContext context, UserModel user) async {
-    try {
-      final String path = "/user/${user.uid}";
-      final firestoreRef = _firestore.doc(path);
-      await firestoreRef.set(user.address);
-    } catch (e) {
-      showExceptionDialog(context,
-          title: Text("Storage failure"), content: e.toString());
-
-      print(e);
-    }
+  Future<void> storeUserInfo(UserModel user) async {
+    final String path = "/user/${user.uid}";
+    final firestoreRef = _firestore.doc(path);
+    await firestoreRef.set(user.address);
   }
 
-  void readUserInfo(BuildContext context, UserModel user) {
+  Future<void> readUserInfo(UserModel user) async {
     // try {
     // throw IntegerDivisionByZeroException;
     // print("dsadsad");
     final String path = "/user/${user.uid}";
     final firestoreRef = _firestore.doc(path);
-    firestoreRef.get().then((document) {
+    await firestoreRef.get().then((document) {
       final data = document.data();
       if (data != null) {
         print(data);
@@ -40,13 +33,14 @@ class FirestoreDatabase implements Database {
             phone: data["phone"] ?? "",
             city: data["city"] ?? "",
             area: data["area"] ?? "");
+
         print(
             "firebase : ${data["phone"]} ,  ${data["city"]} , ${data["area"]}");
         print("obj ${user.phone} ,  ${user.city} , ${user.area}");
       }
     });
 
-    print(path);
+    //   print(path);
     // } catch (e) {
     //   print("dsad");
     //   print(e);
