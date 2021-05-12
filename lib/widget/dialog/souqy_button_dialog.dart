@@ -12,6 +12,7 @@ class SouqyButtonDialog extends StatelessWidget {
     this.withIcon = true,
     this.showlabel = true,
     this.height = 50,
+    this.validator,
   })  : _controller = gearController,
         super(key: key) {
     for (int i = 0; i < list.length; i++) {}
@@ -23,6 +24,7 @@ class SouqyButtonDialog extends StatelessWidget {
   final bool withIcon;
   final bool showlabel;
   final double height;
+  final String Function(String) validator;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class SouqyButtonDialog extends StatelessWidget {
           controller: _controller,
           height: height,
           isReadOnly: true,
+          validator: validator,
           textAlign:
               showlabel && height == 50 ? TextAlign.center : TextAlign.start,
           showlabel: showlabel,
