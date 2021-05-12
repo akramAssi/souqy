@@ -12,7 +12,22 @@ class Strings {
   static const String city = "City";
   static const String area = "Area";
   static const String phone = "Phone";
+  static const String make = "Make";
+  static const String year = "Year";
+  static const String model = "Model";
+  static const String type = "Type";
+  static const String kilo = "Kilometer";
+  static const String engineSize = "engine size";
+  static const String gearType = "gear type";
+  static const String fuelType = "fuel type";
+  static const String color = "Color";
+  static const String oldOwner = "Old Owner";
+  static const String origin = "Origin";
+  static const String price = "Price";
+  static const String paymentMethod = "Payment Method";
   static const String nameRequired = "$name is required";
+  static const String cityRequired = "$city is required";
+  static const String areaRequired = "$area is required";
   static const String emailInValid = "$e_mail is invalid";
   static const String emailRequired = "$e_mail is required";
   static const String phoneInValidRequired = "$phone is required";
@@ -20,6 +35,11 @@ class Strings {
   static const String phoneInValidPrefix = "should be start 05";
   static const String phoneInValidNotString = "should be diget number";
   static const String acceptExceptionDialog = "ok";
+  static const String saveDialog = "yes";
+  static const String cancelDialog = "cancel";
+  static const String noDialog = "no";
+  static const String alartDialog = "Alart";
+  static const String contantAlartDialog = "are you sure ?";
   static const String passwordInValidRequired = "$password is required";
   static const String passwordInValidLength =
       "should be 8 characters or higher";
@@ -31,5 +51,8 @@ class Strings {
   static const String signFailed = "$signOut  failed";
   static const String upLoad = "upload";
   static const String upLoadFailed = "$upLoad  failed";
+
   static String success(String value) => "$value success";
+  static String requiredField(String value) => "$value required";
+  static String requiredFieldo = "Required";
 }
