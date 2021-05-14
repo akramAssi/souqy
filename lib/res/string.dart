@@ -51,6 +51,12 @@ class Strings {
   static const String signFailed = "$signOut  failed";
   static const String upLoad = "upload";
   static const String upLoadFailed = "$upLoad  failed";
+  static const String sold = "sold";
+  static const String availabel = "availabel";
+  static const String carFeatures = "Car features";
+  static const String additionalInformation = "Additional Information";
+  static const String alartPriceExpected =
+      "Expected price is availabel to the advertiser only";
 
   static String success(String value) => "$value success";
   static String requiredField(String value) => "$value required";
