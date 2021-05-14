@@ -13,7 +13,7 @@ class RowMainInfo extends StatelessWidget {
   final Size size;
   final String make;
   final String model;
-  final String price;
+  final int price;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -48,8 +48,7 @@ class RowMainInfo extends StatelessWidget {
           alignment: Alignment(-5, 0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(25),
-                bottomRight: Radius.circular(25)),
+                topLeft: Radius.circular(25), bottomLeft: Radius.circular(25)),
             color: alertColor,
           ),
           child: Row(
@@ -61,17 +60,17 @@ class RowMainInfo extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                child: Image.asset(
-                  'images/shekel.png',
-                  width: 15,
+                child: Text(
+                  "$price",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              Text(
-                price,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
+              Image.asset(
+                'images/shekel.png',
+                width: 15,
               ),
               SizedBox(
                 width: 15,

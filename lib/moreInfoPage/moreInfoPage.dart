@@ -1,12 +1,16 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:souqy/home_pages/souqy_available_label.dart';
+import 'package:souqy/model/ads.dart';
+import 'package:souqy/model/card_info.dart';
 import 'package:souqy/moreInfoPage/row_main_info.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
 class MoreInfoPage extends StatelessWidget {
-  String label;
+  // final String label;
+  final Ads carAdsInfo;
   final List<String> imgList = [
     'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
     'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
@@ -15,6 +19,8 @@ class MoreInfoPage extends StatelessWidget {
     'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
     'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
   ];
+
+  MoreInfoPage({Key key, @required this.carAdsInfo}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -40,9 +46,9 @@ class MoreInfoPage extends StatelessWidget {
             ),
             RowMainInfo(
               size: size,
-              make: "فولكسفاغن",
-              model: "كرافتر",
-              price: "100000",
+              make: carAdsInfo.card.make,
+              model: carAdsInfo.card.model,
+              price: carAdsInfo.card.price,
             ),
             SizedBox(
               height: 25,
@@ -53,37 +59,36 @@ class MoreInfoPage extends StatelessWidget {
               alignment: WrapAlignment.center,
               children: [
                 Circleinfocard(
-                  icon: "mini_car.png",
-                  label: "خصوصي",
-                ),
+                    icon: "mini_car.png", label: carAdsInfo.card.origin),
                 Circleinfocard(
                   icon: "kilo.png",
-                  label: "100",
+                  label: "${carAdsInfo.moreInfo.kilo}",
                 ),
                 Circleinfocard(
                   icon: "year.png",
-                  label: "2012",
+                  label: "${carAdsInfo.card.year}",
                 ),
                 Circleinfocard(
                   icon: "car_seat.png",
-                  label: "5 مقاعد",
+                  label: "${carAdsInfo.moreInfo.passengers} seater",
                 ),
                 Circleinfocard(
                   icon: "color.png",
-                  label: "اخضر",
+                  label: "${carAdsInfo.moreInfo.color}",
                 ),
                 Circleinfocard(
                   icon: "gear.png",
-                  label: "عادي",
+                  label: "${carAdsInfo.moreInfo.gear}",
                 ),
                 Circleinfocard(
                   icon: "engine.png",
-                  label: "1800",
+                  label: "${carAdsInfo.moreInfo.engin}",
                 ),
-                Circleinfocard(icon: "gas_station.png", label: "بنزين"),
+                Circleinfocard(
+                    icon: "gas_station.png", label: carAdsInfo.card.fuel),
                 Circleinfocard(
                   icon: "user.png",
-                  label: "بد ٢",
+                  label: "${carAdsInfo.moreInfo.oldOwner}",
                 ),
               ],
             ),
@@ -102,21 +107,23 @@ class MoreInfoPage extends StatelessWidget {
                 )),
             Container(
               margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.all(13),
               decoration: BoxDecoration(
                   border: Border.all(color: primeCOLOR),
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25),
-                      bottomLeft: Radius.circular(25))),
+                      topRight: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(20))),
               child: Wrap(
                 alignment: WrapAlignment.start,
                 children: [
-                  buildItemList("فتحة سقف"),
-                  buildItemList("راعش"),
-                  buildItemList("نظام صوتي"),
-                  buildItemList("جنط مغنيسيوم"),
-                  buildItemList("ايش ما بدك ضيف"),
+                  for (var feature in carAdsInfo.moreInfo.feature)
+                    buildItemList(feature)
+
+                  // buildItemList("راعش"),
+                  // buildItemList("نظام صوتي"),
+                  // buildItemList("جنط مغنيسيوم"),
+                  // buildItemList("ايش ما بدك ضيف"),
                 ],
               ),
             ),
@@ -136,15 +143,14 @@ class MoreInfoPage extends StatelessWidget {
             ),
             Container(
               margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                   border: Border.all(color: primeCOLOR),
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25),
-                      bottomLeft: Radius.circular(25))),
-              child: Text(
-                  "فخامه جميع الاضافات  ترخيص 1 ، مُكيّف إغلاق مركزي، فرش جلد",
+                      topRight: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(20))),
+              child: Text("${carAdsInfo.moreInfo.additionalInformation}",
                   style: TextStyle(fontSize: 20, color: primeCOLOR)),
             ),
             Container(
@@ -212,7 +218,7 @@ class MoreInfoPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
           child: Text(
             text,
-            style: TextStyle(color: primeCOLOR, fontSize: 20),
+            style: TextStyle(color: primeCOLOR, fontSize: 15),
           ),
         ),
       ],
@@ -260,8 +266,8 @@ class Circleinfocard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 70,
-      height: 70,
+      width: 73,
+      height: 73,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
@@ -280,11 +286,16 @@ class Circleinfocard extends StatelessWidget {
           SizedBox(
             height: 3,
           ),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: alertColor,
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 7),
+            child: AutoSizeText(
+              label,
+              maxLines: 1,
+              minFontSize: 5,
+              style: TextStyle(
+                fontSize: 12,
+                color: alertColor,
+              ),
             ),
           ),
         ],
