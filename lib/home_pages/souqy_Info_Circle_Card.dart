@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
 
@@ -10,12 +11,13 @@ class SouqyInfoCircleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 37,
-        height: 37,
+        width: 47,
+        height: 47,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
           color: Colors.white,
           border: Border.all(
+            color: fontColor,
             width: 1,
           ),
         ),
@@ -31,11 +33,16 @@ class SouqyInfoCircleCard extends StatelessWidget {
             SizedBox(
               height: 2,
             ),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 6,
-                color: alertColor,
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 3.05),
+              child: AutoSizeText(
+                value,
+                maxLines: 1,
+                minFontSize: 6,
+                style: TextStyle(
+                  fontSize: 8,
+                  color: alertColor,
+                ),
               ),
             )
           ],
