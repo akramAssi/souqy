@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: 10,
         ),
-        SouqyHomepage(
+        SouqyHomePage(
           shrinkWrap: false,
         ),
         SizedBox(
