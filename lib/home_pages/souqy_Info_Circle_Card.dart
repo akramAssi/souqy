@@ -17,7 +17,7 @@ class SouqyInfoCircleCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(25),
           color: Colors.white,
           border: Border.all(
-            color: fontColor,
+            color: borderTextfieldColor,
             width: 1,
           ),
         ),
@@ -29,6 +29,7 @@ class SouqyInfoCircleCard extends StatelessWidget {
               path,
               width: 15,
               height: 15,
+              color: fontColor,
             ),
             SizedBox(
               height: 2,
