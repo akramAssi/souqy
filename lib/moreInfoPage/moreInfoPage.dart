@@ -6,6 +6,7 @@ import 'package:souqy/model/card_info.dart';
 import 'package:souqy/moreInfoPage/row_main_info.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
 import 'package:souqy/res/color.dart';
+import 'package:souqy/res/string.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
 class MoreInfoPage extends StatelessWidget {
@@ -99,7 +100,7 @@ class MoreInfoPage extends StatelessWidget {
                   left: 10,
                 ),
                 child: Text(
-                  "الاضافات",
+                  Strings.carFeatures,
                   style: TextStyle(
                     color: primeCOLOR,
                     fontSize: 25,
@@ -134,7 +135,7 @@ class MoreInfoPage extends StatelessWidget {
                 left: 10,
               ),
               child: Text(
-                "المعلومات الاضافية",
+                Strings.additionalInformation,
                 style: TextStyle(
                   color: primeCOLOR,
                   fontSize: 25,
@@ -272,7 +273,7 @@ class Circleinfocard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         border: Border.all(
-          color: borderColor,
+          color: borderTextfieldColor,
         ),
       ),
       child: Column(
@@ -282,6 +283,7 @@ class Circleinfocard extends StatelessWidget {
             "images/$icon",
             width: 28,
             height: 28,
+            color: fontColor,
           ),
           SizedBox(
             height: 3,
