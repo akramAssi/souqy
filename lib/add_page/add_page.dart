@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:souqy/add_page/search_brand.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
 import 'package:souqy/res/color.dart';
+import 'package:souqy/res/string.dart';
 import 'package:souqy/res/style.dart';
 import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
 import 'package:souqy/widget/souqy_kilometer_textFiled.dart';
@@ -206,6 +207,9 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
       unselectedBorderColor: borderTextfieldColor,
       selectedColor: primeCOLOR,
       borderRadius: BorderRadius.circular(15),
+      unselectedTextStyle: TextStyle(
+        color: fontColor,
+      ),
       selectedTextStyle: TextStyle(
         color: backgroundColor,
       ),
@@ -367,6 +371,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
         color: Colors.white,
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               souqySearchForBrand,
               // first widget have search and brand list
@@ -588,7 +593,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
               Container(
                 margin: EdgeInsets.only(top: 10, left: 15),
                 child: Text(
-                  'Car features',
+                  Strings.carFeatures,
                   style: TextStyle(fontSize: 20),
                 ),
               ),
@@ -604,7 +609,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                 margin:
                     EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 7),
                 child: Text(
-                  'Additional information',
+                  Strings.additionalInformation,
                   style: TextStyle(
                     fontSize: 15,
                   ),
@@ -647,7 +652,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                       bottomRight: Radius.circular(20),
                     )),
                 child: Text(
-                  "Expected price is availabel to the advertiser only",
+                  Strings.alartPriceExpected,
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -690,7 +695,10 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                                   side: BorderSide(color: borderColor),
                                 ),
                                 padding: EdgeInsets.all(12)),
-                            child: Image.asset("images/expect.png"),
+                            child: Image.asset(
+                              "images/expect.png",
+                              color: fontColor,
+                            ),
                             onPressed: () {},
                           ),
                         ],
