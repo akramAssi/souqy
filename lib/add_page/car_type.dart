@@ -63,10 +63,12 @@ class _CarType extends State<CarType> {
                   ? Image.asset(
                       'images/carType/' + carTypeList[widget.loc] + '.png',
                       width: 30,
+                      color: fontColor,
                     )
                   : Image.asset(
                       'images/carType/' + carTypeList[index] + '.png',
                       width: 30,
+                      color: fontColor,
                     ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
