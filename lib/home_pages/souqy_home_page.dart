@@ -22,8 +22,20 @@ class SouqyHomePage extends StatelessWidget {
     //       'id : ${x.card.idAds} ,make :${x.card.make} , model : ${x.card.model} , price : ${x.card.price} , year ${x.card.year}, origin ${x.card.origin} , fuel ${x.card.fuel} , avail ${x.card.available}');
     // }
 
+    final List<String> imgListTemp0 = [
+      'https://carsguide-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,t_cg__marking_background__sm_/v1/editorial/2021-Mercedes-Benz-S-Class-S-450-sedan-red-press-image-1200x800p-%2815%29.jpg',
+      "https://carsguide-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,t_cg_hero_large/v1/editorial/2021-Mercedes-Benz-S-Class-S-450-sedan-red-press-image-1200x800p-%283%29.jpg",
+      'https://carsguide-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,t_cg_hero_large/v1/editorial/2021-Mercedes-Benz-S-Class-S-450-sedan-red-press-image-1001x565p.jpg',
+      'https://carsguide-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,t_cg__marking_background__sm_/v1/editorial/2021-Mercedes-Benz-S-Class-S-450-sedan-red-press-image-1200x800p-%2813%29.jpg',
+      'https://carsguide-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,t_cg__marking_background__sm_/v1/editorial/2021-Mercedes-Benz-S-Class-S-450-sedan-red-press-image-1200x800p-%289%29.jpg',
+      'https://carsguide-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,t_cg__marking_background__sm_/v1/editorial/2021-Mercedes-Benz-S-Class-S-450-sedan-red-press-image-1200x800p-%288%29.jpg',
+      'https://carsguide-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,t_cg_hero_large/v1/editorial/2021-Mercedes-Benz-S-Class-S-450-sedan-red-press-image-1200x800p-%281%29.jpg',
+      'https://carsguide-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,t_cg_hero_large/v1/editorial/2021-Mercedes-Benz-S-Class-S-450-sedan-red-press-image-1200x800p-%282%29.jpg',
+      "https://carsguide-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,t_cg__marking_background__sm_/v1/editorial/2021-Mercedes-Benz-S-Class-S-450-sedan-red-press-image-1200x800p-%2811%29.jpg",
+    ];
+
     dataList[0].moreInfo = MoreInfoCar(
-      imageList: null,
+      imageList: imgListTemp0,
       kilo: 2000,
       passengers: 5,
       color: "red",
