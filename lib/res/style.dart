@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:souqy/res/string.dart';
-
 import 'color.dart';
+
+class SouqyStyle {
+  static final Radius radius = Radius.circular(10);
+  static final BorderRadius souqyBorderRadius = BorderRadius.only(
+    topRight: radius,
+    topLeft: Radius.zero,
+    bottomLeft: radius,
+    bottomRight: radius,
+  );
+}
 
 mixin SouqyFormFieldStyle {
   final BorderRadius borderRadius = BorderRadius.circular(10);
-  final Radius radius = Radius.circular(10);
+
   //return to last TextField
   TextSelection returnToLast(controller) {
     return TextSelection.fromPosition(
@@ -46,30 +55,15 @@ mixin SouqyFormFieldStyle {
       );
   OutlineInputBorder get souqyFocusBorder => OutlineInputBorder(
         borderSide: BorderSide(color: primeCOLOR),
-        borderRadius: BorderRadius.only(
-          topRight: radius,
-          topLeft: Radius.zero,
-          bottomLeft: radius,
-          bottomRight: radius,
-        ),
+        borderRadius: SouqyStyle.souqyBorderRadius,
       );
   OutlineInputBorder get souqyEnableBorder => OutlineInputBorder(
         borderSide: BorderSide(color: borderTextfieldColor),
-        borderRadius: BorderRadius.only(
-          topRight: radius,
-          topLeft: Radius.zero,
-          bottomLeft: radius,
-          bottomRight: radius,
-        ),
+        borderRadius: SouqyStyle.souqyBorderRadius,
       );
   OutlineInputBorder get souqyErrorBorder => OutlineInputBorder(
         borderSide: BorderSide(color: alertColor),
-        borderRadius: BorderRadius.only(
-          topRight: radius,
-          topLeft: Radius.zero,
-          bottomLeft: radius,
-          bottomRight: radius,
-        ),
+        borderRadius: SouqyStyle.souqyBorderRadius,
       );
 
   final TextStyle errorStyle =
