@@ -13,8 +13,8 @@ class SouqyThumbnailCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
-          fit: BoxFit.fill,
-          image: AssetImage(path),
+          fit: BoxFit.cover,
+          image: NetworkImage(path),
           // image: AssetImage('lib/mo/kia-op.jpg'),
         ),
       ),
