@@ -35,7 +35,7 @@ class UserProfile extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          SouqyHomepage(),
+          SouqyHomePage(),
           SizedBox(
             height: 10,
           ),

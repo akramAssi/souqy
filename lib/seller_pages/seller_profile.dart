@@ -115,7 +115,7 @@ class SellerProfile extends StatelessWidget {
           SizedBox(
             height: 7,
           ),
-          SouqyHomepage(),
+          SouqyHomePage(),
           SizedBox(
             height: 10,
           ),
