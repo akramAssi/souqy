@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:souqy/res/string.dart';
+import 'package:wc_form_validators/wc_form_validators.dart';
 
 import '../res/color.dart';
 import '../res/style.dart';
@@ -22,15 +24,18 @@ class _SouqySearchFiledState extends State<SouqySearchFiled> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      // height: 90,
+      constraints: BoxConstraints(minHeight: 70),
       padding: EdgeInsets.symmetric(horizontal: 17, vertical: 16),
-      child: TextField(
+      child: TextFormField(
         controller: widget.controller,
         focusNode: widget.focusNode,
         textInputAction: TextInputAction.next,
         cursorColor: fontColor,
         style: TextStyle(fontSize: 17, color: fontColor),
         decoration: widget.searchDecoration,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: Validators.required(Strings.requiredField(Strings.make)),
         onChanged: (value) {
           widget.onChange(value);
         },

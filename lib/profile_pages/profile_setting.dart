@@ -6,6 +6,7 @@ import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
+import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
 import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
@@ -36,6 +37,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
   String get phone => _phoneController.text;
   String get city => _cityController.text;
   String get area => _areaController.text;
+  List<String> cityList = ["nablus", "Qalqilya"];
 
   bool _saving = false;
 
@@ -45,15 +47,26 @@ class _ProfileSettingState extends State<ProfileSetting> {
     super.initState();
   }
 
-  Future<void> saveAddress(
+  Future<bool> saveInfo(
       {BuildContext context, String phone, String city, String area}) async {
+    print("akram-dsdsd");
     await locator
         .get<UserController>()
         .storeAddress(phone: phone, city: city, area: area)
-        .onError((error, stackTrace) {
+        .onError((error, stackTrace) async {
       showExceptionDialog(context,
           title: Strings.signOut, content: error.toString());
     });
+    if (imageFile != null) {
+      await locator
+          .get<UserController>()
+          .uploadProfilePicture(imageFile)
+          .onError((error, stackTrace) {
+        showExceptionDialog(context,
+            title: Strings.upLoad, content: Strings.upLoadFailed);
+      });
+    }
+    return true;
   }
 
   @override
@@ -67,13 +80,23 @@ class _ProfileSettingState extends State<ProfileSetting> {
     super.dispose();
   }
 
+  void onPressYear(dynamic value) {
+    print(value.toString());
+    setState(() {
+      _cityController.text = value?.toString() ?? cityList[0];
+    });
+    Navigator.of(context).pop();
+    // _goNext(_modelFoucs);
+  }
+
   @override
   Widget build(BuildContext context) {
     // showExeptionDilog(context,
     //     title: Text("download failure"), content: "sadasdasdas");
     //
     print(currentUser?.avatarUrl);
-    setDefalut();
+    currentUser = locator.get<UserController>().currentUser;
+    // setDefalut();
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -148,6 +171,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                     SouqyFormField(
                       label: Strings.phone,
                       controller: _phoneController,
+                      keyboardType: TextInputType.phone,
                       validator: Validators.compose([
                         Validators.required(Strings.phoneInValidRequired),
                         Validators.patternRegExp(RegExp(r"^[0-9]\d*(\.\d+)?$"),
@@ -164,6 +188,15 @@ class _ProfileSettingState extends State<ProfileSetting> {
                     SouqyFormField(
                       label: Strings.city,
                       controller: _cityController,
+                      isReadOnly: true,
+                      onTop: () {
+                        showBotomSheatDialogWithOneColumn(
+                          context: context,
+                          list: cityList,
+                          onPress: onPressYear,
+                        );
+                      },
+                      validator: Validators.required(Strings.cityRequired),
                     ),
                     SizedBox(
                       height: 10,
@@ -171,20 +204,24 @@ class _ProfileSettingState extends State<ProfileSetting> {
                     SouqyFormField(
                       label: Strings.area,
                       controller: _areaController,
+                      validator: Validators.required(Strings.areaRequired),
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: primeCOLOR,
                               onPrimary: backgroundColor,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
+                                  borderRadius: BorderRadius.circular(10)),
                               padding: EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 20)),
+                                  vertical: 10, horizontal: 15)),
                           onPressed: () {
-                            // saveAddress(phone: phone, area: area, city: city);
-                            print("save");
+                            Navigator.of(context).pop();
                           },
                           child: Text("Cancel"),
                         ),
@@ -193,30 +230,34 @@ class _ProfileSettingState extends State<ProfileSetting> {
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              primary: primeCOLOR,
+                              primary: alertColor,
                               onPrimary: backgroundColor,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
+                                  borderRadius: BorderRadius.circular(10)),
                               padding: EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 20)),
+                                  vertical: 10, horizontal: 22)),
                           onPressed: () async {
-                            // saveAddress(phone: phone, area: area, city: city);
-                            if (imageFile != null) {
-                              await locator
-                                  .get<UserController>()
-                                  .uploadProfilePicture(imageFile)
-                                  .onError((error, stackTrace) {
-                                showExceptionDialog(context,
-                                    title: Strings.upLoad,
-                                    content: Strings.upLoadFailed);
+                            if (_formKey.currentState.validate()) {
+                              setState(() {
+                                _saving = true;
                               });
+                              bool upload = await saveInfo(
+                                  phone: phone, area: area, city: city);
+                              // bool upload = await demo();
+                              if (upload == true) {}
+                              setState(() {
+                                _saving = false;
+                              });
+                              Navigator.of(context).pop();
                             }
-                            print("save");
                           },
                           child: Text("Save"),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               )
@@ -235,5 +276,15 @@ class _ProfileSettingState extends State<ProfileSetting> {
     _phoneController.text = currentUser?.phone ?? "";
     _cityController.text = currentUser?.city ?? "";
     _areaController.text = currentUser?.area ?? "";
+  }
+
+  Future<String> delay(int s, int index) {
+    return Future.delayed(Duration(seconds: s), () => "done $index");
+  }
+
+  Future<bool> demo() async {
+    await delay(2, 1);
+    await delay(1, 2);
+    return true;
   }
 }

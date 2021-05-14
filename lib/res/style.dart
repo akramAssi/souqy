@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:souqy/res/string.dart';
 
 import 'color.dart';
 
@@ -17,7 +18,7 @@ mixin SouqyFormFieldStyle {
           color: Colors.grey,
         ),
         //icon search
-        labelText: "Make",
+        labelText: Strings.make,
         labelStyle: TextStyle(fontSize: 18, color: primeCOLOR),
         //prepare label
         filled: true,
@@ -31,6 +32,15 @@ mixin SouqyFormFieldStyle {
         focusedBorder: OutlineInputBorder(
           borderRadius: borderRadius,
           borderSide: BorderSide(color: primeCOLOR),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: alertColor),
+          borderRadius: borderRadius,
+        ),
+        errorStyle: errorStyle,
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: alertColor),
+          borderRadius: borderRadius,
         ),
         //set border in foucus mode
       );

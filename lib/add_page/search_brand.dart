@@ -5,6 +5,7 @@ import 'package:souqy/res/style.dart';
 
 import '../res/color.dart';
 
+// ignore: must_be_immutable
 class SouqySearchForBrand extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
