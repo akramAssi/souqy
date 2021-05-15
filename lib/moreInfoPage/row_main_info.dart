@@ -24,7 +24,7 @@ class RowMainInfo extends StatelessWidget {
         Text(
           make,
           style: TextStyle(
-            fontSize: 25,
+            fontSize: 20,
             color: primeCOLOR,
           ),
         ),
@@ -38,7 +38,7 @@ class RowMainInfo extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize: 25,
+              fontSize: 20,
               color: primeCOLOR,
             ),
           ),
