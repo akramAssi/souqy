@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
+import 'package:souqy/res/string.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
 
-class SouqyButtonDialog extends StatelessWidget {
+class SouqyButtonDialog extends StatefulWidget {
   SouqyButtonDialog({
     Key key,
     @required TextEditingController gearController,
     @required this.list,
     @required this.label,
-    this.withIcon = true,
     this.showlabel = true,
     this.height = 50,
     this.validator,
@@ -21,24 +21,31 @@ class SouqyButtonDialog extends StatelessWidget {
   final TextEditingController _controller;
   final List<String> list;
   final String label;
-  final bool withIcon;
+  bool _withIcon = true;
   final bool showlabel;
   final double height;
   final String Function(String) validator;
 
   @override
+  _SouqyButtonDialogState createState() => _SouqyButtonDialogState();
+}
+
+class _SouqyButtonDialogState extends State<SouqyButtonDialog> {
+  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         SouqyFormField(
-          label: label,
-          controller: _controller,
-          height: height,
+          label: widget.label,
+          controller: widget._controller,
+          height: widget.height,
           isReadOnly: true,
-          validator: validator,
-          textAlign:
-              showlabel && height == 50 ? TextAlign.center : TextAlign.start,
-          showlabel: showlabel,
+          fontSize: 14,
+          validator: widget.validator,
+          textAlign: widget.showlabel && widget.height == 50
+              ? TextAlign.center
+              : TextAlign.start,
+          showlabel: widget.showlabel,
           onTop: () {
             showCupertinoModalPopup(
               context: context,
@@ -51,18 +58,21 @@ class SouqyButtonDialog extends StatelessWidget {
                   title: const Text('choose'),
                   // message: const Text('Message'),
                   actions: [
-                    for (int i = 0; i < list.length; i++)
+                    for (int i = 0; i < widget.list.length; i++)
                       CupertinoActionSheetAction(
-                        child: Text(list[i]),
+                        child: Text(widget.list[i]),
                         onPressed: () {
-                          _controller.text = list[i];
+                          widget._controller.text = widget.list[i];
+                          setState(() {
+                            widget._withIcon = false;
+                          });
                           Navigator.pop(context);
                         },
                       ),
                   ],
                   cancelButton: CupertinoActionSheetAction(
                     isDestructiveAction: true,
-                    child: const Text('Cancel'),
+                    child: const Text(Strings.cancelDialog),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -72,10 +82,11 @@ class SouqyButtonDialog extends StatelessWidget {
             );
           },
         ),
-        (withIcon)
+        (widget._withIcon)
             ? Positioned(
-                top: showlabel && height == 50 ? 31 : 18,
-                right: showlabel && height == 50 ? 8 : 15,
+                top: widget.showlabel && widget.height == 50 ? 31 : 18,
+                // top: size.height * 0.04,
+                right: widget.showlabel && widget.height == 50 ? 5 : 5,
                 child: Icon(
                   Icons.arrow_drop_down,
                   size: 30,
