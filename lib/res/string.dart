@@ -36,7 +36,7 @@ class Strings {
   static const String phoneInValidNotString = "should be diget number";
   static const String acceptExceptionDialog = "ok";
   static const String saveDialog = "yes";
-  static const String cancelDialog = "cancel";
+  static const String cancelDialog = "Cancel";
   static const String noDialog = "no";
   static const String alartDialog = "Alart";
   static const String contantAlartDialog = "are you sure ?";
@@ -54,9 +54,15 @@ class Strings {
   static const String sold = "sold";
   static const String availabel = "availabel";
   static const String carFeatures = "Car features";
+  static const String colorDialog = "Choose the vehicle color";
   static const String additionalInformation = "Additional Information";
   static const String alartPriceExpected =
       "Expected price is availabel to the advertiser only";
+
+  static const String colorDialogButton = "choose";
+  static const String publishing = "publishing";
+
+  static const String expectedPrice = "Expected price";
 
   static String success(String value) => "$value success";
   static String requiredField(String value) => "$value required";
