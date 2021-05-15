@@ -7,6 +7,7 @@ import 'package:souqy/moreInfoPage/row_main_info.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
+import 'package:souqy/res/style.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
 class MoreInfoPage extends StatelessWidget {
@@ -103,10 +104,7 @@ class MoreInfoPage extends StatelessWidget {
               padding: EdgeInsets.all(13),
               decoration: BoxDecoration(
                   border: Border.all(color: primeCOLOR),
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20))),
+                  borderRadius: SouqyStyle.souqyBorderRadius),
               child: Wrap(
                 alignment: WrapAlignment.start,
                 children: [
@@ -139,10 +137,7 @@ class MoreInfoPage extends StatelessWidget {
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                   border: Border.all(color: primeCOLOR),
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20))),
+                  borderRadius: SouqyStyle.souqyBorderRadius),
               child: Text("${carAdsInfo.moreInfo.additionalInformation}",
                   style: TextStyle(fontSize: 20, color: primeCOLOR)),
             ),
@@ -151,10 +146,7 @@ class MoreInfoPage extends StatelessWidget {
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                   border: Border.all(color: primeCOLOR),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25),
-                      bottomLeft: Radius.circular(25))),
+                  borderRadius: SouqyStyle.souqyBorderRadius),
               child: Column(
                 children: [
                   buildRowInfo("images/user.png", "ناصر شنطي"),
@@ -259,8 +251,8 @@ class Circleinfocard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 73,
-      height: 73,
+      width: 70,
+      height: 70,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
@@ -281,7 +273,7 @@ class Circleinfocard extends StatelessWidget {
             height: 3,
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 7),
+            margin: EdgeInsets.symmetric(horizontal: 12),
             child: AutoSizeText(
               label,
               maxLines: 1,
