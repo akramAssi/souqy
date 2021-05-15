@@ -102,7 +102,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     );
     // _gearController.text = "Gear";
     // _fuelController.text = "Fuel";
-    _colorController.text = "Color";
+    _colorController.text = Strings.color;
     // _vehicleOriginController.text = "Origin";
     _ownerController.text = "0";
     final year = DateTime.now().year;
@@ -114,30 +114,30 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     }
 
     yearSouqyFormField = SouqyFormField(
-      label: "Year",
+      label: Strings.year,
       controller: _yearController,
       height: 50,
       isReadOnly: true,
       textAlign: TextAlign.center,
-      validator: Validators.required("requi"),
+      validator: Validators.required(Strings.requiredFieldo),
       onTop: () {
         _openDialog(context: context, list: _yearList, onPress: onPressYear);
       },
     );
     modelSouqyFormField = SouqyFormField(
-      label: "Model",
+      label: Strings.model,
       controller: _modelController,
       focusNode: _modelFoucs,
       height: 50,
-      validator: Validators.required("requi"),
+      validator: Validators.required(Strings.requiredFieldo),
     );
 
     engineSouqyFormField = SouqyFormField(
-      label: "Engine Size",
+      label: Strings.engineSize,
       controller: _engineController,
       height: 50,
       textAlign: TextAlign.center,
-      validator: Validators.required("requi"),
+      validator: Validators.required(Strings.requiredFieldo),
       onTop: () {
         _openDialog(
             context: context, list: _engineList, onPress: onPressEngine);
@@ -146,31 +146,31 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     gearSouqyButtonDialog = SouqyButtonDialog(
       gearController: _gearController,
       list: _gearList,
-      label: "Gear Type",
-      validator: Validators.required("requi"),
+      label: Strings.gearType,
+      validator: Validators.required(Strings.requiredFieldo),
     );
     fuelSouqyButtonDialog = SouqyButtonDialog(
       gearController: _fuelController,
       list: _fuelList,
-      label: "Fuel Type",
-      validator: Validators.required("requi"),
+      label: Strings.fuelType,
+      validator: Validators.required(Strings.requiredFieldo),
     );
     colorSouqyFormField = SouqyFormField(
-      label: "Color",
+      label: Strings.color,
       controller: _colorController,
       height: 50,
       isReadOnly: true,
       textAlign: TextAlign.center,
       color: currentColor,
       filled: true,
-      validator: Validators.required("requi"),
+      validator: Validators.required(Strings.requiredFieldo),
       onTop: () {
         showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text(
-                  'Choose the vehicle color',
+                  Strings.colorDialog,
                 ),
                 content: SingleChildScrollView(
                   child: BlockPicker(
@@ -181,8 +181,8 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                 ),
                 actions: <Widget>[
                   TextButton(
-                    child: const Text(
-                      'choose',
+                    child: Text(
+                      Strings.colorDialogButton,
                       textAlign: TextAlign.left,
                     ),
                     onPressed: () {
@@ -198,9 +198,9 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     orginSouqyButtonDialog = SouqyButtonDialog(
       gearController: _vehicleOriginController,
       list: _vehicleOriginList,
-      label: "origin",
-      withIcon: false,
-      validator: Validators.required("requi"),
+      label: Strings.origin,
+      // withIcon: false,
+      validator: Validators.required(Strings.requiredFieldo),
     );
     carFGroupButton = GroupButton(
       unselectedColor: backgroundColor,
@@ -368,7 +368,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     return Form(
       key: _formKey,
       child: Container(
-        color: Colors.white,
+        color: backgroundColor,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,7 +384,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                 padding:
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 child: Text(
-                  "Kilometer",
+                  Strings.kilo,
                   style: TextStyle(fontSize: 20),
                 ),
               ),
@@ -395,6 +395,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Flexible(
                       flex: 1,
@@ -422,6 +423,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Flexible(
                       flex: 1,
@@ -437,7 +439,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Old Owner",
+                            Strings.oldOwner,
                             style: TextStyle(
                               color: primeCOLOR,
                               fontSize: 14.0,
@@ -450,21 +452,26 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                             height: 50,
                             decoration: BoxDecoration(
                               border: Border.all(color: borderTextfieldColor),
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(20),
-                                topLeft: Radius.zero,
-                                bottomLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                              ),
+                              borderRadius: SouqyStyle.souqyBorderRadius,
                             ),
                             child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Flexible(
                                   flex: 1,
                                   child: Ink(
-                                      child: IconButton(
-                                          icon: Icon(Icons.add),
+                                      child: ElevatedButton(
+                                          child: Icon(Icons.add),
+                                          style: ElevatedButton.styleFrom(
+                                              padding: EdgeInsets.all(5),
+                                              onPrimary: primeCOLOR,
+                                              primary: Colors.transparent,
+                                              shape: CircleBorder(),
+                                              elevation: 0),
                                           onPressed: increaseOwner)),
+                                ),
+                                SizedBox(
+                                  width: 7,
                                 ),
                                 Flexible(
                                   flex: 2,
@@ -515,12 +522,19 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                                 ),
                                 Flexible(
                                   flex: 1,
-                                  child: Ink(
-                                    child: IconButton(
-                                        icon: Icon(Icons.remove),
-                                        onPressed: decreaseOwner),
-                                  ),
+                                  child: ElevatedButton(
+                                      child: Icon(Icons.remove),
+                                      style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.all(5),
+                                          onPrimary: primeCOLOR,
+                                          primary: Colors.transparent,
+                                          shape: CircleBorder(),
+                                          elevation: 0),
+                                      onPressed: decreaseOwner),
                                 ),
+                                SizedBox(
+                                  width: 7,
+                                )
                               ],
                             ),
                           ),
@@ -574,22 +588,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                   ),
                 ),
               ),
-              Center(
-                child: SizedBox(
-                  width: size.width / 1.5,
-                  child: SouqySubmitBotton(
-                    label: "publishing",
-                    height: 45,
-                    fontSize: 15,
-                    onPress: () {
-                      _formKey.currentState.validate();
-                      // if (_formKey.currentState.validate()) {
-                      //   _submit(carType.typeSelected);
-                      // }
-                    },
-                  ),
-                ),
-              ),
+
               Container(
                 margin: EdgeInsets.only(top: 10, left: 15),
                 child: Text(
@@ -670,7 +669,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                     Flexible(
                       flex: 4,
                       child: SouqyFormField(
-                        label: "Expected price",
+                        label: Strings.expectedPrice,
                         controller: _expectedPriceController,
                         labelFontSize: 20,
                         isReadOnly: true,
@@ -718,6 +717,8 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                   labelFontSize: 20,
                   keyboardType: TextInputType.number,
                   height: 50,
+                  validator:
+                      Validators.required(Strings.requiredField(Strings.price)),
                 ),
               ),
               SizedBox(
@@ -726,6 +727,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
@@ -743,6 +745,9 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                         label: "Payment method",
                         showlabel: false,
                         height: 50,
+                        // size: size,
+                        validator: Validators.required(
+                            Strings.requiredField(Strings.paymentMethod)),
                       ),
                     ),
                   ],
@@ -755,7 +760,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                 child: SizedBox(
                   width: size.width / 1.5,
                   child: SouqySubmitBotton(
-                    label: "publishing",
+                    label: Strings.publishing,
                     height: 45,
                     fontSize: 15,
                     onPress: () {
@@ -781,6 +786,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Flexible(
             flex: 1,
