@@ -37,11 +37,19 @@ class _SouqySearchForBrandState extends State<SouqySearchForBrand>
       final elementLower = element.toLowerCase();
       return elementLower.contains(queryLower);
     }).toList();
+
     setState(() {
       widget.count = query;
       widget.onchangeList = se;
       widget.controller.selection = returnToLast(widget.controller);
     });
+  }
+
+  void lossFocus() {
+    if (widget.onchangeList.length == 1) {
+      widget.count = widget.onchangeList[0];
+      widget.controller.text = widget.onchangeList[0];
+    }
   }
 
   @override
@@ -54,9 +62,10 @@ class _SouqySearchForBrandState extends State<SouqySearchForBrand>
         onChange: filterBrand,
         controller: widget.controller,
         focusNode: widget.focusNode,
+        lossFocus: lossFocus,
       ),
       Container(
-        height: 100,
+        height: (widget.onchangeList.length < 1) ? 0 : 100,
         child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
