@@ -5,8 +5,10 @@ import 'package:souqy/res/color.dart';
 class SouqyInfoCircleCard extends StatelessWidget {
   final String path;
   final String value;
+  final Size size;
 
-  SouqyInfoCircleCard({Key key, this.path, this.value}) : super(key: key);
+  SouqyInfoCircleCard({Key key, this.path, this.value, @required this.size})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -35,7 +37,7 @@ class SouqyInfoCircleCard extends StatelessWidget {
               height: 2,
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 3.05),
+              padding: EdgeInsets.symmetric(horizontal: 3),
               child: AutoSizeText(
                 value,
                 maxLines: 1,
@@ -102,72 +104,3 @@ class SouqyInfoCircleCardTemp extends StatelessWidget {
     );
   }
 }
-
-// Container(
-//   width: 35,
-//   height: 35,
-//   margin: EdgeInsets.only(bottom: 5),
-//   child: Column(
-//     children: [
-//       Container(
-//         width: 30,
-//         height: 30,
-//         child: Container(
-//           alignment: Alignment(0, 0.8),
-//           child: Text(
-//             'private',
-//             style: TextStyle(
-//               fontSize: 6,
-//               color: thiredColor,
-//             ),
-//           ),
-//         ),
-//         decoration: BoxDecoration(
-//             image: DecorationImage(
-//           alignment: Alignment(0, -.5),
-//           image: AssetImage('lib/mo/001-car.png'),
-//           fit: BoxFit.none,
-//         )),
-//       ),
-//     ],
-//   ),
-//   decoration: BoxDecoration(
-//     borderRadius: BorderRadius.circular(25),
-//     color: Colors.white,
-//     border: Border.all(width: 1, color: borderColor),
-//   ),
-// ),
-// Container(
-//   width: 35,
-//   height: 35,
-//   child: Column(
-//     children: [
-//       Container(
-//         width: 20,
-//         height: 22,
-//         margin: EdgeInsets.only(top: 2),
-//         child: Container(
-//           alignment: Alignment(0, 1.7),
-//           child: Text(
-//             'petrol',
-//             style: TextStyle(
-//               fontSize: 6,
-//               color: thiredColor,
-//             ),
-//           ),
-//         ),
-//         decoration: BoxDecoration(
-//           image: DecorationImage(
-//             image: AssetImage(
-//                 'lib/mo/gas-station-3.png'),
-//           ),
-//         ),
-//       ),
-//     ],
-//   ),
-//   decoration: BoxDecoration(
-//     borderRadius: BorderRadius.circular(25),
-//     color: Colors.white,
-//     border: Border.all(width: 1, color: borderColor),
-//   ),
-// ),
