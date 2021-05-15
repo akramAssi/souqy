@@ -9,7 +9,7 @@ List<Ads> dataList = [
       model: "S-Class",
       price: 500000,
       year: 2021,
-      origin: "private",
+      origin: "commercial",
       fuel: "petrol",
       available: true,
       thumbnailUrl:
