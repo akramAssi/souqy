@@ -14,6 +14,7 @@ class SouqyFormField extends StatelessWidget with SouqyFormFieldStyle {
   final VoidCallback onEditingComplete;
   final bool filled;
   final double labelFontSize;
+  final double fontSize;
   final bool showlabel;
   final FocusNode focusNode;
   final TextInputType keyboardType;
@@ -38,6 +39,7 @@ class SouqyFormField extends StatelessWidget with SouqyFormFieldStyle {
     this.keyboardType = TextInputType.text,
     this.validator,
     this.obscureText = false,
+    this.fontSize = 16,
   }) : super(key: key);
 
   @override
@@ -89,6 +91,7 @@ class SouqyFormField extends StatelessWidget with SouqyFormFieldStyle {
               ? [FilteringTextInputFormatter.allow(RegExp(r"^\d+$"))]
               : null,
           style: TextStyle(
+            fontSize: fontSize,
             color: (filled == true && color != Colors.white)
                 ? Colors.white
                 : fontColor,
