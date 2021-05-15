@@ -185,7 +185,7 @@ class _SearchButton extends State<StatefulWidget> {
 
   void onPressEngine(dynamic value) {
     setState(() {
-      _engineController.text = value.toString();
+      _engineController.text = value?.toString() ?? "900";
     });
     Navigator.of(context).pop();
   }
