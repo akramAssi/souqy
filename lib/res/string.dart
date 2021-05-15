@@ -24,6 +24,7 @@ class Strings {
   static const String oldOwner = "Old Owner";
   static const String origin = "Origin";
   static const String price = "Price";
+  static const String carTypeName = "Type";
   static const String paymentMethod = "Payment Method";
   static const String nameRequired = "$name is required";
   static const String cityRequired = "$city is required";
