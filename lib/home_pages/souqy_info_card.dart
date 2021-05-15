@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
 
@@ -14,23 +15,29 @@ class SouqyInfoCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              AutoSizeText(
                 make,
+                maxLines: 1,
+                minFontSize: 5,
+                maxFontSize: 40,
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: size.width / 22,
                   color: fontColor,
                 ),
               ),
-              Text(
+              AutoSizeText(
                 model,
+                maxLines: 1,
+                minFontSize: 5,
                 style: TextStyle(
-                  fontSize: 23,
+                  fontSize: size.width / 23,
                   color: fontColor,
                 ),
               ),
@@ -56,18 +63,18 @@ class SouqyInfoCard extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
                 child: Image.asset(
                   'images/shekel.png',
-                  width: 15,
+                  width: size.width / 24,
                 ),
               ),
               Text(
                 '$price',
                 style: TextStyle(
-                  fontSize: size.width / 23,
+                  fontSize: size.width / 24,
                   color: backgroundColor,
                 ),
               ),
               SizedBox(
-                width: 22,
+                width: size.width / 25,
               )
             ],
           ),
