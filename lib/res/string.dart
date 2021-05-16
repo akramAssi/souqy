@@ -43,6 +43,7 @@ class Strings {
   static const String alartDialog = "Alart";
   static const String contantAlartDialog = "are you sure ?";
   static const String passwordInValidRequired = "$password is required";
+  static const String installment = "installment";
   static const String passwordInValidLength =
       "should be 8 characters or higher";
 
@@ -68,6 +69,7 @@ class Strings {
   static const String expected = "Expected";
   static const String downPayment = "Down payment";
   static const String monthlyPayment = "Monthly payment";
+  static const String installmentDetail = "Installment detail";
 
   static String success(String value) => "$value success";
   static String requiredField(String value) => "$value required";
