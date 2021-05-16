@@ -445,7 +445,7 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
                           leftButton: increaseOwner,
                           rightButton: decreaseOwner,
                           onChanged: onChangedOwner,
-                          ownerController: _ownerController),
+                          controller: _ownerController),
                     ),
                     Flexible(flex: 1, child: Container()),
                   ],

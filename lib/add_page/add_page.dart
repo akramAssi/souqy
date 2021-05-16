@@ -508,7 +508,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                           leftButton: increaseOwner,
                           rightButton: decreaseOwner,
                           onChanged: onChangedOwner,
-                          ownerController: _ownerController),
+                          controller: _ownerController),
                     ),
                     Flexible(flex: 1, child: Container()),
                   ],
