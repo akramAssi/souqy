@@ -24,6 +24,7 @@ class Strings {
   static const String oldOwner = "Old Owner";
   static const String origin = "Origin";
   static const String price = "Price";
+  static const String passenger = "Passenger";
   static const String paymentMethod = "Payment Method";
   static const String nameRequired = "$name is required";
   static const String cityRequired = "$city is required";
@@ -63,6 +64,9 @@ class Strings {
   static const String publishing = "publishing";
 
   static const String expectedPrice = "Expected price";
+  static const String expected = "Expected";
+  static const String downPayment = "Down payment";
+  static const String monthlyPayment = "Monthly payment";
 
   static String success(String value) => "$value success";
   static String requiredField(String value) => "$value required";
