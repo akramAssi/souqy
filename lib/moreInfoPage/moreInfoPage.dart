@@ -17,6 +17,64 @@ class MoreInfoPage extends StatelessWidget {
   MoreInfoPage({Key key, @required this.carAdsInfo}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    List<Widget> payment;
+    if (carAdsInfo.moreInfo.paymentMethod.contains(Strings.installment)) {
+      payment = [
+        Container(
+            padding: EdgeInsets.only(
+              top: 13,
+              right: 10,
+              left: 10,
+            ),
+            child: Text(
+              Strings.installmentDetail,
+              style: TextStyle(
+                color: primeCOLOR,
+                fontSize: 20,
+              ),
+            )),
+        Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          decoration: BoxDecoration(
+              border: Border.all(color: primeCOLOR),
+              borderRadius: SouqyStyle.souqyBorderRadius),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(Strings.downPayment + " :",
+                      style: TextStyle(fontSize: 18, color: primeCOLOR)),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text("5222",
+                      style: TextStyle(fontSize: 18, color: primeCOLOR)),
+                  // Text("${carAdsInfo.moreInfo.downPayment}")
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Text(Strings.monthlyPayment + " :",
+                      style: TextStyle(fontSize: 16, color: primeCOLOR)),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text("5222",
+                      style: TextStyle(fontSize: 16, color: primeCOLOR)),
+                  // Text("${carAdsInfo.moreInfo.monthlyPayment}")
+                ],
+              ),
+            ],
+          ),
+        )
+      ];
+    } else {
+      payment = [SizedBox()];
+    }
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: souqyAppBar("normal", context),
@@ -86,6 +144,10 @@ class MoreInfoPage extends StatelessWidget {
                 ),
               ],
             ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: payment,
+            ),
             Container(
                 padding: EdgeInsets.only(
                   top: 13,
@@ -96,7 +158,7 @@ class MoreInfoPage extends StatelessWidget {
                   Strings.carFeatures,
                   style: TextStyle(
                     color: primeCOLOR,
-                    fontSize: 25,
+                    fontSize: 20,
                   ),
                 )),
             Container(
@@ -153,6 +215,8 @@ class MoreInfoPage extends StatelessWidget {
                   buildRowInfo("images/phone.png", "0568555917"),
                   buildRowInfo(
                       "images/location.png", "قلقية-شارع ما بعرف وين انا "),
+                  buildRowInfo(
+                      "images/calendar.png", carAdsInfo.moreInfo.publishDate),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
