@@ -46,6 +46,7 @@ class SouqyHomePage extends StatelessWidget {
       additionalInformation: "this is add text hi im hear",
       publishDate: "2/5/2019",
       userId: dataList[0].card.idAds,
+      paymentMethod: "installments",
     );
 
     return Padding(
