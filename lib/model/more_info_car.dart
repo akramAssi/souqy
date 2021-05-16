@@ -11,6 +11,9 @@ class MoreInfoCar {
   List<String> feature;
   String additionalInformation;
   String publishDate;
+  String paymentMethod;
+  int downPayment;
+  int monthlyPayment;
   String userId;
 
   MoreInfoCar({
@@ -24,6 +27,14 @@ class MoreInfoCar {
     @required this.feature,
     @required this.additionalInformation,
     @required this.publishDate,
+    @required this.paymentMethod,
+    int downPayment,
+    int monthlyPayment,
     @required this.userId,
-  });
+  }) {
+    if (paymentMethod.contains("installments")) {
+      this.downPayment = downPayment;
+      this.monthlyPayment = monthlyPayment;
+    }
+  }
 }
