@@ -76,6 +76,7 @@ class SouqyCarCard extends StatelessWidget {
                     make: carAdsInfo.card.make,
                     model: carAdsInfo.card.model,
                     price: carAdsInfo.card.price,
+                    paymentMethod: carAdsInfo.moreInfo?.paymentMethod ?? "",
                     size: size,
                   ),
                   Spacer(),
