@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:souqy/add_page/expected_page.dart';
 import 'package:souqy/seller_pages/seller_page.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/color.dart';
@@ -48,7 +49,7 @@ class _HomePageState extends State<HomePage> {
     ),
     SouqySellerList(),
     AddPage(),
-    abd(),
+    ExpectedPage(),
   ];
 
   void _onItemTapped(int index) {
