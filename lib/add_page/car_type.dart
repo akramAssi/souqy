@@ -44,7 +44,8 @@ class _CarType extends State<CarType> {
     return Container(
       // margin: EdgeInsets.only(top: 5),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      height: widget.setSelected != 0 ? 180 : 80,
+      // height: widget.setSelected != 0 ? 190 : 80,
+      constraints: BoxConstraints(minHeight: 80, maxHeight: 200),
       child: GridView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
