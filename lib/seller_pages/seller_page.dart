@@ -15,9 +15,8 @@ class SouqySellerList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: ListView.builder(
+    return Scaffold(
+      body: ListView.builder(
         itemCount: 2,
         itemBuilder: (BuildContext context, int index) {
           var textStyle = TextStyle(
