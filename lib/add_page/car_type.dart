@@ -40,7 +40,6 @@ class _CarType extends State<CarType> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    print(widget.loc);
     return Container(
       // margin: EdgeInsets.only(top: 5),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),

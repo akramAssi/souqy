@@ -22,7 +22,6 @@ class SouqyKilometerTextField extends StatelessWidget {
 
   void onPress(dynamic value) {
     number = value;
-    print(number);
     _controllerField1.text = value[0].toString();
     _controllerField2.text = value[1].toString();
     _controllerField3.text = value[2].toString();
