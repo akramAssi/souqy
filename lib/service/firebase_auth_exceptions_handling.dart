@@ -14,7 +14,6 @@ enum AuthResultStatus {
 
 class AuthExceptionHandler {
   static handleException(e) {
-    print(e.code);
     var status;
     switch (e.code) {
       case "invalid-email":
