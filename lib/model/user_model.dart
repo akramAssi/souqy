@@ -25,26 +25,25 @@ class UserModel {
     //   this.avatarUrl = user.photoURL;
     // }
   }
-  void setData(
-      {@required String name,
-      @required String email,
-      @required String phone,
-      @required String city,
-      @required String area}) {
-    this.displayName = name;
-    this.email = email;
-    this.phone = phone;
-    this.area = area;
-    this.city = city;
+  factory UserModel.fromJson(String id, Map<String, dynamic> json,
+      {UserModel currentUser}) {
+    final x = UserModel(
+      id,
+      area: json["area"] ?? currentUser?.area,
+      city: json["city"] ?? currentUser?.city,
+      email: json["email"] ?? currentUser?.email,
+      displayName: json["name"] ?? currentUser?.displayName,
+      phone: json["phone"] ?? currentUser?.phone,
+    );
+    print(x.toJson());
+    return x;
   }
 
-  Map<String, dynamic> get address {
-    return {
-      "name": displayName,
-      "email": email,
-      "phone": phone,
-      "city": city,
-      "area": area,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "area": area,
+        "city": city,
+        "email": email,
+        "name": displayName,
+        "phone": phone,
+      };
 }
