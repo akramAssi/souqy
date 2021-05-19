@@ -32,8 +32,10 @@ class UserController {
     _currentUser = _authRepo.currentUserModel();
 
     getDownloadUrl();
+
     if (_currentUser != null) {
-      await readAddres();
+      _currentUser =
+          await readUserInfo(_currentUser.uid, currentUser: currentUser);
     }
   }
 
@@ -55,7 +57,8 @@ class UserController {
       User user = await _authRepo.mysignInWithGoogle(context);
       // UserModel tempUser = UserModel.user(user);
       _currentUser = UserModel.user(user);
-      await readAddres();
+      _currentUser =
+          await readUserInfo(_currentUser.uid, currentUser: currentUser);
       if (_currentUser.displayName == null ||
           _currentUser.displayName.isEmpty) {
         _currentUser.displayName = user.displayName;
@@ -71,7 +74,8 @@ class UserController {
     try {
       User user = await _authRepo.signInWithFacebook();
       _currentUser = UserModel.user(user);
-      await readAddres();
+      _currentUser =
+          await readUserInfo(_currentUser.uid, currentUser: currentUser);
       if (_currentUser.displayName == null ||
           _currentUser.displayName.isEmpty) {
         _currentUser.displayName = user.displayName;
@@ -91,7 +95,8 @@ class UserController {
       if (user != null) {
         _status = AuthResultStatus.successful;
         _currentUser = UserModel.user(user);
-        await readAddres();
+        _currentUser =
+            await readUserInfo(_currentUser.uid, currentUser: currentUser);
         if (_currentUser.displayName == null ||
             _currentUser.displayName.isEmpty) {
           _currentUser.displayName = user.displayName;
@@ -147,13 +152,19 @@ class UserController {
 
   //storage
   Future<void> uploadProfilePicture(PickedFile image) async {
-    _currentUser.avatarUrl = await _storageRepo.uploadFile(File(image.path));
+    String path = "user/profile/${_currentUser.uid}";
+    _currentUser.avatarUrl =
+        await _storageRepo.uploadFile(File(image.path), path);
   }
 
   Future<void> getDownloadUrl() async {
     if (_currentUser?.uid != null) {
-      _currentUser.avatarUrl =
-          await _storageRepo.getUserProfileImage(currentUser);
+      try {
+        _currentUser.avatarUrl =
+            await _storageRepo.getUserProfileImage(currentUser);
+      } catch (e) {
+        _currentUser.avatarUrl = _authRepo.currentUser.photoURL;
+      }
     }
   }
 
@@ -187,7 +198,11 @@ class UserController {
     await _databaseRepo.storeUserInfo(_currentUser);
   }
 
-  Future<void> readAddres() async {
-    await _databaseRepo.readUserInfo(_currentUser);
+  Future<UserModel> readUserInfo(String userId, {UserModel currentUser}) async {
+    Map<String, dynamic> userJson = await _databaseRepo.readUserInfo(userId);
+
+    var x = UserModel.fromJson(userId, userJson, currentUser: currentUser);
+
+    return x;
   }
 }
