@@ -1,32 +1,28 @@
+import 'dart:convert';
+
+import 'package:souqy/model/card_info.dart';
 import 'package:souqy/model/more_info_car.dart';
 
-import 'card_info.dart';
+Ads adsFromJson(String str) => Ads.fromJson(json.decode(str));
+
+String adsToJson(Ads data) => json.encode(data.toJson());
 
 class Ads {
-  CardInfo card;
-  MoreInfoCar moreInfo;
-  String idAds;
-  Ads(this.idAds, this.card, this.moreInfo);
+  Ads({
+    this.cardInfo,
+    this.moreInfo,
+  });
 
-  Ads.card(
-      {String idAds,
-      String make,
-      String model,
-      int price,
-      int year,
-      String origin,
-      String fuel,
-      bool available,
-      String thumbnailUrl}) {
-    this.card = CardInfo(
-        idAds: idAds,
-        make: make,
-        model: model,
-        price: price,
-        year: year,
-        origin: origin,
-        fuel: fuel,
-        available: available,
-        thumbnailUrl: thumbnailUrl);
-  }
+  CardInfo cardInfo;
+  MoreInfo moreInfo;
+
+  factory Ads.fromJson(Map<String, dynamic> json) => Ads(
+        cardInfo: CardInfo.fromJson(json["cardInfo"]),
+        moreInfo: MoreInfo.fromJson(json["moreInfo"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "cardInfo": cardInfo.toJson(),
+        "moreInfo": moreInfo.toJson(),
+      };
 }
