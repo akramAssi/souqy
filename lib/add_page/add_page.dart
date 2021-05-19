@@ -5,10 +5,13 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:group_button/group_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:souqy/add_page/search_brand.dart';
+import 'package:souqy/model/ads.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/res/style.dart';
+import 'package:souqy/service/locator.dart';
+import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
 import 'package:souqy/widget/souqy_kilometer_textFiled.dart';
 import 'package:souqy/widget/souqy_left_right_button_feild.dart';
@@ -16,6 +19,7 @@ import 'package:souqy/widget/souqy_text_filed.dart';
 import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
 import 'package:souqy/widget/souqy_submit_button.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
+import 'package:souqy/view_controller/ads_controller.dart';
 
 import 'car_type.dart';
 
@@ -252,19 +256,23 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     );
 
     downPaymentSouqyFormField = SouqyFormField(
-      label: Strings.downPayment,
-      controller: _downPaymentController,
-      height: 50,
-      validator:
-          Validators.required(Strings.requiredField(Strings.downPayment)),
-    );
+        label: Strings.downPayment,
+        controller: _downPaymentController,
+        height: 50,
+        validator: Validators.compose([
+          Validators.required(Strings.passwordInValidRequired),
+          Validators.patternRegExp(
+              RegExp(r"^[0-9]\d*(\.\d+)?$"), Strings.phoneInValidNotString),
+        ]));
     monthlyPaymentSouqyFormField = SouqyFormField(
-      label: Strings.monthlyPayment,
-      controller: _monthlyPaymentController,
-      height: 50,
-      validator:
-          Validators.required(Strings.requiredField(Strings.monthlyPayment)),
-    );
+        label: Strings.monthlyPayment,
+        controller: _monthlyPaymentController,
+        height: 50,
+        validator: Validators.compose([
+          Validators.required(Strings.passwordInValidRequired),
+          Validators.patternRegExp(
+              RegExp(r"^[0-9]\d*(\.\d+)?$"), Strings.phoneInValidNotString),
+        ]));
     _paymentController.addListener(onchangedPyment);
   }
 
@@ -394,8 +402,8 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
 
   void _submit(String type) {
     print("make : ${_makeController.text}");
-    print("type : $type");
     print("year : ${_yearController.text}");
+    print("type : $type");
     print("model : ${_modelController.text}");
     print("model : ${souqyKilometerTextField.kilometer}");
     print("engin : ${_engineController.text}");
@@ -409,6 +417,43 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     print("origin : ${_addInfoController.text}");
     print("price ${_priceController.text}");
     print("payment ${_paymentController.text}");
+
+    var x = Ads.fromJson({
+      "cardInfo": {
+        "make": _makeController.text,
+        "model": _modelController.text,
+        "price": int.parse(_priceController.text),
+        "year": int.parse(_yearController.text),
+        "origin": _vehicleOriginController.text,
+        "fuel": _fuelController.text,
+        "avaliable": true,
+        "paymentMethod": _paymentController.text,
+        "urlThumb": _myImages.length > 0 ? _myImages[0] : null,
+      },
+      "moreInfo": {
+        "type": type,
+        "kilo": souqyKilometerTextField.kilometer,
+        "engineSize": int.parse(_engineController.text.trim()),
+        "passenger": int.parse(_passengerController.text),
+        "color": currentColor.toString(),
+        "gear": _gearController.text,
+        "oldOwner": owner,
+        "listImage": _myImages,
+        "carFeature": _checkedItemList,
+        "additionalInformation": _addInfoController.text,
+        "downPayment": (_downPaymentController.text == null ||
+                _downPaymentController.text.isEmpty)
+            ? null
+            : int.parse(_downPaymentController.text),
+        "monthlyPayment": (_monthlyPaymentController.text == null ||
+                _monthlyPaymentController.text.isEmpty)
+            ? null
+            : int.parse(_monthlyPaymentController.text),
+        "userId": locator.get<UserController>().currentUser.uid,
+      }
+    });
+    print(x.toJson());
+    locator.get<AdsController>().createAds(x);
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -638,6 +683,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Flexible(flex: 1, child: downPaymentSouqyFormField),
                       SizedBox(
