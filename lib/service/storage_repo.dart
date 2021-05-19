@@ -10,11 +10,11 @@ class StorageRepo {
   //     FirebaseStorage(bucket: "gs://souqy-9b821.appspot.com");
   FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Auth _authRepo = locator.get<Auth>();
-  Future<String> uploadFile(File file) async {
-    UserModel user = _authRepo.currentUserModel();
-    var userId = user.uid;
-    var storageRef = _storage.ref().child("user/profile/$userId");
+  // Auth _authRepo = locator.get<Auth>();
+  Future<String> uploadFile(File file, String firebaseCloudPath) async {
+    // UserModel user = _authRepo.currentUserModel();
+    // var userId = user.uid;
+    var storageRef = _storage.ref().child(firebaseCloudPath);
     var uploadTask = storageRef.putFile(file);
     var completedTask = await uploadTask;
     String downloadUrl = await completedTask.ref.getDownloadURL();
@@ -26,12 +26,8 @@ class StorageRepo {
       return null;
     }
 
-    try {
-      Reference file = _storage.ref().child("user/profile/${user.uid}");
-      String f = (await file.getDownloadURL()).toString();
-      return f;
-    } catch (e) {
-      return _authRepo.currentUser.photoURL;
-    }
+    Reference file = _storage.ref().child("user/profile/${user.uid}");
+    String f = (await file.getDownloadURL()).toString();
+    return f;
   }
 }
