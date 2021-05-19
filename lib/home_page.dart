@@ -1,13 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:souqy/add_page/expected_page.dart';
+import 'package:souqy/model/ads.dart';
 import 'package:souqy/search_page/search.dart';
-import 'package:souqy/seller_pages/seller_page.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
+import 'package:souqy/service/database_repo.dart';
 import 'package:souqy/service/locator.dart';
-import 'package:souqy/trash/1.dart';
+import 'package:souqy/view_controller/ads_controller.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
@@ -31,6 +33,15 @@ class _HomePageState extends State<HomePage> {
     // showMyDialog(context);
   }
 
+  Future<void> _getIn() async {
+    FirestoreDatabase _databaseRepo = locator.get<FirestoreDatabase>();
+    await _databaseRepo.userInNablus().onError((error, stackTrace) {
+      showExceptionDialog(context,
+          title: Strings.signOut, content: error.toString());
+    });
+    // showMyDialog(context);
+  }
+
   int _selectedIndex = 0;
   static const TextStyle optionStyle = TextStyle(
       fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blueAccent);
@@ -40,8 +51,24 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: 10,
         ),
-        SouqyHomePage(
-          shrinkWrap: false,
+        StreamBuilder(
+          stream: locator.get<AdsController>().readAds(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              QuerySnapshot<Map<String, dynamic>> map = snapshot.data;
+              List<Ads> list = [];
+              map.docs.forEach((doc) {
+                list.add(Ads.fromJson(doc.data()));
+              });
+
+              return SouqyHomePage(
+                shrinkWrap: false,
+                list: list,
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
         ),
         SizedBox(
           height: 10,
@@ -122,11 +149,21 @@ class _HomePageState extends State<HomePage> {
     );
 
     _widgetOptions.add(Container(
-      child: TextButton(
-        child: Text("sign out"),
-        onPressed: () {
-          _singOut();
-        },
+      child: Column(
+        children: [
+          TextButton(
+            child: Text("are you bored"),
+            onPressed: () {
+              _getIn();
+            },
+          ),
+          TextButton(
+            child: Text("sign out"),
+            onPressed: () {
+              _singOut();
+            },
+          ),
+        ],
       ),
     ));
     return ss;
