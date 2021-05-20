@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
 
 class RowMainInfo extends StatelessWidget {
-  const RowMainInfo({
+  RowMainInfo({
     Key key,
     @required this.size,
     @required this.make,
