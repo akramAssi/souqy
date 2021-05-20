@@ -13,21 +13,16 @@ class AdsController {
 
   StorageRepo _storageRepo = locator.get<StorageRepo>();
 
-  List<Ads> addData;
-  AdsController() {
-    readAds();
-    print(addData);
-  }
   Future<void> createAds(Ads data) async {
     try {
       var uuid = Uuid(options: {'grng': UuidUtil.cryptoRNG});
-      if (data.moreInfo.listImage.length > 0) {
-        for (int i = 0; i < data.moreInfo.listImage.length; i++) {
+      if (data.listImage.length > 0) {
+        for (int i = 0; i < data.listImage.length; i++) {
           String path = "ads/${uuid.v1()}";
-          data.moreInfo.listImage[i] = await _storageRepo.uploadFile(
-              File(data.moreInfo.listImage[i]), path);
+          data.listImage[i] =
+              await _storageRepo.uploadFile(File(data.listImage[i]), path);
         }
-        data.cardInfo.urlThumb = data.moreInfo.listImage[0];
+        data.urlThumb = data.listImage[0];
       }
       _databaseRepo.createAds(data.toJson());
     } catch (e) {
@@ -35,14 +30,35 @@ class AdsController {
     }
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> readAds() {
-    // FirestoreDatabase _databaseRepo = locator.get<FirestoreDatabase>();
-    // StorageRepo _storageRepo = locator.get<StorageRepo>();
-    return _databaseRepo.readAds();
-    // try {
-    // } catch (e) {
-    //   print(e);
-    //   return null;
-    // }
+  Future<void> updateAds(Ads data) async {
+    try {
+      var uuid = Uuid(options: {'grng': UuidUtil.cryptoRNG});
+      if (data.listImage.length > 0) {
+        for (int i = 0; i < data.listImage.length; i++) {
+          var urlPattern =
+              r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+          var match = new RegExp(urlPattern, caseSensitive: false);
+          if (match.hasMatch(data.listImage[i]) == false) {
+            String path = "ads/${uuid.v1()}";
+            data.listImage[i] =
+                await _storageRepo.uploadFile(File(data.listImage[i]), path);
+          }
+        }
+        data.urlThumb = data.listImage[0];
+      }
+      _databaseRepo.createAds(data.toJson(), id: data.id);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> readAds() =>
+      _databaseRepo.readAds();
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getUserAds(String id) =>
+      _databaseRepo.getUserAds(id);
+
+  Future<void> soldAds(String id) async {
+    await _databaseRepo.solidAds(id);
   }
 }
