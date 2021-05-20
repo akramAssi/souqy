@@ -71,6 +71,10 @@ class Strings {
   static const String monthlyPayment = "Monthly payment";
   static const String installmentDetail = "Installment detail";
   static const String noDataMessage = "No Data Yet";
+  static const String update = "Update";
+
+  static String bookmark = "Bookmark";
+  static String myAds = "My Ads";
 
   static String success(String value) => "$value success";
   static String requiredField(String value) => "$value required";
