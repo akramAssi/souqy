@@ -13,7 +13,19 @@ class SouqyKilometerTextField extends StatelessWidget {
   final TextEditingController _controllerField5 = TextEditingController();
   final TextEditingController _controllerField6 = TextEditingController();
 
-  List<int> number = [0, 0, 0, 0, 0, 0];
+  List<int> number;
+
+  SouqyKilometerTextField({Key key, this.number}) : super(key: key) {
+    if (number == null) {
+      number = [0, 0, 0, 0, 0, 0];
+    }
+    _controllerField1.text = number[0].toString();
+    _controllerField2.text = number[1].toString();
+    _controllerField3.text = number[2].toString();
+    _controllerField4.text = number[3].toString();
+    _controllerField5.text = number[4].toString();
+    _controllerField6.text = number[5].toString();
+  }
 
   int get kilometer {
     var y = number.join('');
