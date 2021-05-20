@@ -61,7 +61,6 @@ class _EmailRegisterFormState extends State<EmailRegisterForm> {
       } else {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(value);
         showExceptionDialog(context, title: Strings.login, content: errorMsg);
-        print(errorMsg);
       }
     });
 
