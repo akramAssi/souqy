@@ -9,6 +9,7 @@ class UserModel {
   String phone;
   String city;
   String area;
+  List<String> bookmark;
 
   UserModel(this.uid,
       {this.displayName,
