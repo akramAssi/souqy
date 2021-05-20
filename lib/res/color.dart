@@ -50,6 +50,8 @@ const Color annotationColor = Color(0xFFFFE13E);
 const Color borderColor = Color(0x3199bcc4);
 const Color borderTextfieldColor = Color(0xa999bcc4);
 const Color fontColor = Color(0xff02333c);
+const Color borderCard = Color(0x3308535d);
+
 // const Color alertColor = Color(0xff08535d);
 
 MaterialColor primeCOLOR = MaterialColor(0xff08535d, <int, Color>{
