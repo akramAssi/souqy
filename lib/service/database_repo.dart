@@ -61,6 +61,33 @@ class FirestoreDatabase {
     // );
   }
 
+  Future<List<String>> readUserBookmark(String userId) async {
+    // try {
+    // throw IntegerDivisionByZeroException;
+    // print("dsadsad");
+    final String path = "/user/$userId/save_post";
+    final firestoreRef = _firestore.collection(path);
+    List<String> tempList = [];
+    await firestoreRef.get().then((document) {
+      document.docs.forEach((doc) {
+        if (doc != null || doc.data() != null) {
+          tempList.add(doc.id);
+        }
+      });
+      return tempList;
+    });
+
+    return tempList;
+  }
+
+  Future<void> deleteUserBookmark(String userId, String adsId) async {
+    // try {
+    // throw IntegerDivisionByZeroException;
+    // print("dsadsad");
+    final String path = "/user/$userId/save_post/$adsId";
+    await _firestore.doc(path).delete();
+  }
+
   Future<void> userInNablus() async {
     // try {
     // throw IntegerDivisionByZeroException;
@@ -84,16 +111,39 @@ class FirestoreDatabase {
     });
   }
 
-  Future<void> createAds(data) async {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getUserAds(String id) {
+    final firestoreRef =
+        _firestore.collection("ads").where("userId", isEqualTo: id);
+    // .orderBy("publishDate", descending: true);
+    final snapshot = firestoreRef.snapshots();
+    return snapshot;
+  }
+
+  Future<void> createAds(data, {String id}) async {
+    if (id != null) {
+      _firestore.collection("ads").doc(id).update(data);
+    } else {
+      await _firestore.collection("ads").add(data);
+    }
+  }
+
+  Future<void> addBookmark(String data, String userid) async {
+    await _firestore
+        .collection("user")
+        .doc(userid)
+        .collection("save_post")
+        .doc(data)
+        .set({"post_id": data});
+  }
+
+  Future<void> solidAds(String id) async {
     // final String path = "/user/${user.uid}";
-    var temp = {
-      "cardInfo": {"id": "23232323"}
-    };
-    await _firestore.collection("ads").add(data);
+    await _firestore.collection("ads").doc(id).update({"avaliable": false});
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> readAds() {
-    final firestoreRef = _firestore.collection("ads");
+    final firestoreRef =
+        _firestore.collection("ads").orderBy("publishDate", descending: true);
     final snapshot = firestoreRef.snapshots();
     return snapshot;
     // snapshot.listen((event) {
@@ -113,5 +163,34 @@ class FirestoreDatabase {
     //   });
     // });
     // return x;
+  }
+
+  Future<List<Ads>> readBookmark(List<String> bookmark) async {
+    // final String path = "/user/$userId/save_post";
+    // final firestoreRef = _firestore.collection(path);
+    // final snapshot = firestoreRef.snapshots();
+    List<Ads> tempList = [];
+    // await firestoreRef.get().then((document) {
+    //   document.docs.forEach((doc) async {
+    //     if (doc != null || doc.data() != null) {
+    //       // tempList.add(doc.id);
+    //       rint("data1 ----- $tempList");
+    //       });
+    //     }
+    //   });
+    //   print("data ----- $tempList");
+    // })
+
+    for (var element in bookmark) {
+      await _firestore.collection("ads").doc(element).get().then((value) {
+        Ads temp = Ads.fromJson(value.data());
+        temp.id = element;
+        tempList.add(temp);
+      });
+    }
+
+    print("data ----- $tempList");
+    return tempList;
+    // return snapshot;
   }
 }
