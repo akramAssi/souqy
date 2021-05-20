@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:souqy/add_page/search_brand.dart';
 import 'package:souqy/model/ads.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
+import 'package:souqy/res/car.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/res/style.dart';
@@ -23,30 +24,36 @@ import 'package:souqy/view_controller/ads_controller.dart';
 
 import 'car_type.dart';
 
+// ignore: must_be_immutable
 class AddPage extends StatefulWidget {
+  Ads carAds;
+  final VoidCallback returnTOHome;
+
+  AddPage({Key key, this.carAds, this.returnTOHome}) : super(key: key);
   @override
   _AddPageState createState() => _AddPageState();
 }
 
 class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   //Textfor all field Controller
-  TextEditingController _makeController;
-  TextEditingController _modelController;
-  TextEditingController _yearController;
-  TextEditingController _engineController;
-  TextEditingController _passengerController;
-  TextEditingController _gearController;
-  TextEditingController _fuelController;
-  TextEditingController _colorController;
-  TextEditingController _vehicleOriginController;
-  TextEditingController _ownerController;
-  TextEditingController _addInfoController;
-  TextEditingController _expectedPriceController;
-  TextEditingController _priceController;
-  TextEditingController _paymentController;
-  TextEditingController _downPaymentController;
-  TextEditingController _monthlyPaymentController;
-  var souqyKilometerTextField = SouqyKilometerTextField();
+  TextEditingController _makeController = TextEditingController();
+  TextEditingController _modelController = TextEditingController();
+  TextEditingController _yearController = TextEditingController();
+  TextEditingController _engineController = TextEditingController();
+  TextEditingController _passengerController = TextEditingController();
+  TextEditingController _gearController = TextEditingController();
+  TextEditingController _fuelController = TextEditingController();
+  TextEditingController _colorController = TextEditingController();
+  TextEditingController _vehicleOriginController = TextEditingController();
+  TextEditingController _ownerController = TextEditingController();
+  TextEditingController _addInfoController = TextEditingController();
+  TextEditingController _expectedPriceController = TextEditingController();
+  TextEditingController _priceController = TextEditingController();
+  TextEditingController _paymentController = TextEditingController();
+  TextEditingController _downPaymentController = TextEditingController();
+  TextEditingController _monthlyPaymentController = TextEditingController();
+  // var souqyKilometerTextField = SouqyKilometerTextField();
+  var souqyKilometerTextField;
   bool showPaymentDetail = false;
   var carType = CarType();
   var souqySearchForBrand;
@@ -86,7 +93,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   ];
   var modelSouqyFormField;
   var yearSouqyFormField;
-  var carFGroupButton;
+  GroupButton carFGroupButton;
   var engineSouqyFormField;
   var passengerSouqyFormField;
   var gearSouqyButtonDialog;
@@ -96,22 +103,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   var monthlyPaymentSouqyFormField;
   var orginSouqyButtonDialog;
   _AddPageState() {
-    _makeController = TextEditingController();
-    _modelController = TextEditingController();
-    _yearController = TextEditingController();
-    _engineController = TextEditingController();
-    _passengerController = TextEditingController();
-    _gearController = TextEditingController();
-    _fuelController = TextEditingController();
-    _colorController = TextEditingController();
-    _vehicleOriginController = TextEditingController();
-    _ownerController = TextEditingController();
-    _addInfoController = TextEditingController();
-    _expectedPriceController = TextEditingController();
-    _priceController = TextEditingController();
-    _paymentController = TextEditingController();
-    _downPaymentController = TextEditingController();
-    _monthlyPaymentController = TextEditingController();
     souqySearchForBrand = SouqySearchForBrand(
       controller: _makeController,
       focusNode: _makeFoucs,
@@ -185,74 +176,53 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
       label: Strings.fuelType,
       validator: Validators.required(Strings.requiredFieldo),
     );
-    colorSouqyFormField = SouqyFormField(
-      label: Strings.color,
-      controller: _colorController,
-      height: 50,
-      isReadOnly: true,
-      textAlign: TextAlign.center,
-      color: currentColor,
-      filled: true,
-      validator: Validators.required(Strings.requiredFieldo),
-      onTop: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text(
-                  Strings.colorDialog,
-                ),
-                content: SingleChildScrollView(
-                  child: BlockPicker(
-                    pickerColor: primeCOLOR,
-                    onColorChanged: changeColor,
-                    availableColors: carColor,
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text(
-                      Strings.colorDialogButton,
-                      textAlign: TextAlign.left,
-                    ),
-                    onPressed: () {
-                      setState(() => currentColor = pickerColor);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            });
-      },
-    );
+    // colorSouqyFormField = SouqyFormField(
+    //   label: Strings.color,
+    //   controller: _colorController,
+    //   height: 50,
+    //   isReadOnly: true,
+    //   textAlign: TextAlign.center,
+    //   color: currentColor,
+    //   filled: true,
+    //   validator: Validators.required(Strings.requiredFieldo),
+    //   onTop: () {
+    //     showDialog(
+    //         context: context,
+    //         builder: (BuildContext context) {
+    //           return AlertDialog(
+    //             title: const Text(
+    //               Strings.colorDialog,
+    //             ),
+    //             content: SingleChildScrollView(
+    //               child: BlockPicker(
+    //                 pickerColor: primeCOLOR,
+    //                 onColorChanged: changeColor,
+    //                 availableColors: carColor,
+    //               ),
+    //             ),
+    //             actions: <Widget>[
+    //               TextButton(
+    //                 child: Text(
+    //                   Strings.colorDialogButton,
+    //                   textAlign: TextAlign.left,
+    //                 ),
+    //                 onPressed: () {
+    //                   setState(() => currentColor = pickerColor);
+    //                   print(currentColor.toString());
+    //                   Navigator.of(context).pop();
+    //                 },
+    //               ),
+    //             ],
+    //           );
+    //         });
+    //   },
+    // );
     orginSouqyButtonDialog = SouqyButtonDialog(
       gearController: _vehicleOriginController,
       list: _vehicleOriginList,
       label: Strings.origin,
       // withIcon: false,
       validator: Validators.required(Strings.requiredFieldo),
-    );
-    carFGroupButton = GroupButton(
-      unselectedColor: backgroundColor,
-      unselectedBorderColor: borderTextfieldColor,
-      selectedColor: primeCOLOR,
-      borderRadius: BorderRadius.circular(15),
-      unselectedTextStyle: TextStyle(
-        color: fontColor,
-      ),
-      selectedTextStyle: TextStyle(
-        color: backgroundColor,
-      ),
-      isRadio: false,
-      spacing: 10,
-      onSelected: (index, isSelected) {
-        if (isSelected) {
-          _checkedItemList.add(allItemList[index]);
-        } else if (!isSelected) {
-          _checkedItemList.remove(allItemList[index]);
-        }
-      },
-      buttons: allItemList,
     );
 
     downPaymentSouqyFormField = SouqyFormField(
@@ -419,41 +389,151 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     print("payment ${_paymentController.text}");
 
     var x = Ads.fromJson({
-      "cardInfo": {
-        "make": _makeController.text,
-        "model": _modelController.text,
-        "price": int.parse(_priceController.text),
-        "year": int.parse(_yearController.text),
-        "origin": _vehicleOriginController.text,
-        "fuel": _fuelController.text,
-        "avaliable": true,
-        "paymentMethod": _paymentController.text,
-        "urlThumb": _myImages.length > 0 ? _myImages[0] : null,
-      },
-      "moreInfo": {
-        "type": type,
-        "kilo": souqyKilometerTextField.kilometer,
-        "engineSize": int.parse(_engineController.text.trim()),
-        "passenger": int.parse(_passengerController.text),
-        "color": currentColor.toString(),
-        "gear": _gearController.text,
-        "oldOwner": owner,
-        "listImage": _myImages,
-        "carFeature": _checkedItemList,
-        "additionalInformation": _addInfoController.text,
-        "downPayment": (_downPaymentController.text == null ||
-                _downPaymentController.text.isEmpty)
-            ? null
-            : int.parse(_downPaymentController.text),
-        "monthlyPayment": (_monthlyPaymentController.text == null ||
-                _monthlyPaymentController.text.isEmpty)
-            ? null
-            : int.parse(_monthlyPaymentController.text),
-        "userId": locator.get<UserController>().currentUser.uid,
-      }
+      "make": _makeController.text,
+      "model": _modelController.text,
+      "price": int.parse(_priceController.text),
+      "year": int.parse(_yearController.text),
+      "origin": _vehicleOriginController.text,
+      "fuel": _fuelController.text,
+      "avaliable": true,
+      "paymentMethod": _paymentController.text,
+      "urlThumb": _myImages.length > 0 ? _myImages[0] : null,
+      "type": type,
+      "kilo": souqyKilometerTextField.kilometer,
+      "engineSize": int.parse(_engineController.text.trim()),
+      "passenger": int.parse(_passengerController.text),
+      "color": currentColor.toString(),
+      "gear": _gearController.text,
+      "oldOwner": owner,
+      "listImage": _myImages,
+      "carFeature": _checkedItemList,
+      "additionalInformation": _addInfoController.text,
+      "downPayment": (_downPaymentController.text == null ||
+              _downPaymentController.text.isEmpty)
+          ? null
+          : int.parse(_downPaymentController.text),
+      "monthlyPayment": (_monthlyPaymentController.text == null ||
+              _monthlyPaymentController.text.isEmpty)
+          ? null
+          : int.parse(_monthlyPaymentController.text),
+      "userId": locator.get<UserController>().currentUser.uid,
     });
-    print(x.toJson());
-    locator.get<AdsController>().createAds(x);
+    if (widget.carAds != null) {
+      x.id = widget.carAds.id;
+      locator.get<AdsController>().updateAds(x);
+      // Navigator.of(context).pop();
+      Navigator.pop(context, x);
+    } else {
+      locator.get<AdsController>().createAds(x);
+      widget.returnTOHome();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.carAds != null) {
+      _makeController.text = widget.carAds.make;
+
+      _modelController.text = widget.carAds.model;
+
+      _priceController.text = widget.carAds.price.toString();
+
+      _yearController.text = widget.carAds.year.toString();
+
+      _vehicleOriginController.text = widget.carAds.origin;
+
+      _fuelController.text = widget.carAds.fuel;
+
+      _paymentController.text = widget.carAds.paymentMethod;
+
+      carType.onchangeList = [widget.carAds.type];
+
+      carType.typeSelected = widget.carAds.type;
+
+      carType.setSelected = 0;
+
+      carType.loc = carTypeList.indexOf(widget.carAds.type);
+      List<String> kilo = widget.carAds.kilo.toString().split("");
+      List<int> sd = [0, 0, 0, 0, 0, 0];
+      int p = 5;
+      for (var i in kilo.reversed) {
+        sd[p--] = int.parse(i);
+      }
+      souqyKilometerTextField = SouqyKilometerTextField(
+        number: sd,
+      );
+
+      _engineController.text = widget.carAds.engineSize.toString();
+
+      _passengerController.text = widget.carAds.passenger.toString();
+
+      //  currentColor.toString(),
+      _gearController.text = widget.carAds.gear;
+
+      owner = widget.carAds.oldOwner;
+
+      _ownerController.text = "$owner";
+
+      _myImages = widget.carAds.listImage;
+
+      _checkedItemList = widget.carAds.carFeature;
+
+      _addInfoController.text = widget.carAds.additionalInformation;
+
+      _downPaymentController.text = widget.carAds.downPayment?.toString();
+
+      _monthlyPaymentController.text = widget.carAds.monthlyPayment?.toString();
+
+      carFGroupButton = GroupButton(
+        unselectedColor: backgroundColor,
+        unselectedBorderColor: borderTextfieldColor,
+        selectedColor: primeCOLOR,
+        borderRadius: BorderRadius.circular(15),
+        unselectedTextStyle: TextStyle(
+          color: fontColor,
+        ),
+        selectedTextStyle: TextStyle(
+          color: backgroundColor,
+        ),
+        isRadio: false,
+        spacing: 10,
+        selectedButtons: widget.carAds.carFeature,
+        onSelected: (index, isSelected) {
+          if (isSelected) {
+            _checkedItemList.add(allItemList[index]);
+          } else if (!isSelected) {
+            _checkedItemList.remove(allItemList[index]);
+          }
+        },
+        buttons: allItemList,
+      );
+    } else {
+      souqyKilometerTextField = SouqyKilometerTextField();
+
+      carFGroupButton = GroupButton(
+        unselectedColor: backgroundColor,
+        unselectedBorderColor: borderTextfieldColor,
+        selectedColor: primeCOLOR,
+        borderRadius: BorderRadius.circular(15),
+        unselectedTextStyle: TextStyle(
+          color: fontColor,
+        ),
+        selectedTextStyle: TextStyle(
+          color: backgroundColor,
+        ),
+        isRadio: false,
+        spacing: 10,
+        onSelected: (index, isSelected) {
+          if (isSelected) {
+            _checkedItemList.add(allItemList[index]);
+          } else if (!isSelected) {
+            _checkedItemList.remove(allItemList[index]);
+          }
+        },
+        buttons: allItemList,
+      );
+    }
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -509,7 +589,47 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                     ),
                     Flexible(
                       flex: 1,
-                      child: colorSouqyFormField,
+                      child: colorSouqyFormField = SouqyFormField(
+                        label: Strings.color,
+                        controller: _colorController,
+                        height: 50,
+                        isReadOnly: true,
+                        textAlign: TextAlign.center,
+                        color: currentColor,
+                        filled: true,
+                        validator: Validators.required(Strings.requiredFieldo),
+                        onTop: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    Strings.colorDialog,
+                                  ),
+                                  content: SingleChildScrollView(
+                                    child: BlockPicker(
+                                      pickerColor: primeCOLOR,
+                                      onColorChanged: changeColor,
+                                      availableColors: carColor,
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text(
+                                        Strings.colorDialogButton,
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      onPressed: () {
+                                        setState(
+                                            () => currentColor = pickerColor);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -788,7 +908,9 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                 child: SizedBox(
                   width: size.width / 1.5,
                   child: SouqySubmitBotton(
-                    label: Strings.publishing,
+                    label: widget.carAds == null
+                        ? Strings.publishing
+                        : Strings.update,
                     height: 45,
                     fontSize: 15,
                     onPress: () {
