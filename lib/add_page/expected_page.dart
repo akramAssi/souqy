@@ -398,7 +398,48 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
                     ),
                     Flexible(
                       flex: 1,
-                      child: colorSouqyFormField,
+                      child: colorSouqyFormField = SouqyFormField(
+                        label: Strings.color,
+                        controller: _colorController,
+                        height: 50,
+                        isReadOnly: true,
+                        textAlign: TextAlign.center,
+                        color: currentColor,
+                        filled: true,
+                        validator: Validators.required(Strings.requiredFieldo),
+                        onTop: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    Strings.colorDialog,
+                                  ),
+                                  content: SingleChildScrollView(
+                                    child: BlockPicker(
+                                      pickerColor: primeCOLOR,
+                                      onColorChanged: changeColor,
+                                      availableColors: carColor,
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text(
+                                        Strings.colorDialogButton,
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      onPressed: () {
+                                        setState(
+                                            () => currentColor = pickerColor);
+                                        print(currentColor.toString());
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                      ),
                     ),
                   ],
                 ),
