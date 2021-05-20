@@ -69,16 +69,6 @@ class SouqyFormField extends StatelessWidget with SouqyFormFieldStyle {
           controller: controller,
           focusNode: focusNode,
           validator: validator,
-          // validator: (String value) {
-          //   if (validator == null) {
-          //     return null;
-          //   }
-          //   if (validator(value) == null) {
-
-          //     return validator(value);
-          //   }
-          //   return validator(value);
-          // },
           //controller
           textAlign: textAlign,
           readOnly: isReadOnly,
