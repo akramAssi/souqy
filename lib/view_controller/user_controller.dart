@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:souqy/model/ads.dart';
 import 'package:souqy/model/user_model.dart';
 import 'package:souqy/service/Auth.dart';
 import 'package:souqy/service/database_repo.dart';
@@ -79,7 +81,6 @@ class UserController {
       if (_currentUser.displayName == null ||
           _currentUser.displayName.isEmpty) {
         _currentUser.displayName = user.displayName;
-        print("eeeokko:${_currentUser.displayName}");
         storeSelf();
       }
       getDownloadUrl();
@@ -100,7 +101,6 @@ class UserController {
         if (_currentUser.displayName == null ||
             _currentUser.displayName.isEmpty) {
           _currentUser.displayName = user.displayName;
-          print("eeeokko:${_currentUser.displayName}");
           storeSelf();
         }
       } else {
@@ -202,6 +202,29 @@ class UserController {
     Map<String, dynamic> userJson = await _databaseRepo.readUserInfo(userId);
 
     var x = UserModel.fromJson(userId, userJson, currentUser: currentUser);
+
+    x.bookmark = await _databaseRepo.readUserBookmark(userId);
+
+    return x;
+  }
+
+  Future<void> updateBookmarkUser() async {
+    _currentUser.bookmark =
+        await _databaseRepo.readUserBookmark(_currentUser.uid);
+  }
+
+  Future<void> addBookmark(String adsId) async {
+    await _databaseRepo.addBookmark(adsId, _currentUser.uid);
+    await updateBookmarkUser();
+  }
+
+  Future<void> deleteBookmarkUser(String adsId) async {
+    await _databaseRepo.deleteUserBookmark(_currentUser.uid, adsId);
+    await updateBookmarkUser();
+  }
+
+  Future<List<Ads>> getUserBookmark() async {
+    var x = await _databaseRepo.readBookmark(_currentUser.bookmark);
 
     return x;
   }
