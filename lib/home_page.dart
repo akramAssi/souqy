@@ -25,23 +25,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<void> _singOut() async {
-    await locator.get<UserController>().signOut().onError((error, stackTrace) {
-      showExceptionDialog(context,
-          title: Strings.signOut, content: error.toString());
-    });
-    // showMyDialog(context);
-  }
-
-  Future<void> _getIn() async {
-    FirestoreDatabase _databaseRepo = locator.get<FirestoreDatabase>();
-    await _databaseRepo.userInNablus().onError((error, stackTrace) {
-      showExceptionDialog(context,
-          title: Strings.signOut, content: error.toString());
-    });
-    // showMyDialog(context);
-  }
-
   int _selectedIndex = 0;
   static const TextStyle optionStyle = TextStyle(
       fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blueAccent);
@@ -58,9 +41,10 @@ class _HomePageState extends State<HomePage> {
               QuerySnapshot<Map<String, dynamic>> map = snapshot.data;
               List<Ads> list = [];
               map.docs.forEach((doc) {
-                list.add(Ads.fromJson(doc.data()));
+                Ads temp = Ads.fromJson(doc.data());
+                temp.id = doc.id;
+                list.add(temp);
               });
-
               return SouqyHomePage(
                 shrinkWrap: false,
                 list: list,
@@ -76,8 +60,6 @@ class _HomePageState extends State<HomePage> {
       ],
     ),
     SearchButton(),
-    AddPage(),
-    ExpectedPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -93,6 +75,12 @@ class _HomePageState extends State<HomePage> {
           title: Strings.userFetchFailed, content: error.toString());
     });
     super.initState();
+  }
+
+  void returnToHome() {
+    setState(() {
+      _selectedIndex = 0;
+    });
   }
 
   @override
@@ -148,24 +136,12 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-    _widgetOptions.add(Container(
-      child: Column(
-        children: [
-          TextButton(
-            child: Text("are you bored"),
-            onPressed: () {
-              _getIn();
-            },
-          ),
-          TextButton(
-            child: Text("sign out"),
-            onPressed: () {
-              _singOut();
-            },
-          ),
-        ],
+    _widgetOptions.addAll([
+      AddPage(
+        returnTOHome: returnToHome,
       ),
-    ));
+      ExpectedPage(),
+    ]);
     return ss;
   }
 }
