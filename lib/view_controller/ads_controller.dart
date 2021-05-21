@@ -18,9 +18,14 @@ class AdsController {
       var uuid = Uuid(options: {'grng': UuidUtil.cryptoRNG});
       if (data.listImage.length > 0) {
         for (int i = 0; i < data.listImage.length; i++) {
-          String path = "ads/${uuid.v1()}";
-          data.listImage[i] =
-              await _storageRepo.uploadFile(File(data.listImage[i]), path);
+          var urlPattern =
+              r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+          var match = new RegExp(urlPattern, caseSensitive: false);
+          if (match.hasMatch(data.listImage[i]) == false) {
+            String path = "ads/${uuid.v1()}";
+            data.listImage[i] =
+                await _storageRepo.uploadFile(File(data.listImage[i]), path);
+          }
         }
         data.urlThumb = data.listImage[0];
       }
