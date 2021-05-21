@@ -50,7 +50,7 @@ const Color annotationColor = Color(0xFFFFE13E);
 const Color borderColor = Color(0x3199bcc4);
 const Color borderTextfieldColor = Color(0xa999bcc4);
 const Color fontColor = Color(0xff02333c);
-// const Color alertColor = Color(0xff08535d);
+Color statisticFontColor = Colors.grey[800];
 
 MaterialColor primeCOLOR = MaterialColor(0xff08535d, <int, Color>{
   50: Color.fromRGBO(136, 14, 79, .1),
@@ -63,4 +63,17 @@ MaterialColor primeCOLOR = MaterialColor(0xff08535d, <int, Color>{
   700: Color.fromRGBO(136, 14, 79, .8),
   800: Color.fromRGBO(136, 14, 79, .9),
   900: Color.fromRGBO(136, 14, 79, 1),
+});
+
+MaterialColor statisticColor = MaterialColor(0xff08535d, <int, Color>{
+  50: Color.fromRGBO(95, 147, 154, .1),
+  100: Color.fromRGBO(95, 147, 154, .2),
+  200: Color.fromRGBO(95, 147, 154, .3),
+  300: Color.fromRGBO(95, 147, 154, .4),
+  400: Color.fromRGBO(95, 147, 154, .5),
+  500: Color.fromRGBO(95, 147, 154, .6),
+  600: Color.fromRGBO(95, 147, 154, .7),
+  700: Color.fromRGBO(95, 147, 154, .8),
+  800: Color.fromRGBO(95, 147, 154, .9),
+  900: Color.fromRGBO(95, 147, 154, 1),
 });
