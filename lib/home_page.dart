@@ -103,6 +103,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    locator.get<FirestoreDatabase>().userInNablus();
     final ss = Scaffold(
       appBar: souqyAppBar("profile", context),
       body: Center(

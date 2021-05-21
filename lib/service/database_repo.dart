@@ -93,8 +93,14 @@ class FirestoreDatabase {
     // throw IntegerDivisionByZeroException;
     // print("dsadsad");
     // final String path = "/user/${user.uid}";
-    final firestoreRef =
-        _firestore.collection("user").where("city", isEqualTo: "Qalqilya");
+    final firestoreRef = _firestore
+        .collection("ads")
+        .where("make", isEqualTo: "bmw")
+        // .where("model", isEqualTo: "1-series")
+        // .where("type",isEqualTo: )
+        .where("price", isGreaterThanOrEqualTo: 30000)
+        .where("price", isLessThanOrEqualTo: 200000);
+
     // final snapshot = firestoreRef.snapshots();
     // snapshot.listen((event) {
     //   event.docs.forEach((element) {
@@ -106,7 +112,7 @@ class FirestoreDatabase {
       value.docs.forEach((element) {
         print("-------------------------------------");
         print(element.id);
-        print(element.data());
+        // print(element.data());
       });
     });
   }
@@ -142,8 +148,10 @@ class FirestoreDatabase {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> readAds() {
-    final firestoreRef =
-        _firestore.collection("ads").orderBy("publishDate", descending: true);
+    final firestoreRef = _firestore
+        .collection("ads")
+        // .where("avaliable", isEqualTo: true)
+        .orderBy("publishDate", descending: true);
     final snapshot = firestoreRef.snapshots();
     return snapshot;
     // snapshot.listen((event) {
