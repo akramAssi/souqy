@@ -96,9 +96,12 @@ AppBar souqyAppBar(
               onPressed: editOnPress,
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(5.0),
               child: TextButton(
-                child: Text(Strings.sold),
+                child: Text(
+                  Strings.sold,
+                  style: TextStyle(color: alertColor),
+                ),
                 onPressed: soldOnPress,
               ),
             ),
