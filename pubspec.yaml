@@ -43,6 +43,8 @@ dependencies:
   fl_chart: ^0.36.1
   syncfusion_flutter_charts: ^18.4.49
   
+  intl: ^0.17.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -80,6 +82,7 @@ flutter:
   - images/big_man.png
   - images/settings.png
   - images/404.png
+  - images/myAds.png
   - images/
   - images/carBrand/
   - images/carType/

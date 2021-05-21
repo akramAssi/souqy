@@ -55,35 +55,40 @@ class SouqyCarCard extends StatelessWidget {
           children: [
             Stack(children: <Widget>[
               // SouqyThumbnailCard(path: 'images/kia-op.jpg'),
-              SouqyThumbnailCard(path: carAdsInfo.card.thumbnailUrl),
+              SouqyThumbnailCard(path: carAdsInfo.urlThumb),
               Positioned(
                 left: size.width / 80,
                 top: 25.0,
                 child: SouqyAvailabellabel(
                   size: size,
-                  availabel: carAdsInfo.card.available,
+                  availabel: carAdsInfo.avaliable,
                   isCard: true,
                 ),
               ),
             ]),
-            Padding(
+            Container(
               padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, right: 8.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SouqyInfoCard(
-                    make: carAdsInfo.card.make,
-                    model: carAdsInfo.card.model,
-                    price: carAdsInfo.card.price,
-                    size: size,
+                  Flexible(
+                    flex: 7,
+                    child: SouqyInfoCard(
+                      make: carAdsInfo.make,
+                      model: carAdsInfo.model,
+                      price: carAdsInfo.price,
+                      paymentMethod: carAdsInfo?.paymentMethod ?? "",
+                      size: size,
+                    ),
                   ),
                   Spacer(),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SouqyInfoCircleCard(
-                        value: "${carAdsInfo.card.year}",
+                        value: "${carAdsInfo.year}",
                         path: "images/year.png",
                         size: size,
                       ),
@@ -91,7 +96,7 @@ class SouqyCarCard extends StatelessWidget {
                         height: 5,
                       ),
                       SouqyInfoCircleCard(
-                        value: "${carAdsInfo.card.origin}",
+                        value: "${carAdsInfo.origin}",
                         path: "images/mini_car.png",
                         size: size,
                       ),
@@ -99,7 +104,7 @@ class SouqyCarCard extends StatelessWidget {
                         height: 5,
                       ),
                       SouqyInfoCircleCard(
-                        value: "${carAdsInfo.card.fuel}",
+                        value: "${carAdsInfo.fuel}",
                         path: "images/gas_station.png",
                         size: size,
                       ),

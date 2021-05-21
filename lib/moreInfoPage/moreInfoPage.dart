@@ -1,173 +1,383 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:souqy/add_page/add_page.dart';
 import 'package:souqy/home_pages/souqy_available_label.dart';
 import 'package:souqy/model/ads.dart';
-import 'package:souqy/model/card_info.dart';
+import 'package:souqy/service/locator.dart';
+import 'package:souqy/model/user_model.dart';
 import 'package:souqy/moreInfoPage/row_main_info.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/res/style.dart';
+import 'package:souqy/view_controller/ads_controller.dart';
+import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
-class MoreInfoPage extends StatelessWidget {
+class MoreInfoPage extends StatefulWidget {
   // final String label;
-  final Ads carAdsInfo;
+  Ads carAdsInfo;
 
   MoreInfoPage({Key key, @required this.carAdsInfo}) : super(key: key);
+
+  @override
+  _MoreInfoPageState createState() => _MoreInfoPageState();
+}
+
+class _MoreInfoPageState extends State<MoreInfoPage> {
+  Ads currentAds;
+  UserModel currentUser = locator.get<UserController>().currentUser;
+  // Future<UserModel> ownerAds;
+  @override
+  void initState() {
+    super.initState();
+    currentAds = widget.carAdsInfo;
+  }
+
+  Future<void> onPress() async {
+    await locator
+        .get<AdsController>()
+        .soldAds(currentAds.id)
+        .then((value) => setState(() {
+              currentAds.avaliable = false;
+            }));
+  }
+
+  Future<void> _openEditPage(BuildContext context, Ads ads) async {
+    Ads res = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+            appBar: souqyAppBar("normal", context),
+            body: AddPage(
+              carAds: currentAds,
+            )),
+        fullscreenDialog: true,
+      ),
+    );
+    if (res != null) {
+      setState(() {
+        currentAds = res;
+      });
+    }
+  }
+
+  Future<void> onPressSaveBookmark() async {
+    await locator
+        .get<UserController>()
+        .addBookmark(currentAds.id)
+        .then((value) {
+      currentUser = locator.get<UserController>().currentUser;
+      setState(() {});
+    });
+  }
+
+  Future<void> onPressUnSaveBookmark() async {
+    print("dsd");
+    await locator
+        .get<UserController>()
+        .deleteBookmarkUser(currentAds.id)
+        .then((value) {
+      currentUser = locator.get<UserController>().currentUser;
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("-----------------");
+    List<Widget> payment;
+    if (currentAds.paymentMethod.contains(Strings.installment)) {
+      payment = [
+        Container(
+            padding: EdgeInsets.only(
+              top: 13,
+              right: 10,
+              left: 10,
+            ),
+            child: Text(
+              Strings.installmentDetail,
+              style: TextStyle(
+                color: primeCOLOR,
+                fontSize: 20,
+              ),
+            )),
+        Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          decoration: BoxDecoration(
+              border: Border.all(color: primeCOLOR),
+              borderRadius: SouqyStyle.souqyBorderRadius),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(Strings.downPayment + " :",
+                      style: TextStyle(fontSize: 18, color: primeCOLOR)),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text("${currentAds.downPayment}",
+                      style: TextStyle(fontSize: 18, color: primeCOLOR)),
+                  // Text("${carAdsInfo.moreInfo.downPayment}")
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Text(Strings.monthlyPayment + " :",
+                      style: TextStyle(fontSize: 16, color: primeCOLOR)),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text("${currentAds.monthlyPayment}",
+                      style: TextStyle(fontSize: 16, color: primeCOLOR)),
+                  // Text("${carAdsInfo.moreInfo.monthlyPayment}")
+                ],
+              ),
+            ],
+          ),
+        )
+      ];
+    } else {
+      payment = [SizedBox()];
+    }
+    Widget appBar;
+    if (currentAds.userId == locator.get<UserController>().currentUser.uid) {
+      if (currentAds.avaliable == true) {
+        appBar = souqyAppBar("owner", context, soldOnPress: onPress,
+            editOnPress: () {
+          _openEditPage(context, currentAds);
+        }, ads: currentAds);
+      } else {
+        appBar = souqyAppBar("normal", context);
+      }
+    } else if (currentUser.bookmark.contains(currentAds.id)) {
+      appBar = souqyAppBar("notOwnerBookmark", context,
+          soldOnPress: onPressUnSaveBookmark);
+    } else {
+      appBar = souqyAppBar(
+        "notOwner",
+        context,
+        soldOnPress: onPressSaveBookmark,
+      );
+    }
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: souqyAppBar("normal", context),
-      body: Container(
-        color: Colors.white,
-        child: ListView(
-          children: [
-            Stack(
-              children: [
-                SouqyImageSlider(
-                  imageList: carAdsInfo.moreInfo.imageList,
-                  source: "Network",
-                ),
-                Positioned(
-                    left: 33,
-                    // right: size.width / 80,
-                    top: 25.0,
-                    child: SouqyAvailabellabel(
-                        availabel: true, size: size, isCard: false))
-              ],
-            ),
-            RowMainInfo(
-              size: size,
-              make: carAdsInfo.card.make,
-              model: carAdsInfo.card.model,
-              price: carAdsInfo.card.price,
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            Wrap(
-              spacing: 50,
-              runSpacing: 25,
-              alignment: WrapAlignment.center,
-              children: [
-                Circleinfocard(
-                    icon: "mini_car.png", label: carAdsInfo.card.origin),
-                Circleinfocard(
-                  icon: "kilo.png",
-                  label: "${carAdsInfo.moreInfo.kilo}",
-                ),
-                Circleinfocard(
-                  icon: "year.png",
-                  label: "${carAdsInfo.card.year}",
-                ),
-                Circleinfocard(
-                  icon: "car_seat.png",
-                  label: "${carAdsInfo.moreInfo.passengers} seater",
-                ),
-                Circleinfocard(
-                  icon: "color.png",
-                  label: "${carAdsInfo.moreInfo.color}",
-                ),
-                Circleinfocard(
-                  icon: "gear.png",
-                  label: "${carAdsInfo.moreInfo.gear}",
-                ),
-                Circleinfocard(
-                  icon: "engine.png",
-                  label: "${carAdsInfo.moreInfo.engin}",
-                ),
-                Circleinfocard(
-                    icon: "gas_station.png", label: carAdsInfo.card.fuel),
-                Circleinfocard(
-                  icon: "user.png",
-                  label: "${carAdsInfo.moreInfo.oldOwner}",
-                ),
-              ],
-            ),
-            Container(
-                padding: EdgeInsets.only(
-                  top: 13,
-                  right: 10,
-                  left: 10,
-                ),
-                child: Text(
-                  Strings.carFeatures,
-                  style: TextStyle(
-                    color: primeCOLOR,
-                    fontSize: 25,
-                  ),
-                )),
-            Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(13),
-              decoration: BoxDecoration(
-                  border: Border.all(color: primeCOLOR),
-                  borderRadius: SouqyStyle.souqyBorderRadius),
-              child: Wrap(
-                alignment: WrapAlignment.start,
+      appBar: appBar,
+      body: FutureBuilder<UserModel>(
+        future: locator.get<UserController>().readUserInfo(widget
+            .carAdsInfo.userId), // a previously-obtained Future<String> or null
+        builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
+          List<Widget> children;
+          if (snapshot.hasData) {
+            final UserModel owner = snapshot.data;
+            var widgetList = [
+              Stack(
                 children: [
-                  for (var feature in carAdsInfo.moreInfo.feature)
-                    buildItemList(feature)
-
-                  // buildItemList("راعش"),
-                  // buildItemList("نظام صوتي"),
-                  // buildItemList("جنط مغنيسيوم"),
-                  // buildItemList("ايش ما بدك ضيف"),
+                  SouqyImageSlider(
+                    imageList: currentAds.listImage,
+                    source: "Network",
+                  ),
+                  Positioned(
+                      left: 33,
+                      // right: size.width / 80,
+                      top: 25.0,
+                      child: SouqyAvailabellabel(
+                          availabel: currentAds.avaliable,
+                          size: size,
+                          isCard: false))
                 ],
               ),
-            ),
-            Container(
-              padding: EdgeInsets.only(
-                top: 13,
-                right: 10,
-                left: 10,
+              RowMainInfo(
+                size: size,
+                make: currentAds.make,
+                model: currentAds.model,
+                price: currentAds.price,
               ),
-              child: Text(
-                Strings.additionalInformation,
-                style: TextStyle(
-                  color: primeCOLOR,
-                  fontSize: 25,
-                ),
+              SizedBox(
+                height: 25,
               ),
-            ),
-            Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  border: Border.all(color: primeCOLOR),
-                  borderRadius: SouqyStyle.souqyBorderRadius),
-              child: Text("${carAdsInfo.moreInfo.additionalInformation}",
-                  style: TextStyle(fontSize: 20, color: primeCOLOR)),
-            ),
-            Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  border: Border.all(color: primeCOLOR),
-                  borderRadius: SouqyStyle.souqyBorderRadius),
-              child: Column(
+              Wrap(
+                spacing: 50,
+                runSpacing: 25,
+                alignment: WrapAlignment.center,
                 children: [
-                  buildRowInfo("images/user.png", "ناصر شنطي"),
-                  buildRowInfo("images/phone.png", "0568555917"),
-                  buildRowInfo(
-                      "images/location.png", "قلقية-شارع ما بعرف وين انا "),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Image.asset("images/whatsapp.png"),
-                      SizedBox(
-                        width: 10,
+                  Circleinfocard(
+                      icon: "mini_car.png", label: currentAds.origin),
+                  Circleinfocard(
+                    icon: "kilo.png",
+                    label: "${currentAds.kilo}",
+                  ),
+                  Circleinfocard(
+                    icon: "year.png",
+                    label: "${currentAds.year}",
+                  ),
+                  Circleinfocard(
+                    icon: "car_seat.png",
+                    label: "${currentAds.passenger} seater",
+                  ),
+                  Circleinfocard(
+                    icon: "color.png",
+                    label: "${currentAds.color}",
+                  ),
+                  Circleinfocard(
+                    icon: "gear.png",
+                    label: "${currentAds.gear}",
+                  ),
+                  Circleinfocard(
+                    icon: "engine.png",
+                    label: "${currentAds.engineSize}",
+                  ),
+                  Circleinfocard(
+                      icon: "gas_station.png", label: currentAds.fuel),
+                  Circleinfocard(
+                    icon: "user.png",
+                    label: "${currentAds.oldOwner}",
+                  ),
+                  Circleinfocard(
+                    icon: "${currentAds.type}.png",
+                    label: "${currentAds.type}",
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: payment,
+              ),
+            ];
+            if (currentAds.carFeature != null &&
+                currentAds.carFeature.isNotEmpty) {
+              widgetList.addAll([
+                Container(
+                    padding: EdgeInsets.only(
+                      top: 13,
+                      right: 10,
+                      left: 10,
+                    ),
+                    child: Text(
+                      Strings.carFeatures,
+                      style: TextStyle(
+                        color: primeCOLOR,
+                        fontSize: 20,
                       ),
-                      Image.asset("images/email.png"),
+                    )),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(13),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: primeCOLOR),
+                      borderRadius: SouqyStyle.souqyBorderRadius),
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    children: [
+                      for (var feature in currentAds.carFeature)
+                        buildItemList(feature)
                     ],
                   ),
-                ],
+                ),
+              ]);
+            }
+            if (currentAds.additionalInformation != null &&
+                currentAds.additionalInformation.isNotEmpty) {
+              widgetList.addAll([
+                Container(
+                  padding: EdgeInsets.only(
+                    top: 13,
+                    right: 10,
+                    left: 10,
+                  ),
+                  child: Text(
+                    Strings.additionalInformation,
+                    style: TextStyle(
+                      color: primeCOLOR,
+                      fontSize: 25,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: primeCOLOR),
+                      borderRadius: SouqyStyle.souqyBorderRadius),
+                  child: Text("${currentAds.additionalInformation}",
+                      style: TextStyle(fontSize: 20, color: primeCOLOR)),
+                )
+              ]);
+            }
+
+            widgetList.addAll([
+              Container(
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    border: Border.all(color: primeCOLOR),
+                    borderRadius: SouqyStyle.souqyBorderRadius),
+                child: Column(
+                  children: [
+                    buildRowInfo("images/user.png", owner.displayName),
+                    buildRowInfo("images/phone.png", owner.phone),
+                    buildRowInfo(
+                        "images/location.png", "${owner.city} - ${owner.area}"),
+                    buildRowInfo("images/calendar.png",
+                        currentAds.publishDate.toString()),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Image.asset("images/whatsapp.png"),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Image.asset("images/email.png"),
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ]);
+
+            return Container(
+              color: Colors.white,
+              child: ListView(
+                children: widgetList,
               ),
-            )
-          ],
-        ),
+            );
+          } else if (snapshot.hasError) {
+            children = <Widget>[
+              const Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: 60,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text('Error: ${snapshot.error}'),
+              )
+            ];
+          } else {
+            children = const <Widget>[
+              SizedBox(
+                child: CircularProgressIndicator(),
+                width: 60,
+                height: 60,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: Text('Awaiting result...'),
+              )
+            ];
+          }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: children,
+            ),
+          );
+        },
       ),
     );
   }
@@ -188,7 +398,7 @@ class MoreInfoPage extends StatelessWidget {
           SizedBox(
             width: 20,
           ),
-          Text(text, style: TextStyle(fontSize: 16, color: primeCOLOR))
+          Text(text ?? "", style: TextStyle(fontSize: 16, color: primeCOLOR))
         ],
       ),
     );
@@ -212,7 +422,7 @@ class MoreInfoPage extends StatelessWidget {
 }
 
 class PointList extends StatelessWidget {
-  const PointList({
+  PointList({
     Key key,
   }) : super(key: key);
 

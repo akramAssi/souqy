@@ -5,40 +5,56 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:group_button/group_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:souqy/add_page/search_brand.dart';
+import 'package:souqy/model/ads.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
+import 'package:souqy/res/car.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/res/style.dart';
+import 'package:souqy/service/locator.dart';
+import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
 import 'package:souqy/widget/souqy_kilometer_textFiled.dart';
+import 'package:souqy/widget/souqy_left_right_button_feild.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
 import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
 import 'package:souqy/widget/souqy_submit_button.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
+import 'package:souqy/view_controller/ads_controller.dart';
 
 import 'car_type.dart';
 
+// ignore: must_be_immutable
 class AddPage extends StatefulWidget {
+  Ads carAds;
+  final VoidCallback returnTOHome;
+
+  AddPage({Key key, this.carAds, this.returnTOHome}) : super(key: key);
   @override
   _AddPageState createState() => _AddPageState();
 }
 
 class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   //Textfor all field Controller
-  TextEditingController _makeController;
-  TextEditingController _modelController;
-  TextEditingController _yearController;
-  TextEditingController _engineController;
-  TextEditingController _gearController;
-  TextEditingController _fuelController;
-  TextEditingController _colorController;
-  TextEditingController _vehicleOriginController;
-  TextEditingController _ownerController;
-  TextEditingController _addInfoController;
-  TextEditingController _expectedPriceController;
-  TextEditingController _priceController;
-  TextEditingController _paymentController;
-  var souqyKilometerTextField = SouqyKilometerTextField();
+  TextEditingController _makeController = TextEditingController();
+  TextEditingController _modelController = TextEditingController();
+  TextEditingController _yearController = TextEditingController();
+  TextEditingController _engineController = TextEditingController();
+  TextEditingController _passengerController = TextEditingController();
+  TextEditingController _gearController = TextEditingController();
+  TextEditingController _fuelController = TextEditingController();
+  TextEditingController _colorController = TextEditingController();
+  TextEditingController _vehicleOriginController = TextEditingController();
+  TextEditingController _ownerController = TextEditingController();
+  TextEditingController _addInfoController = TextEditingController();
+  TextEditingController _expectedPriceController = TextEditingController();
+  TextEditingController _priceController = TextEditingController();
+  TextEditingController _paymentController = TextEditingController();
+  TextEditingController _downPaymentController = TextEditingController();
+  TextEditingController _monthlyPaymentController = TextEditingController();
+  // var souqyKilometerTextField = SouqyKilometerTextField();
+  var souqyKilometerTextField;
+  bool showPaymentDetail = false;
   var carType = CarType();
   var souqySearchForBrand;
 
@@ -48,6 +64,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
 
   List<int> _yearList = [];
   List<int> _engineList = [];
+  List<int> _passengerList = [];
   List<String> _payment = ["Cash ", " installments"];
   final List<String> _gearList = ["Manual", "Automatic"];
   final List<String> _fuelList = ["Patrol", "Diesel", "Hybrid", "Electric"];
@@ -76,26 +93,16 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   ];
   var modelSouqyFormField;
   var yearSouqyFormField;
-  var carFGroupButton;
+  GroupButton carFGroupButton;
   var engineSouqyFormField;
+  var passengerSouqyFormField;
   var gearSouqyButtonDialog;
   var fuelSouqyButtonDialog;
   var colorSouqyFormField;
+  var downPaymentSouqyFormField;
+  var monthlyPaymentSouqyFormField;
   var orginSouqyButtonDialog;
   _AddPageState() {
-    _makeController = TextEditingController();
-    _modelController = TextEditingController();
-    _yearController = TextEditingController();
-    _engineController = TextEditingController();
-    _gearController = TextEditingController();
-    _fuelController = TextEditingController();
-    _colorController = TextEditingController();
-    _vehicleOriginController = TextEditingController();
-    _ownerController = TextEditingController();
-    _addInfoController = TextEditingController();
-    _expectedPriceController = TextEditingController();
-    _priceController = TextEditingController();
-    _paymentController = TextEditingController();
     souqySearchForBrand = SouqySearchForBrand(
       controller: _makeController,
       focusNode: _makeFoucs,
@@ -111,6 +118,9 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     }
     for (int i = 900; i <= 6500; i += 50) {
       _engineList.add(i);
+    }
+    for (int i = 1; i <= 55; i += 1) {
+      _passengerList.add(i);
     }
 
     yearSouqyFormField = SouqyFormField(
@@ -143,6 +153,17 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
             context: context, list: _engineList, onPress: onPressEngine);
       },
     );
+    passengerSouqyFormField = SouqyFormField(
+      label: Strings.passenger,
+      controller: _passengerController,
+      height: 50,
+      textAlign: TextAlign.center,
+      validator: Validators.required(Strings.requiredFieldo),
+      onTop: () {
+        _openDialog(
+            context: context, list: _passengerList, onPress: onPressPassenger);
+      },
+    );
     gearSouqyButtonDialog = SouqyButtonDialog(
       gearController: _gearController,
       list: _gearList,
@@ -155,46 +176,47 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
       label: Strings.fuelType,
       validator: Validators.required(Strings.requiredFieldo),
     );
-    colorSouqyFormField = SouqyFormField(
-      label: Strings.color,
-      controller: _colorController,
-      height: 50,
-      isReadOnly: true,
-      textAlign: TextAlign.center,
-      color: currentColor,
-      filled: true,
-      validator: Validators.required(Strings.requiredFieldo),
-      onTop: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text(
-                  Strings.colorDialog,
-                ),
-                content: SingleChildScrollView(
-                  child: BlockPicker(
-                    pickerColor: primeCOLOR,
-                    onColorChanged: changeColor,
-                    availableColors: carColor,
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text(
-                      Strings.colorDialogButton,
-                      textAlign: TextAlign.left,
-                    ),
-                    onPressed: () {
-                      setState(() => currentColor = pickerColor);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            });
-      },
-    );
+    // colorSouqyFormField = SouqyFormField(
+    //   label: Strings.color,
+    //   controller: _colorController,
+    //   height: 50,
+    //   isReadOnly: true,
+    //   textAlign: TextAlign.center,
+    //   color: currentColor,
+    //   filled: true,
+    //   validator: Validators.required(Strings.requiredFieldo),
+    //   onTop: () {
+    //     showDialog(
+    //         context: context,
+    //         builder: (BuildContext context) {
+    //           return AlertDialog(
+    //             title: const Text(
+    //               Strings.colorDialog,
+    //             ),
+    //             content: SingleChildScrollView(
+    //               child: BlockPicker(
+    //                 pickerColor: primeCOLOR,
+    //                 onColorChanged: changeColor,
+    //                 availableColors: carColor,
+    //               ),
+    //             ),
+    //             actions: <Widget>[
+    //               TextButton(
+    //                 child: Text(
+    //                   Strings.colorDialogButton,
+    //                   textAlign: TextAlign.left,
+    //                 ),
+    //                 onPressed: () {
+    //                   setState(() => currentColor = pickerColor);
+    //                   print(currentColor.toString());
+    //                   Navigator.of(context).pop();
+    //                 },
+    //               ),
+    //             ],
+    //           );
+    //         });
+    //   },
+    // );
     orginSouqyButtonDialog = SouqyButtonDialog(
       gearController: _vehicleOriginController,
       list: _vehicleOriginList,
@@ -202,28 +224,26 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
       // withIcon: false,
       validator: Validators.required(Strings.requiredFieldo),
     );
-    carFGroupButton = GroupButton(
-      unselectedColor: backgroundColor,
-      unselectedBorderColor: borderTextfieldColor,
-      selectedColor: primeCOLOR,
-      borderRadius: BorderRadius.circular(15),
-      unselectedTextStyle: TextStyle(
-        color: fontColor,
-      ),
-      selectedTextStyle: TextStyle(
-        color: backgroundColor,
-      ),
-      isRadio: false,
-      spacing: 10,
-      onSelected: (index, isSelected) {
-        if (isSelected) {
-          _checkedItemList.add(allItemList[index]);
-        } else if (!isSelected) {
-          _checkedItemList.remove(allItemList[index]);
-        }
-      },
-      buttons: allItemList,
-    );
+
+    downPaymentSouqyFormField = SouqyFormField(
+        label: Strings.downPayment,
+        controller: _downPaymentController,
+        height: 50,
+        validator: Validators.compose([
+          Validators.required(Strings.passwordInValidRequired),
+          Validators.patternRegExp(
+              RegExp(r"^[0-9]\d*(\.\d+)?$"), Strings.phoneInValidNotString),
+        ]));
+    monthlyPaymentSouqyFormField = SouqyFormField(
+        label: Strings.monthlyPayment,
+        controller: _monthlyPaymentController,
+        height: 50,
+        validator: Validators.compose([
+          Validators.required(Strings.passwordInValidRequired),
+          Validators.patternRegExp(
+              RegExp(r"^[0-9]\d*(\.\d+)?$"), Strings.phoneInValidNotString),
+        ]));
+    _paymentController.addListener(onchangedPyment);
   }
 
   void _goNext(FocusNode nextNode) {
@@ -234,7 +254,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
 
   void onPressYear(dynamic value) {
     setState(() {
-      print("ark" + value.toString());
       _yearController.text = value?.toString() ?? "${DateTime.now().year}";
     });
     Navigator.of(context).pop();
@@ -243,7 +262,14 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
 
   void onPressEngine(dynamic value) {
     setState(() {
-      _engineController.text = value.toString();
+      _engineController.text = value?.toString() ?? _engineList[0].toString();
+    });
+    Navigator.of(context).pop();
+  }
+
+  void onPressPassenger(dynamic value) {
+    setState(() {
+      _passengerController.text = value.toString();
     });
     Navigator.of(context).pop();
   }
@@ -271,9 +297,18 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
 
   void decreaseOwner() {
     setState(() {
-      print(owner);
       if (owner > 0) {
         _ownerController.text = "${--owner}";
+      }
+    });
+  }
+
+  void onchangedPyment() {
+    setState(() {
+      if (_paymentController.text.contains("installments")) {
+        showPaymentDetail = true;
+      } else {
+        showPaymentDetail = false;
       }
     });
   }
@@ -284,8 +319,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     setState(() {
       if (pickedFile != null) {
         _myImages.add(pickedFile.path);
-      } else {
-        print('No image selected.');
       }
     });
   }
@@ -297,8 +330,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     setState(() {
       if (pickedFile != null) {
         _myImages.add(pickedFile.path);
-      } else {
-        print('No image selected.');
       }
     });
   }
@@ -340,27 +371,159 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   }
 
   void _submit(String type) {
-    print("make : ${_makeController.text}");
-    print("type : $type");
-    print("year : ${_yearController.text}");
-    print("model : ${_modelController.text}");
-    print("model : ${souqyKilometerTextField.kilometer}");
-    print("engin : ${_engineController.text}");
-    print("gear : ${_gearController.text}");
-    print("gear : ${_gearController.text}");
-    print("fuel : ${_fuelController.text}");
-    print("color : ${currentColor.toString()}");
-    print("old owner : $owner");
-    print("origin : ${_vehicleOriginController.text}");
-    print("features ${_checkedItemList.toString()}");
-    print("origin : ${_addInfoController.text}");
-    print("price ${_priceController.text}");
-    print("payment ${_paymentController.text}");
+    if (_myImages.length <= 0) {
+      _myImages.add(
+          "https://firebasestorage.googleapis.com/v0/b/souqy-9b821.appspot.com/o/ads%2Fno_image.png?alt=media&token=1ab0b2bc-782d-4189-afed-78dc0422bd0f");
+    }
+    var x = Ads.fromJson({
+      "make": _makeController.text,
+      "model": _modelController.text,
+      "price": int.parse(_priceController.text),
+      "year": int.parse(_yearController.text),
+      "origin": _vehicleOriginController.text,
+      "fuel": _fuelController.text,
+      "avaliable": true,
+      "paymentMethod": _paymentController.text,
+      "urlThumb": _myImages.length > 0 ? _myImages[0] : null,
+      "type": type,
+      "kilo": souqyKilometerTextField.kilometer,
+      "engineSize": int.parse(_engineController.text.trim()),
+      "passenger": int.parse(_passengerController.text),
+      "color": currentColor.toString(),
+      "gear": _gearController.text,
+      "oldOwner": owner,
+      "listImage": _myImages,
+      "carFeature": _checkedItemList,
+      "additionalInformation": _addInfoController.text,
+      "downPayment": (_downPaymentController.text == null ||
+              _downPaymentController.text.isEmpty)
+          ? null
+          : int.parse(_downPaymentController.text),
+      "monthlyPayment": (_monthlyPaymentController.text == null ||
+              _monthlyPaymentController.text.isEmpty)
+          ? null
+          : int.parse(_monthlyPaymentController.text),
+      "userId": locator.get<UserController>().currentUser.uid,
+    });
+    if (widget.carAds != null) {
+      x.id = widget.carAds.id;
+      locator.get<AdsController>().updateAds(x);
+      // Navigator.of(context).pop();
+      Navigator.pop(context, x);
+    } else {
+      locator.get<AdsController>().createAds(x);
+      widget.returnTOHome();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.carAds != null) {
+      _makeController.text = widget.carAds.make;
+
+      _modelController.text = widget.carAds.model;
+
+      _priceController.text = widget.carAds.price.toString();
+
+      _yearController.text = widget.carAds.year.toString();
+
+      _vehicleOriginController.text = widget.carAds.origin;
+
+      _fuelController.text = widget.carAds.fuel;
+
+      _paymentController.text = widget.carAds.paymentMethod;
+
+      carType.onchangeList = [widget.carAds.type];
+
+      carType.typeSelected = widget.carAds.type;
+
+      carType.setSelected = 0;
+
+      carType.loc = carTypeList.indexOf(widget.carAds.type);
+      List<String> kilo = widget.carAds.kilo.toString().split("");
+      List<int> sd = [0, 0, 0, 0, 0, 0];
+      int p = 5;
+      for (var i in kilo.reversed) {
+        sd[p--] = int.parse(i);
+      }
+      souqyKilometerTextField = SouqyKilometerTextField(
+        number: sd,
+      );
+
+      _engineController.text = widget.carAds.engineSize.toString();
+
+      _passengerController.text = widget.carAds.passenger.toString();
+
+      //  currentColor.toString(),
+      _gearController.text = widget.carAds.gear;
+
+      owner = widget.carAds.oldOwner;
+
+      _ownerController.text = "$owner";
+
+      _myImages = widget.carAds.listImage;
+
+      _checkedItemList = widget.carAds.carFeature;
+
+      _addInfoController.text = widget.carAds.additionalInformation;
+
+      _downPaymentController.text = widget.carAds.downPayment?.toString();
+
+      _monthlyPaymentController.text = widget.carAds.monthlyPayment?.toString();
+
+      carFGroupButton = GroupButton(
+        unselectedColor: backgroundColor,
+        unselectedBorderColor: borderTextfieldColor,
+        selectedColor: primeCOLOR,
+        borderRadius: BorderRadius.circular(15),
+        unselectedTextStyle: TextStyle(
+          color: fontColor,
+        ),
+        selectedTextStyle: TextStyle(
+          color: backgroundColor,
+        ),
+        isRadio: false,
+        spacing: 10,
+        selectedButtons: widget.carAds.carFeature,
+        onSelected: (index, isSelected) {
+          if (isSelected) {
+            _checkedItemList.add(allItemList[index]);
+          } else if (!isSelected) {
+            _checkedItemList.remove(allItemList[index]);
+          }
+        },
+        buttons: allItemList,
+      );
+    } else {
+      souqyKilometerTextField = SouqyKilometerTextField();
+
+      carFGroupButton = GroupButton(
+        unselectedColor: backgroundColor,
+        unselectedBorderColor: borderTextfieldColor,
+        selectedColor: primeCOLOR,
+        borderRadius: BorderRadius.circular(15),
+        unselectedTextStyle: TextStyle(
+          color: fontColor,
+        ),
+        selectedTextStyle: TextStyle(
+          color: backgroundColor,
+        ),
+        isRadio: false,
+        spacing: 10,
+        onSelected: (index, isSelected) {
+          if (isSelected) {
+            _checkedItemList.add(allItemList[index]);
+          } else if (!isSelected) {
+            _checkedItemList.remove(allItemList[index]);
+          }
+        },
+        buttons: allItemList,
+      );
+    }
   }
 
   final _formKey = GlobalKey<FormState>();
-  final PageStorageBucket _bucket = PageStorageBucket();
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -406,14 +569,54 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                     ),
                     Flexible(
                       flex: 1,
-                      child: gearSouqyButtonDialog,
+                      child: passengerSouqyFormField,
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Flexible(
                       flex: 1,
-                      child: fuelSouqyButtonDialog,
+                      child: colorSouqyFormField = SouqyFormField(
+                        label: Strings.color,
+                        controller: _colorController,
+                        height: 50,
+                        isReadOnly: true,
+                        textAlign: TextAlign.center,
+                        color: currentColor,
+                        filled: true,
+                        validator: Validators.required(Strings.requiredFieldo),
+                        onTop: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    Strings.colorDialog,
+                                  ),
+                                  content: SingleChildScrollView(
+                                    child: BlockPicker(
+                                      pickerColor: primeCOLOR,
+                                      onColorChanged: changeColor,
+                                      availableColors: carColor,
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text(
+                                        Strings.colorDialogButton,
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      onPressed: () {
+                                        setState(
+                                            () => currentColor = pickerColor);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -427,120 +630,12 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                   children: [
                     Flexible(
                       flex: 1,
-                      child: colorSouqyFormField,
+                      child: gearSouqyButtonDialog,
                     ),
                     SizedBox(
                       width: 10,
                     ),
-                    Flexible(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            Strings.oldOwner,
-                            style: TextStyle(
-                              color: primeCOLOR,
-                              fontSize: 14.0,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: borderTextfieldColor),
-                              borderRadius: SouqyStyle.souqyBorderRadius,
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  flex: 1,
-                                  child: Ink(
-                                      child: ElevatedButton(
-                                          child: Icon(Icons.add),
-                                          style: ElevatedButton.styleFrom(
-                                              padding: EdgeInsets.all(5),
-                                              onPrimary: primeCOLOR,
-                                              primary: Colors.transparent,
-                                              shape: CircleBorder(),
-                                              elevation: 0),
-                                          onPressed: increaseOwner)),
-                                ),
-                                SizedBox(
-                                  width: 7,
-                                ),
-                                Flexible(
-                                  flex: 2,
-                                  child: TextField(
-                                    textAlign: TextAlign.center,
-                                    controller: _ownerController,
-                                    maxLength: 2,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r"^[1-4]?[0-9]$")),
-                                    ],
-                                    decoration: InputDecoration(
-                                      // contentPadding: EdgeInsets.all(8),
-                                      counter: Offstage(),
-                                      border: InputBorder.none,
-                                    ),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        if (value.isEmpty) {
-                                          owner = 0;
-                                          _ownerController.text = "";
-                                        } else {
-                                          int temp = int.parse(value);
-                                          print(owner);
-                                          if (owner < 50 && owner >= 0) {
-                                            print("ok :$owner");
-                                            owner = temp;
-                                            _ownerController.text = "$owner";
-                                          } else if (owner > 50) {
-                                            owner = 49;
-                                            _ownerController.text = "49";
-                                          } else if (owner < 0) {
-                                            owner = 0;
-                                            _ownerController.text = "0";
-                                          }
-                                        }
-                                      });
-                                      _ownerController.selection =
-                                          TextSelection.fromPosition(
-                                              TextPosition(
-                                                  offset: _ownerController
-                                                      .text.length));
-                                    },
-                                    onTap: () => _ownerController.selection =
-                                        returnToLast(_ownerController),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: ElevatedButton(
-                                      child: Icon(Icons.remove),
-                                      style: ElevatedButton.styleFrom(
-                                          padding: EdgeInsets.all(5),
-                                          onPrimary: primeCOLOR,
-                                          primary: Colors.transparent,
-                                          shape: CircleBorder(),
-                                          elevation: 0),
-                                      onPressed: decreaseOwner),
-                                ),
-                                SizedBox(
-                                  width: 7,
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    Flexible(flex: 1, child: fuelSouqyButtonDialog),
                     SizedBox(
                       width: 10,
                     ),
@@ -548,6 +643,26 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                       flex: 1,
                       child: orginSouqyButtonDialog,
                     ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(flex: 1, child: Container()),
+                    Flexible(
+                      flex: 1,
+                      child: SouqyLeftRightButtonField(
+                          leftButton: increaseOwner,
+                          rightButton: decreaseOwner,
+                          onChanged: onChangedOwner,
+                          controller: _ownerController),
+                    ),
+                    Flexible(flex: 1, child: Container()),
                   ],
                 ),
               ),
@@ -635,6 +750,57 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 25,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        Strings.paymentMethod,
+                        style: TextStyle(fontSize: 20, color: primeCOLOR),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: SouqyButtonDialog(
+                        gearController: _paymentController,
+                        list: _payment,
+                        label: Strings.paymentMethod,
+                        showlabel: false,
+                        height: 50,
+                        // size: size,
+                        validator: Validators.required(
+                            Strings.requiredField(Strings.paymentMethod)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Visibility(
+                visible: showPaymentDetail,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(flex: 1, child: downPaymentSouqyFormField),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(flex: 1, child: monthlyPaymentSouqyFormField),
+                    ],
+                  ),
+                ),
+              ),
               Container(
                 // height: 45,
                 alignment: Alignment.centerRight,
@@ -643,7 +809,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                   top: 20,
                 ),
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 15),
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 25),
                 decoration: BoxDecoration(
                     color: alertColor,
                     borderRadius: BorderRadius.only(
@@ -721,38 +887,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                       Validators.required(Strings.requiredField(Strings.price)),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Payment method",
-                        style: TextStyle(fontSize: 20, color: primeCOLOR),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: SouqyButtonDialog(
-                        gearController: _paymentController,
-                        list: _payment,
-                        label: "Payment method",
-                        showlabel: false,
-                        height: 50,
-                        // size: size,
-                        validator: Validators.required(
-                            Strings.requiredField(Strings.paymentMethod)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+
               SizedBox(
                 height: 40,
               ),
@@ -760,14 +895,16 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                 child: SizedBox(
                   width: size.width / 1.5,
                   child: SouqySubmitBotton(
-                    label: Strings.publishing,
+                    label: widget.carAds == null
+                        ? Strings.publishing
+                        : Strings.update,
                     height: 45,
                     fontSize: 15,
                     onPress: () {
-                      _formKey.currentState.validate();
-                      // if (_formKey.currentState.validate()) {
-                      //   _submit(carType.typeSelected);
-                      // }
+                      // _formKey.currentState.validate();
+                      if (_formKey.currentState.validate()) {
+                        _submit(carType.typeSelected);
+                      }
                     },
                   ),
                 ),
@@ -780,6 +917,30 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
         ),
       ),
     );
+  }
+
+  void onChangedOwner(value) {
+    setState(() {
+      if (value.isEmpty) {
+        owner = 0;
+        _ownerController.text = "";
+      } else {
+        int temp = int.parse(value);
+
+        if (owner < 50 && owner >= 0) {
+          owner = temp;
+          _ownerController.text = "$owner";
+        } else if (owner > 50) {
+          owner = 49;
+          _ownerController.text = "49";
+        } else if (owner < 0) {
+          owner = 0;
+          _ownerController.text = "0";
+        }
+      }
+    });
+    _ownerController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _ownerController.text.length));
   }
 
   Padding rowYearAndModel(BuildContext context, Size size) {

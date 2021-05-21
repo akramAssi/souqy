@@ -9,28 +9,42 @@ class UserModel {
   String phone;
   String city;
   String area;
+  List<String> bookmark;
 
-  UserModel(this.uid, {this.displayName, this.email, this.avatarUrl});
+  UserModel(this.uid,
+      {this.displayName,
+      this.email,
+      this.avatarUrl,
+      this.area,
+      this.city,
+      this.phone});
   UserModel.user(User user) {
     this.uid = user.uid;
-    this.displayName = user.displayName;
+    // this.displayName = user.displayName;
     this.email = user.email;
-    if (user.photoURL != null) {
-      this.avatarUrl = user.photoURL;
-    }
+    // if (user.photoURL != null) {
+    //   this.avatarUrl = user.photoURL;
+    // }
   }
-  void setAddress(
-      {@required String phone, @required String city, @required String area}) {
-    this.phone = phone;
-    this.area = area;
-    this.city = city;
+  factory UserModel.fromJson(String id, Map<String, dynamic> json,
+      {UserModel currentUser}) {
+    final x = UserModel(
+      id,
+      area: json["area"] ?? currentUser?.area,
+      city: json["city"] ?? currentUser?.city,
+      email: json["email"] ?? currentUser?.email,
+      displayName: json["name"] ?? currentUser?.displayName,
+      phone: json["phone"] ?? currentUser?.phone,
+    );
+    print(x.toJson());
+    return x;
   }
 
-  Map<String, dynamic> get address {
-    return {
-      "phone": phone,
-      "city": city,
-      "area": area,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "area": area,
+        "city": city,
+        "email": email,
+        "name": displayName,
+        "phone": phone,
+      };
 }

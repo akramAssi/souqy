@@ -6,18 +6,34 @@ class SouqyThumbnailCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      height: 135,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: NetworkImage(path),
-          // image: AssetImage('lib/mo/kia-op.jpg'),
+    try {
+      return Container(
+        margin: EdgeInsets.all(10),
+        height: 135,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(path),
+            // image: AssetImage('lib/mo/kia-op.jpg'),
+          ),
         ),
-      ),
-    );
+      );
+    } catch (e) {
+      return Container(
+        margin: EdgeInsets.all(10),
+        height: 135,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage("images/broken.png"),
+            // image: AssetImage('lib/mo/kia-op.jpg'),
+          ),
+        ),
+      );
+    }
   }
 }

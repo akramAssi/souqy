@@ -48,11 +48,16 @@ class _ProfileSettingState extends State<ProfileSetting> {
   }
 
   Future<bool> saveInfo(
-      {BuildContext context, String phone, String city, String area}) async {
-    print("akram-dsdsd");
+      {BuildContext context,
+      String name,
+      String email,
+      String phone,
+      String city,
+      String area}) async {
     await locator
         .get<UserController>()
-        .storeAddress(phone: phone, city: city, area: area)
+        .storeAddress(
+            name: name, email: email, phone: phone, city: city, area: area)
         .onError((error, stackTrace) async {
       showExceptionDialog(context,
           title: Strings.signOut, content: error.toString());
@@ -80,8 +85,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
     super.dispose();
   }
 
-  void onPressYear(dynamic value) {
-    print(value.toString());
+  void onPress(dynamic value) {
     setState(() {
       _cityController.text = value?.toString() ?? cityList[0];
     });
@@ -94,7 +98,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
     // showExeptionDilog(context,
     //     title: Text("download failure"), content: "sadasdasdas");
     //
-    print(currentUser?.avatarUrl);
+
     currentUser = locator.get<UserController>().currentUser;
     // setDefalut();
     final _formKey = GlobalKey<FormState>();
@@ -130,8 +134,6 @@ class _ProfileSettingState extends State<ProfileSetting> {
                       await ImagePicker().getImage(source: ImageSource.gallery);
 
                   setState(() {});
-
-                  print(imageFile.path);
                 },
                 isSetting: true,
               ),
@@ -150,6 +152,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                     SouqyFormField(
                       label: Strings.e_mail,
                       controller: _emailController,
+                      isReadOnly: true,
                       validator: Validators.compose([
                         Validators.required(Strings.emailRequired),
                         Validators.patternRegExp(
@@ -193,7 +196,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                         showBotomSheatDialogWithOneColumn(
                           context: context,
                           list: cityList,
-                          onPress: onPressYear,
+                          onPress: onPress,
                         );
                       },
                       validator: Validators.required(Strings.cityRequired),
@@ -242,7 +245,11 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                 _saving = true;
                               });
                               bool upload = await saveInfo(
-                                  phone: phone, area: area, city: city);
+                                  name: name,
+                                  email: email,
+                                  phone: phone,
+                                  area: area,
+                                  city: city);
                               // bool upload = await demo();
                               if (upload == true) {}
                               setState(() {

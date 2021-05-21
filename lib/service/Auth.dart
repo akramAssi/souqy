@@ -18,8 +18,7 @@ abstract class AuthBase {
   Future<User> signInWithFacebook();
   Future<void> updateDisplayName(String displayName);
   Future<User> signInWithEmailAndPassword(String email, String password);
-  Future<User> creatUserWithEmailAndPassword(
-      String name, String email, String password);
+  Future<User> creatUserWithEmailAndPassword(String email, String password);
   Future<void> signOut();
 }
 
@@ -125,14 +124,14 @@ class Auth implements AuthBase {
 
   @override
   Future<User> creatUserWithEmailAndPassword(
-      String name, String email, String password) async {
+      String email, String password) async {
     final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     User user = userCredential.user;
-    await user.updateProfile(
-      displayName: name,
-    );
-    await user.reload();
+    // await user.updateProfile(
+    //   displayName: name,
+    // );
+    // await user.reload();
     return user;
   }
 
@@ -180,7 +179,6 @@ class Auth implements AuthBase {
       ));
       return user;
     } catch (e) {
-      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to sign in with Google: $e'),

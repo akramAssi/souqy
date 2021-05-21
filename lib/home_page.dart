@@ -1,12 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:souqy/add_page/expected_page.dart';
+import 'package:souqy/model/ads.dart';
 import 'package:souqy/search_page/search.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
+import 'package:souqy/service/database_repo.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/statistic/statistic_page.dart';
 import 'package:souqy/trash/1.dart';
+import 'package:souqy/view_controller/ads_controller.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
@@ -22,14 +27,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<void> _singOut() async {
-    await locator.get<UserController>().signOut().onError((error, stackTrace) {
-      showExceptionDialog(context,
-          title: Strings.signOut, content: error.toString());
-    });
-    // showMyDialog(context);
-  }
-
   int _selectedIndex = 0;
   static const TextStyle optionStyle = TextStyle(
       fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blueAccent);
@@ -39,8 +36,25 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: 10,
         ),
-        SouqyHomePage(
-          shrinkWrap: false,
+        StreamBuilder(
+          stream: locator.get<AdsController>().readAds(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              QuerySnapshot<Map<String, dynamic>> map = snapshot.data;
+              List<Ads> list = [];
+              map.docs.forEach((doc) {
+                Ads temp = Ads.fromJson(doc.data());
+                temp.id = doc.id;
+                list.add(temp);
+              });
+              return SouqyHomePage(
+                shrinkWrap: false,
+                list: list,
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
         ),
         SizedBox(
           height: 10,
@@ -48,8 +62,6 @@ class _HomePageState extends State<HomePage> {
       ],
     ),
     SearchButton(),
-    AddPage(),
-    abd(),
   ];
 
   void _onItemTapped(int index) {
@@ -65,6 +77,12 @@ class _HomePageState extends State<HomePage> {
           title: Strings.userFetchFailed, content: error.toString());
     });
     super.initState();
+  }
+
+  void returnToHome() {
+    setState(() {
+      _selectedIndex = 0;
+    });
   }
 
   @override
@@ -120,9 +138,15 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-    _widgetOptions.add(Container(
-      child: StatisticPage(),
-    ));
+    _widgetOptions.addAll([
+      AddPage(
+        returnTOHome: returnToHome,
+      ),
+      ExpectedPage(),
+      Container(
+        child: StatisticPage(),
+      ),
+    ]);
     return ss;
   }
 }
