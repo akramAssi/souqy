@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
+import 'package:souqy/res/string.dart';
 
 class PriceRaing extends StatefulWidget {
+  final void Function(RangeValues) onChange;
+  PriceRaing({
+    key,
+    this.onChange,
+  }) : super(key: key);
   @override
   _PriceRaingState createState() => _PriceRaingState();
 }
 
 class _PriceRaingState extends State<PriceRaing> {
-  RangeValues _currentRangeValues = const RangeValues(30000, 130000);
+  RangeValues _currentRangeValues = const RangeValues(50000, 250000);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,7 +23,7 @@ class _PriceRaingState extends State<PriceRaing> {
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
           border: Border.all(width: 1, color: borderColor)),
-      height: 200,
+      height: 180,
       child: Column(
         children: [
           Container(
@@ -26,9 +32,9 @@ class _PriceRaingState extends State<PriceRaing> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Price Range',
+                  Strings.priceRange,
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 20,
                     color: primeCOLOR,
                   ),
                 ),
@@ -39,19 +45,18 @@ class _PriceRaingState extends State<PriceRaing> {
             height: 20,
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Row(
                   children: [
                     Text(
-                      'Min: ',
-                      style: TextStyle(fontSize: 20, color: primeCOLOR),
+                      Strings.min,
+                      style: TextStyle(fontSize: 15, color: primeCOLOR),
                     ),
                     Text(
                       _currentRangeValues.start.round().toString(),
-                      style: TextStyle(fontSize: 20, color: alertColor),
+                      style: TextStyle(fontSize: 15, color: alertColor),
                     ),
                   ],
                 ),
@@ -59,12 +64,12 @@ class _PriceRaingState extends State<PriceRaing> {
                 Row(
                   children: [
                     Text(
-                      'Max: ',
-                      style: TextStyle(fontSize: 20, color: primeCOLOR),
+                      Strings.max,
+                      style: TextStyle(fontSize: 15, color: primeCOLOR),
                     ),
                     Text(
                       _currentRangeValues.end.round().toString(),
-                      style: TextStyle(fontSize: 20, color: alertColor),
+                      style: TextStyle(fontSize: 15, color: alertColor),
                     ),
                   ],
                 ),
@@ -77,13 +82,14 @@ class _PriceRaingState extends State<PriceRaing> {
           RangeSlider(
             values: _currentRangeValues,
             min: 0,
-            max: 250000,
-            divisions: 125,
+            max: 1000000,
+            divisions: 1000,
             activeColor: primeCOLOR,
             inactiveColor: Colors.grey,
             onChanged: (RangeValues values) {
               setState(() {
                 _currentRangeValues = values;
+                widget.onChange(_currentRangeValues);
               });
             },
           ),
