@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:souqy/add_page/search_brand.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/car.dart';
+import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/search_page/price_range.dart';
 import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
@@ -48,8 +49,12 @@ class _SearchButton extends State<StatefulWidget> {
   int owner = 0;
   Color pickerColor = Colors.white;
   Color currentColor = Colors.white;
-  var rangeValuesStart;
-  var rangeValuesEnd;
+  int rangePriceStart,
+      rangePriceEnd,
+      rangeYearStart,
+      rangeYearEnd,
+      rangeEngStart,
+      rangeEngEnd;
   var modelSouqyFormField;
   var yearSouqyFormField;
   var carFGroupButton;
@@ -193,9 +198,21 @@ class _SearchButton extends State<StatefulWidget> {
   }
 
   void onChangeRange(RangeValues values) {
-    rangeValuesStart = values.start;
-    rangeValuesEnd = values.end;
-    print(rangeValuesStart.toString() + '  ' + rangeValuesEnd.toString());
+    rangePriceStart = values.start.toInt();
+    rangePriceEnd = values.end.toInt();
+    print(rangePriceStart.toString() + '  ' + rangePriceEnd.toString());
+  }
+
+  void onChangeYear(RangeValues values) {
+    rangeYearStart = values.start.toInt();
+    rangeYearEnd = values.end.toInt();
+    print(rangeYearStart.toString() + '  ' + rangeYearEnd.toString());
+  }
+
+  void onChangeEng(RangeValues values) {
+    rangeEngStart = values.start.toInt();
+    rangeEngEnd = values.end.toInt();
+    print(rangeEngStart.toString() + '  ' + rangeEngEnd.toString());
   }
 
   @override
@@ -213,7 +230,45 @@ class _SearchButton extends State<StatefulWidget> {
                 ),
                 Column(
                   children: [
-                    PriceRaing(onChange: onChangeRange),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                          border: Border.all(width: 1, color: borderColor)),
+                      child: Column(
+                        children: [
+                          PriceRaing(
+                            rangeType: Strings.priceRange,
+                            min: 0,
+                            max: 1000000,
+                            step: 1000,
+                            onChange: onChangeRange,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          PriceRaing(
+                            rangeType: Strings.year,
+                            min: 1965,
+                            max: DateTime.now().year.toDouble(),
+                            step: DateTime.now().year,
+                            onChange: onChangeYear,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          PriceRaing(
+                            rangeType: Strings.engineSize,
+                            min: 900,
+                            max: 6500,
+                            step: 112,
+                            onChange: onChangeEng,
+                          ),
+                        ],
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 15, horizontal: 10),
