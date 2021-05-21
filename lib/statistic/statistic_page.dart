@@ -47,12 +47,8 @@ class _StatisticPageState extends State<StatisticPage> {
     setState(() {
       if (_modelController.text == '') {
         chartData = 0;
-
-        print(chartData);
       } else if (_modelController.text.isNotEmpty) {
         chartData = 1;
-
-        print(chartData);
       }
     });
   }
