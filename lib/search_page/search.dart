@@ -240,21 +240,21 @@ class _SearchButton extends State<StatefulWidget> {
                       child: Column(
                         children: [
                           PriceRaing(
-                            rangeType: Strings.priceRange,
-                            min: 0,
-                            max: 1000000,
-                            step: 1000,
-                            onChange: onChangeRange,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          PriceRaing(
                             rangeType: Strings.year,
                             min: 1965,
                             max: DateTime.now().year.toDouble(),
                             step: DateTime.now().year,
                             onChange: onChangeYear,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          PriceRaing(
+                            rangeType: Strings.priceRange,
+                            min: 0,
+                            max: 1000000,
+                            step: 1000,
+                            onChange: onChangeRange,
                           ),
                           SizedBox(
                             height: 10,
@@ -287,13 +287,6 @@ class _SearchButton extends State<StatefulWidget> {
                             flex: 1,
                             child: typeSouqyFormField,
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: yearSouqyFormField,
-                          ),
                         ],
                       ),
                     ),
@@ -304,13 +297,6 @@ class _SearchButton extends State<StatefulWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Flexible(
-                            flex: 1,
-                            child: engineSouqyFormField,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
                           Flexible(
                             flex: 1,
                             child: gearSouqyButtonDialog,
