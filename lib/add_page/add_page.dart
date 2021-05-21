@@ -27,9 +27,8 @@ import 'car_type.dart';
 // ignore: must_be_immutable
 class AddPage extends StatefulWidget {
   Ads carAds;
-  final VoidCallback returnTOHome;
 
-  AddPage({Key key, this.carAds, this.returnTOHome}) : super(key: key);
+  AddPage({Key key, this.carAds}) : super(key: key);
   @override
   _AddPageState createState() => _AddPageState();
 }
@@ -412,7 +411,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
       Navigator.pop(context, x);
     } else {
       locator.get<AdsController>().createAds(x);
-      widget.returnTOHome();
+      Navigator.pop(context, x);
     }
   }
 
