@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:souqy/add_page/expected_page.dart';
 import 'package:souqy/model/ads.dart';
+import 'package:souqy/res/exhibitions.dart';
 import 'package:souqy/search_page/search.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
+import 'package:souqy/seller_pages/seller_page.dart';
 import 'package:souqy/service/database_repo.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/statistic/statistic_page.dart';
@@ -85,12 +87,33 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _openEditPage(BuildContext context) async {
+    Ads res = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            Scaffold(appBar: souqyAppBar("normal", context), body: AddPage()),
+        fullscreenDialog: true,
+      ),
+    );
+    if (res != null) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ss = Scaffold(
       appBar: souqyAppBar("profile", context),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _openEditPage(context);
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: statisticColor,
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(bottom: 0),
@@ -139,8 +162,8 @@ class _HomePageState extends State<HomePage> {
     );
 
     _widgetOptions.addAll([
-      AddPage(
-        returnTOHome: returnToHome,
+      SouqySellerList(
+        exhibitionsList: exhibitions,
       ),
       ExpectedPage(),
       StatisticPage(),
