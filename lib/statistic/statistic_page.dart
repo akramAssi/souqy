@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:souqy/add_page/search_brand.dart';
-import 'package:souqy/res/car.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/statistic/statistic_card.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
@@ -20,7 +19,7 @@ class _StatisticPageState extends State<StatisticPage> {
   var modelSouqyFormField;
   var souqySearchForBrand;
   final _makeFoucs = FocusNode();
-  _LineChartSample2State() {
+  _StatisticPageState() {
     _makeController = TextEditingController();
 
     _modelController = TextEditingController();
