@@ -143,9 +143,7 @@ class _HomePageState extends State<HomePage> {
         returnTOHome: returnToHome,
       ),
       ExpectedPage(),
-      Container(
-        child: StatisticPage(),
-      ),
+      StatisticPage(),
     ]);
     return ss;
   }
