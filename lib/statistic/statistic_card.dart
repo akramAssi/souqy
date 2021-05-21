@@ -13,10 +13,8 @@ class StatisticCard extends StatefulWidget {
 }
 
 class _StatisticCardState extends State<StatisticCard> {
-  List<SalesData> _chartData;
   TooltipBehavior _tooltipBehavior;
   void initState() {
-    _chartData = getChartData();
     _tooltipBehavior = TooltipBehavior(enable: true, header: 'brand');
 
     super.initState();
@@ -24,7 +22,6 @@ class _StatisticCardState extends State<StatisticCard> {
 
   @override
   Widget build(BuildContext context) {
-    print('flag=' + widget.flag.toString());
     final List<Color> color = <Color>[];
     color.add(statisticColor[50]);
     color.add(statisticColor[100]);
