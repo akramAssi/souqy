@@ -96,10 +96,14 @@ class FirestoreDatabase {
     final firestoreRef = _firestore
         .collection("ads")
         .where("make", isEqualTo: "bmw")
-        // .where("model", isEqualTo: "1-series")
-        // .where("type",isEqualTo: )
-        .where("price", isGreaterThanOrEqualTo: 30000)
-        .where("price", isLessThanOrEqualTo: 200000);
+        .where("model", isEqualTo: "1-series")
+        .where("type", isEqualTo: "sedan")
+        .where("year", isEqualTo: 2005)
+        // .where("year", isLessThanOrEqualTo: 2010)
+        // .where("engineSize", isLessThanOrEqualTo: 4000)
+        // .where("engineSize", isGreaterThan: 2015)
+        .where("engineSize", isGreaterThanOrEqualTo: 30000)
+        .where("engineSize", isLessThanOrEqualTo: 200000);
 
     // final snapshot = firestoreRef.snapshots();
     // snapshot.listen((event) {
