@@ -174,156 +174,175 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
           List<Widget> children;
           if (snapshot.hasData) {
             final UserModel owner = snapshot.data;
-            return Container(
-              color: Colors.white,
-              child: ListView(
+            var widgetList = [
+              Stack(
                 children: [
-                  Stack(
-                    children: [
-                      SouqyImageSlider(
-                        imageList: currentAds.listImage,
-                        source: "Network",
-                      ),
-                      Positioned(
-                          left: 33,
-                          // right: size.width / 80,
-                          top: 25.0,
-                          child: SouqyAvailabellabel(
-                              availabel: currentAds.avaliable,
-                              size: size,
-                              isCard: false))
-                    ],
+                  SouqyImageSlider(
+                    imageList: currentAds.listImage,
+                    source: "Network",
                   ),
-                  RowMainInfo(
-                    size: size,
-                    make: currentAds.make,
-                    model: currentAds.model,
-                    price: currentAds.price,
+                  Positioned(
+                      left: 33,
+                      // right: size.width / 80,
+                      top: 25.0,
+                      child: SouqyAvailabellabel(
+                          availabel: currentAds.avaliable,
+                          size: size,
+                          isCard: false))
+                ],
+              ),
+              RowMainInfo(
+                size: size,
+                make: currentAds.make,
+                model: currentAds.model,
+                price: currentAds.price,
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              Wrap(
+                spacing: 50,
+                runSpacing: 25,
+                alignment: WrapAlignment.center,
+                children: [
+                  Circleinfocard(
+                      icon: "mini_car.png", label: currentAds.origin),
+                  Circleinfocard(
+                    icon: "kilo.png",
+                    label: "${currentAds.kilo}",
                   ),
-                  SizedBox(
-                    height: 25,
+                  Circleinfocard(
+                    icon: "year.png",
+                    label: "${currentAds.year}",
                   ),
-                  Wrap(
-                    spacing: 50,
-                    runSpacing: 25,
-                    alignment: WrapAlignment.center,
-                    children: [
-                      Circleinfocard(
-                          icon: "mini_car.png", label: currentAds.origin),
-                      Circleinfocard(
-                        icon: "kilo.png",
-                        label: "${currentAds.kilo}",
-                      ),
-                      Circleinfocard(
-                        icon: "year.png",
-                        label: "${currentAds.year}",
-                      ),
-                      Circleinfocard(
-                        icon: "car_seat.png",
-                        label: "${currentAds.passenger} seater",
-                      ),
-                      Circleinfocard(
-                        icon: "color.png",
-                        label: "${currentAds.color}",
-                      ),
-                      Circleinfocard(
-                        icon: "gear.png",
-                        label: "${currentAds.gear}",
-                      ),
-                      Circleinfocard(
-                        icon: "engine.png",
-                        label: "${currentAds.engineSize}",
-                      ),
-                      Circleinfocard(
-                          icon: "gas_station.png", label: currentAds.fuel),
-                      Circleinfocard(
-                        icon: "user.png",
-                        label: "${currentAds.oldOwner}",
-                      ),
-                    ],
+                  Circleinfocard(
+                    icon: "car_seat.png",
+                    label: "${currentAds.passenger} seater",
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: payment,
+                  Circleinfocard(
+                    icon: "color.png",
+                    label: "${currentAds.color}",
                   ),
-                  Container(
-                      padding: EdgeInsets.only(
-                        top: 13,
-                        right: 10,
-                        left: 10,
-                      ),
-                      child: Text(
-                        Strings.carFeatures,
-                        style: TextStyle(
-                          color: primeCOLOR,
-                          fontSize: 20,
-                        ),
-                      )),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    padding: EdgeInsets.all(13),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: primeCOLOR),
-                        borderRadius: SouqyStyle.souqyBorderRadius),
-                    child: Wrap(
-                      alignment: WrapAlignment.start,
-                      children: [
-                        for (var feature in currentAds.carFeature)
-                          buildItemList(feature)
-                      ],
-                    ),
+                  Circleinfocard(
+                    icon: "gear.png",
+                    label: "${currentAds.gear}",
                   ),
-                  Container(
+                  Circleinfocard(
+                    icon: "engine.png",
+                    label: "${currentAds.engineSize}",
+                  ),
+                  Circleinfocard(
+                      icon: "gas_station.png", label: currentAds.fuel),
+                  Circleinfocard(
+                    icon: "user.png",
+                    label: "${currentAds.oldOwner}",
+                  ),
+                  Circleinfocard(
+                    icon: "${currentAds.type}.png",
+                    label: "${currentAds.type}",
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: payment,
+              ),
+            ];
+            if (currentAds.carFeature != null &&
+                currentAds.carFeature.isNotEmpty) {
+              widgetList.addAll([
+                Container(
                     padding: EdgeInsets.only(
                       top: 13,
                       right: 10,
                       left: 10,
                     ),
                     child: Text(
-                      Strings.additionalInformation,
+                      Strings.carFeatures,
                       style: TextStyle(
                         color: primeCOLOR,
-                        fontSize: 25,
+                        fontSize: 20,
                       ),
+                    )),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(13),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: primeCOLOR),
+                      borderRadius: SouqyStyle.souqyBorderRadius),
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    children: [
+                      for (var feature in currentAds.carFeature)
+                        buildItemList(feature)
+                    ],
+                  ),
+                ),
+              ]);
+            }
+            if (currentAds.additionalInformation != null &&
+                currentAds.additionalInformation.isNotEmpty) {
+              widgetList.addAll([
+                Container(
+                  padding: EdgeInsets.only(
+                    top: 13,
+                    right: 10,
+                    left: 10,
+                  ),
+                  child: Text(
+                    Strings.additionalInformation,
+                    style: TextStyle(
+                      color: primeCOLOR,
+                      fontSize: 25,
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: primeCOLOR),
-                        borderRadius: SouqyStyle.souqyBorderRadius),
-                    child: Text("${currentAds.additionalInformation}",
-                        style: TextStyle(fontSize: 20, color: primeCOLOR)),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: primeCOLOR),
-                        borderRadius: SouqyStyle.souqyBorderRadius),
-                    child: Column(
+                ),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: primeCOLOR),
+                      borderRadius: SouqyStyle.souqyBorderRadius),
+                  child: Text("${currentAds.additionalInformation}",
+                      style: TextStyle(fontSize: 20, color: primeCOLOR)),
+                )
+              ]);
+            }
+
+            widgetList.addAll([
+              Container(
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    border: Border.all(color: primeCOLOR),
+                    borderRadius: SouqyStyle.souqyBorderRadius),
+                child: Column(
+                  children: [
+                    buildRowInfo("images/user.png", owner.displayName),
+                    buildRowInfo("images/phone.png", owner.phone),
+                    buildRowInfo(
+                        "images/location.png", "${owner.city} - ${owner.area}"),
+                    buildRowInfo("images/calendar.png",
+                        currentAds.publishDate.toString()),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        buildRowInfo("images/user.png", owner.displayName),
-                        buildRowInfo("images/phone.png", owner.phone),
-                        buildRowInfo("images/location.png",
-                            "${owner.city} - ${owner.area}"),
-                        buildRowInfo("images/calendar.png",
-                            currentAds.publishDate.toString()),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Image.asset("images/whatsapp.png"),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Image.asset("images/email.png"),
-                          ],
+                        Image.asset("images/whatsapp.png"),
+                        SizedBox(
+                          width: 10,
                         ),
+                        Image.asset("images/email.png"),
                       ],
                     ),
-                  )
-                ],
+                  ],
+                ),
+              )
+            ]);
+
+            return Container(
+              color: Colors.white,
+              child: ListView(
+                children: widgetList,
               ),
             );
           } else if (snapshot.hasError) {
