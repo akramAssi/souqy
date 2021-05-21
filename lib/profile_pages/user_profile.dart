@@ -4,7 +4,6 @@ import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/model/ads.dart';
 import 'package:souqy/model/user_model.dart';
 import 'package:souqy/profile_pages/avatar.dart';
-import 'package:souqy/profile_pages/souqy_car_show.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/service/locator.dart';
