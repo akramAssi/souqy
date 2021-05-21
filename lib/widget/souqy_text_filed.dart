@@ -20,6 +20,7 @@ class SouqyFormField extends StatelessWidget with SouqyFormFieldStyle {
   final TextInputType keyboardType;
   final bool obscureText;
   final String Function(String) validator;
+  final void Function(String) onChange;
 
   Color color = primeCOLOR;
   SouqyFormField({
@@ -40,6 +41,7 @@ class SouqyFormField extends StatelessWidget with SouqyFormFieldStyle {
     this.validator,
     this.obscureText = false,
     this.fontSize = 16,
+    this.onChange,
   }) : super(key: key);
 
   @override
@@ -80,6 +82,13 @@ class SouqyFormField extends StatelessWidget with SouqyFormFieldStyle {
           //   return validator(value);
           // },
           //controller
+          // onChanged: (value) {
+          //   //          setState(() {
+          //   //   print(value);
+          //   // });
+
+          //   print(value);
+          // },
           textAlign: textAlign,
           readOnly: isReadOnly,
           obscureText: obscureText,
