@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
 
@@ -17,26 +18,18 @@ class RowMainInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           width: 4,
         ),
-        Text(
-          make,
-          style: TextStyle(
-            fontSize: 20,
-            color: primeCOLOR,
-          ),
-        ),
         SizedBox(
-          width: 7,
-        ),
-        Container(
-          constraints: BoxConstraints(maxWidth: size.width / 2.8),
-          child: Text(
-            model,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+          width: size.width * .62,
+          child: AutoSizeText(
+            "$make $model",
+            maxFontSize: 20,
+            minFontSize: 10,
+            maxLines: 3,
             style: TextStyle(
               fontSize: 20,
               color: primeCOLOR,
