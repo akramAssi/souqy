@@ -24,6 +24,9 @@ class UserController {
   UserController() {
     _currentUser = initUser();
   }
+  bool isAnonymous() {
+    return _authRepo.isAnonymous;
+  }
 
   UserModel initUser() {
     _currentUser = _authRepo.currentUserModel();

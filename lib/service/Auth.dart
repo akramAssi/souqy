@@ -27,6 +27,7 @@ class Auth implements AuthBase {
   final _firebaseAuth = FirebaseAuth.instance;
   @override
   User get currentUser => _firebaseAuth.currentUser;
+  bool get isAnonymous => _firebaseAuth.currentUser.isAnonymous;
   UserModel currentUserModel() {
     var user = _firebaseAuth.currentUser;
     return (user != null) ? UserModel.user(user) : null;
