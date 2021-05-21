@@ -371,23 +371,10 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   }
 
   void _submit(String type) {
-    print("make : ${_makeController.text}");
-    print("year : ${_yearController.text}");
-    print("type : $type");
-    print("model : ${_modelController.text}");
-    print("model : ${souqyKilometerTextField.kilometer}");
-    print("engin : ${_engineController.text}");
-    print("gear : ${_gearController.text}");
-    print("gear : ${_gearController.text}");
-    print("fuel : ${_fuelController.text}");
-    print("color : ${currentColor.toString()}");
-    print("old owner : $owner");
-    print("origin : ${_vehicleOriginController.text}");
-    print("features ${_checkedItemList.toString()}");
-    print("origin : ${_addInfoController.text}");
-    print("price ${_priceController.text}");
-    print("payment ${_paymentController.text}");
-
+    if (_myImages.length <= 0) {
+      _myImages.add(
+          "https://firebasestorage.googleapis.com/v0/b/souqy-9b821.appspot.com/o/ads%2Fno_image.png?alt=media&token=1ab0b2bc-782d-4189-afed-78dc0422bd0f");
+    }
     var x = Ads.fromJson({
       "make": _makeController.text,
       "model": _modelController.text,
