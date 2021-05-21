@@ -29,96 +29,116 @@ class _CarouselWithIndicatorState extends State<SouqyImageSlider> {
 
   @override
   Widget build(BuildContext context) {
-    switch (widget.source) {
-      case "Network":
-        {
-          imageSliders = widget.imageList.map((item) {
-            var urlPattern =
-                r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
-            var match = new RegExp(urlPattern, caseSensitive: false);
-            return Container(
-              child: Container(
-                margin: EdgeInsets.only(
-                    top: 7.0, right: 7.0, left: 7.0, bottom: 15.0),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(35.0)),
-                    child: Stack(
-                      children: <Widget>[
-                        match.hasMatch(item) == true
-                            ? Image.network(item,
-                                fit: BoxFit.cover, width: 1000.0)
-                            : Image.file(File(item),
-                                fit: BoxFit.cover, width: 1000.0),
-                      ],
-                    )),
-              ),
-            );
-          }).toList();
-          break;
-        }
+    try {
+      // throw ("some arbitrary error");
+      switch (widget.source) {
+        case "Network":
+          {
+            imageSliders = widget.imageList.map((item) {
+              var urlPattern =
+                  r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+              var match = new RegExp(urlPattern, caseSensitive: false);
+              return Container(
+                child: Container(
+                  margin: EdgeInsets.only(
+                      top: 7.0, right: 7.0, left: 7.0, bottom: 15.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                      child: Stack(
+                        children: <Widget>[
+                          match.hasMatch(item) == true
+                              ? Image.network(item,
+                                  fit: BoxFit.cover, width: 1000.0)
+                              : Image.file(File(item),
+                                  fit: BoxFit.cover, width: 1000.0),
+                        ],
+                      )),
+                ),
+              );
+            }).toList();
+            break;
+          }
 
-      case "File":
-        {
-          imageSliders = widget.imageList.map((item) {
-            var urlPattern =
-                r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
-            var match = new RegExp(urlPattern, caseSensitive: false);
-            return Container(
-              child: Container(
-                margin: EdgeInsets.only(
-                    top: 7.0, right: 7.0, left: 7.0, bottom: 15.0),
-                child: InkWell(
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(35.0)),
-                        child: Stack(
-                          children: <Widget>[
-                            match.hasMatch(item) == true
-                                ? Image.network(item,
-                                    fit: BoxFit.cover, width: 1000.0)
-                                : Image.file(File(item),
-                                    fit: BoxFit.cover, width: 1000.0),
-                          ],
-                        )),
-                    onTap: () {
-                      final snackBar = SnackBar(
-                        backgroundColor: fontColor,
-                        content: Text('Long press to remove image'),
-                        action: SnackBarAction(
-                          textColor: Colors.white,
-                          label: 'close',
-                          onPressed: () {},
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    },
-                    onLongPress: () {
-                      widget.onLongPress(item);
-                    }),
+        case "File":
+          {
+            imageSliders = widget.imageList.map((item) {
+              var urlPattern =
+                  r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+              var match = new RegExp(urlPattern, caseSensitive: false);
+              return Container(
+                child: Container(
+                  margin: EdgeInsets.only(
+                      top: 7.0, right: 7.0, left: 7.0, bottom: 15.0),
+                  child: InkWell(
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                          child: Stack(
+                            children: <Widget>[
+                              match.hasMatch(item) == true
+                                  ? Image.network(item,
+                                      fit: BoxFit.cover, width: 1000.0)
+                                  : Image.file(File(item),
+                                      fit: BoxFit.cover, width: 1000.0),
+                            ],
+                          )),
+                      onTap: () {
+                        final snackBar = SnackBar(
+                          backgroundColor: fontColor,
+                          content: Text('Long press to remove image'),
+                          action: SnackBarAction(
+                            textColor: Colors.white,
+                            label: 'close',
+                            onPressed: () {},
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      },
+                      onLongPress: () {
+                        widget.onLongPress(item);
+                      }),
+                ),
+              );
+            }).toList();
+            break;
+          }
+        default:
+          {
+            imageSliders = [
+              Container(
+                child: Container(
+                  margin: EdgeInsets.only(
+                      top: 7.0, right: 7.0, left: 7.0, bottom: 15.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                      child: Stack(
+                        children: <Widget>[
+                          Image.asset("images/broken.png",
+                              fit: BoxFit.cover, width: 1000.0),
+                        ],
+                      )),
+                ),
+              )
+            ];
+            break;
+          }
+      }
+    } catch (e) {
+      imageSliders = [
+        Container(
+          child: Container(
+            margin:
+                EdgeInsets.only(top: 7.0, right: 7.0, left: 7.0, bottom: 15.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(35.0)),
+              image: DecorationImage(
+                image: AssetImage("images/broken.png"),
+                fit: BoxFit.cover,
               ),
-            );
-          }).toList();
-          break;
-        }
-      default:
-        {
-          imageSliders = [
-            Container(
-              child: Container(
-                margin: EdgeInsets.only(
-                    top: 7.0, right: 7.0, left: 7.0, bottom: 15.0),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(35.0)),
-                    child: Stack(
-                      children: <Widget>[
-                        Image.asset("images/404.png",
-                            fit: BoxFit.cover, width: 1000.0),
-                      ],
-                    )),
-              ),
-            )
-          ];
-          break;
-        }
+            ),
+            child: null,
+          ),
+        )
+      ];
     }
     return Column(
       children: [
