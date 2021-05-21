@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 // const Color borderColor = Color(0x31707070);
 // const Color borderTextfieldColor = Color(0xa9707070);
 // const Color fontColor = Color.fromARGB(255, 28, 33, 67);
-const Color alertColor = Color.fromARGB(255, 198, 46, 46);
+// const Color alertColor = Color.fromARGB(255, 198, 46, 46);
+// const Color alertColor = Color(0Xffcf4946);
+const Color alertColor = Color(0Xffce4643);
 const List<Color> carColor = [
   Colors.white,
   Colors.grey,
