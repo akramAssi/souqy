@@ -1,12 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:group_button/group_button.dart';
-import 'package:souqy/add_page/car_type.dart';
 import 'package:souqy/add_page/search_brand.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/car.dart';
-import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/search_page/price_range.dart';
 import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
@@ -14,17 +10,13 @@ import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
 
-import 'comp_exh_search.dart';
-import 'last_search.dart';
-
 class SearchButton extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SearchButton();
 }
 
-int _selectedIndex;
-
 class _SearchButton extends State<StatefulWidget> {
+  String searchType;
 //Textfor all field Controller
   TextEditingController _makeController;
   TextEditingController _modelController;
@@ -36,8 +28,6 @@ class _SearchButton extends State<StatefulWidget> {
   TextEditingController _vehicleOriginController;
   TextEditingController _ownerController;
   TextEditingController _typeController;
-
-  var souqySearchForBrand;
 
   // focusNode
   final _makeFoucs = FocusNode();
@@ -58,7 +48,8 @@ class _SearchButton extends State<StatefulWidget> {
   int owner = 0;
   Color pickerColor = Colors.white;
   Color currentColor = Colors.white;
-
+  var rangeValuesStart;
+  var rangeValuesEnd;
   var modelSouqyFormField;
   var yearSouqyFormField;
   var carFGroupButton;
@@ -80,10 +71,6 @@ class _SearchButton extends State<StatefulWidget> {
     _ownerController = TextEditingController();
     _typeController = TextEditingController();
 
-    souqySearchForBrand = SouqySearchForBrand(
-      controller: _makeController,
-      focusNode: _makeFoucs,
-    );
     // _gearController.text = "Gear";
     // _fuelController.text = "Fuel";
     _colorController.text = Strings.color;
@@ -118,7 +105,7 @@ class _SearchButton extends State<StatefulWidget> {
     );
 
     typeSouqyFormField = SouqyFormField(
-      label: Strings.carTypeName,
+      label: Strings.type,
       controller: _typeController,
       height: 50,
       textAlign: TextAlign.center,
@@ -168,7 +155,7 @@ class _SearchButton extends State<StatefulWidget> {
   void onPressType(dynamic value) {
     setState(() {
       print("ark" + value.toString());
-      _typeController.text = value?.toString() ?? "Hatsh";
+      _typeController.text = value?.toString() ?? carTypeList[0].toString();
     });
     Navigator.of(context).pop();
     _goNext(_modelFoucs);
@@ -185,7 +172,7 @@ class _SearchButton extends State<StatefulWidget> {
 
   void onPressEngine(dynamic value) {
     setState(() {
-      _engineController.text = value?.toString() ?? "900";
+      _engineController.text = value?.toString() ?? _engineList[0].toString();
     });
     Navigator.of(context).pop();
   }
@@ -199,118 +186,105 @@ class _SearchButton extends State<StatefulWidget> {
     );
   }
 
+  void filterSearchType(String query) {
+    setState(() {
+      searchType = query;
+    });
+  }
+
+  void onChangeRange(RangeValues values) {
+    rangeValuesStart = values.start;
+    rangeValuesEnd = values.end;
+    print(rangeValuesStart.toString() + '  ' + rangeValuesEnd.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
-    var searchIsEmpty = 1;
-
     return ListView(
       children: [
-        souqySearchForBrand,
-        searchIsEmpty != 0
-            ? Column(
-                children: [
-                  PriceRaing(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: modelSouqyFormField,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: typeSouqyFormField,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: yearSouqyFormField,
-                        ),
-                      ],
+        searchType == searchFilter[0] || searchType == null
+            ? Column(children: [
+                SouqySearchForBrand(
+                  controller: _makeController,
+                  focusNode: _makeFoucs,
+                  onChangeSearch: filterSearchType,
+                  choose: searchFilter[0],
+                  isVisibil: true,
+                ),
+                Column(
+                  children: [
+                    PriceRaing(onChange: onChangeRange),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: modelSouqyFormField,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: typeSouqyFormField,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: yearSouqyFormField,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: engineSouqyFormField,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: gearSouqyButtonDialog,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: fuelSouqyButtonDialog,
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: engineSouqyFormField,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: gearSouqyButtonDialog,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: fuelSouqyButtonDialog,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
-              )
-            : Column(
-                children: [
-                  CompExhSearch(),
-                  LastSearched(),
-                  Container(
-                    margin: EdgeInsets.only(top: 5, right: 10, left: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Last seen'),
-                        Container(
-                          height: 40,
-                          margin: EdgeInsets.only(left: 5),
-                          child: TextButton(
-                              onPressed: () {
-                                print('Clear');
-                              },
-                              child: Text('Clear'),
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                )),
-                                foregroundColor: MaterialStateProperty.all(
-                                    borderColor.withAlpha(255)),
-                              )),
-                        ),
-                      ],
+                    SizedBox(
+                      height: 20,
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                SouqyHomePage(),
+              ])
+            : SouqySearchForBrand(
+                controller: _makeController,
+                focusNode: _makeFoucs,
+                onChangeSearch: filterSearchType,
+                choose: searchFilter[1],
+                isVisibil: true,
               ),
-        SouqyHomePage(),
-        Container(
-          height: 100,
-        )
       ],
     );
   }
 }
-
-class SearchForPrand {}
