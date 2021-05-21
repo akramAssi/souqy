@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:souqy/res/string.dart';
+import 'car.dart';
 import 'color.dart';
 
 class SouqyStyle {
@@ -29,6 +30,38 @@ mixin SouqyFormFieldStyle {
         //icon search
         labelText: Strings.make,
         labelStyle: TextStyle(fontSize: 18, color: primeCOLOR),
+        //prepare label
+        filled: true,
+        fillColor: backgroundColor,
+        //set backgtound
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: borderColor),
+          borderRadius: borderRadius,
+        ),
+        //set border in normal mode
+        focusedBorder: OutlineInputBorder(
+          borderRadius: borderRadius,
+          borderSide: BorderSide(color: primeCOLOR),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: alertColor),
+          borderRadius: borderRadius,
+        ),
+        errorStyle: errorStyle,
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: alertColor),
+          borderRadius: borderRadius,
+        ),
+        //set border in foucus mode
+      );
+  InputDecoration get searchDecorationExhibition => InputDecoration(
+        prefixIcon: Icon(
+          Icons.search,
+          color: Colors.grey,
+        ),
+        //icon search
+        labelText: 'Exhibitions name Or city',
+        labelStyle: TextStyle(fontSize: 12, color: primeCOLOR),
         //prepare label
         filled: true,
         fillColor: backgroundColor,
