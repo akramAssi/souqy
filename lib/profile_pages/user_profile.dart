@@ -24,102 +24,111 @@ class UserProfile extends StatelessWidget {
   UserModel currentUser = locator.get<UserController>().currentUser;
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: souqyAppBar("settings", context),
-      body: Wrap(
-        alignment: WrapAlignment.spaceAround,
-        direction: Axis.horizontal,
-        // mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              Center(
-                child: Avatar(
-                  avatarUrl: currentUser?.avatarUrl,
-                  onPress: null,
-                  isSetting: false,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Center(
-                child: Text(
-                  currentUser?.displayName ?? "",
-                  style: TextStyle(color: fontColor, fontSize: 15),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-            ],
-          ),
-          // SouqyHomePage(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              buildContainer(
-                  Strings.myAds,
-                  Image.asset(
-                    "images/myAds.png",
-                    color: primeCOLOR,
-                    width: 70,
-                    height: 70,
-                  ), () {
-                _openPage(
-                  context,
-                  Scaffold(
-                    appBar: souqyAppBar("normal", context),
-                    body: ListView(
-                      children: [
-                        StreamBuilder(
-                          stream: locator
-                              .get<AdsController>()
-                              .getUserAds(currentUser.uid),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              QuerySnapshot<Map<String, dynamic>> map =
-                                  snapshot.data;
-                              List<Ads> list = [];
-                              map.docs.forEach((doc) {
-                                Ads temp = Ads.fromJson(doc.data());
-                                temp.id = doc.id;
-                                list.add(temp);
-                              });
-                              return SouqyHomePage(
-                                shrinkWrap: false,
-                                list: list,
-                              );
-                            } else {
-                              return CircularProgressIndicator();
-                            }
-                          },
-                        )
-                      ],
-                    ),
+      body: SingleChildScrollView(
+        child: Wrap(
+          alignment: WrapAlignment.spaceAround,
+          direction: Axis.horizontal,
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Center(
+                  child: Avatar(
+                    avatarUrl: currentUser?.avatarUrl,
+                    onPress: null,
+                    isSetting: false,
                   ),
-                );
-              }),
-              buildContainer(
-                  Strings.bookmark,
-                  Icon(
-                    Icons.bookmarks_outlined,
-                    color: primeCOLOR,
-                    size: 70,
-                  ), () {
-                _openPage(
-                  context,
-                  buildBookmarkPage(context),
-                );
-              }),
-            ],
-          ),
-          //
-          SizedBox(
-            height: 10,
-          ),
-        ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: Text(
+                    currentUser?.displayName ?? "",
+                    style: TextStyle(color: fontColor, fontSize: 15),
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+              ],
+            ),
+            // SouqyHomePage(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: buildContainer(
+                      Strings.myAds,
+                      Image.asset(
+                        "images/myAds.png",
+                        color: primeCOLOR,
+                        width: 70,
+                        height: 70,
+                      ), () {
+                    _openPage(
+                      context,
+                      Scaffold(
+                        appBar: souqyAppBar("normal", context),
+                        body: ListView(
+                          children: [
+                            StreamBuilder(
+                              stream: locator
+                                  .get<AdsController>()
+                                  .getUserAds(currentUser.uid),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  QuerySnapshot<Map<String, dynamic>> map =
+                                      snapshot.data;
+                                  List<Ads> list = [];
+                                  map.docs.forEach((doc) {
+                                    Ads temp = Ads.fromJson(doc.data());
+                                    temp.id = doc.id;
+                                    list.add(temp);
+                                  });
+                                  return SouqyHomePage(
+                                    shrinkWrap: false,
+                                    list: list,
+                                  );
+                                } else {
+                                  return CircularProgressIndicator();
+                                }
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: buildContainer(
+                      Strings.bookmark,
+                      Icon(
+                        Icons.bookmarks_outlined,
+                        color: primeCOLOR,
+                        size: 70,
+                      ), () {
+                    _openPage(
+                      context,
+                      buildBookmarkPage(context),
+                    );
+                  }),
+                ),
+              ],
+            ),
+            //
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -184,7 +193,7 @@ class UserProfile extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.all(15),
         height: 200,
-        width: 200,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: borderColor,
           border: Border.all(color: borderTextfieldColor),
