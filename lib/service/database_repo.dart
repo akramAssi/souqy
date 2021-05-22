@@ -88,22 +88,24 @@ class FirestoreDatabase {
     await _firestore.doc(path).delete();
   }
 
-  Future<void> userInNablus() async {
+  Future<List<Ads>> search() async {
     // try {
     // throw IntegerDivisionByZeroException;
     // print("dsadsad");
     // final String path = "/user/${user.uid}";
     final firestoreRef = _firestore
         .collection("ads")
-        .where("make", isEqualTo: "bmw")
-        .where("model", isEqualTo: "1-series")
-        .where("type", isEqualTo: "sedan")
-        .where("year", isEqualTo: 2005)
-        // .where("year", isLessThanOrEqualTo: 2010)
-        // .where("engineSize", isLessThanOrEqualTo: 4000)
-        // .where("engineSize", isGreaterThan: 2015)
-        .where("engineSize", isGreaterThanOrEqualTo: 30000)
-        .where("engineSize", isLessThanOrEqualTo: 200000);
+        // .where("make", isEqualTo: make)
+        .where("avaliable", isEqualTo: true)
+        .orderBy("publishDate", descending: true);
+    // .where("model", isEqualTo: "1-series")
+    // .where("type", isEqualTo: "sedan")
+    // .where("year", isEqualTo: 2005)
+    // // .where("year", isLessThanOrEqualTo: 2010)
+    // // .where("engineSize", isLessThanOrEqualTo: 4000)
+    // // .where("engineSize", isGreaterThan: 2015)
+    // .where("engineSize", isGreaterThanOrEqualTo: 30000)
+    // .where("engineSize", isLessThanOrEqualTo: 200000);
 
     // final snapshot = firestoreRef.snapshots();
     // snapshot.listen((event) {
@@ -111,14 +113,15 @@ class FirestoreDatabase {
     //     print(element.data());
     //   });
     // });
-    print("hi  hi  hi");
+    List<Ads> tempList = [];
     await firestoreRef.get().then((value) {
       value.docs.forEach((element) {
-        print("-------------------------------------");
-        print(element.id);
-        // print(element.data());
+        Ads temp = Ads.fromJson(element.data());
+        temp.id = element.id;
+        tempList.add(temp);
       });
     });
+    return tempList;
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getUserAds(String id) {
@@ -154,7 +157,7 @@ class FirestoreDatabase {
   Stream<QuerySnapshot<Map<String, dynamic>>> readAds() {
     final firestoreRef = _firestore
         .collection("ads")
-        // .where("avaliable", isEqualTo: true)
+        .where("avaliable", isEqualTo: true)
         .orderBy("publishDate", descending: true);
     final snapshot = firestoreRef.snapshots();
     return snapshot;
@@ -200,8 +203,6 @@ class FirestoreDatabase {
         tempList.add(temp);
       });
     }
-
-    print("data ----- $tempList");
     return tempList;
     // return snapshot;
   }

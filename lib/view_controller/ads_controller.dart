@@ -66,4 +66,8 @@ class AdsController {
   Future<void> soldAds(String id) async {
     await _databaseRepo.solidAds(id);
   }
+
+  Future<List<Ads>> search() async {
+    return await _databaseRepo.search();
+  }
 }

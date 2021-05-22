@@ -2,14 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:souqy/add_page/search_brand.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
+import 'package:souqy/model/ads.dart';
 import 'package:souqy/res/car.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/search_page/price_range.dart';
+import 'package:souqy/service/locator.dart';
+import 'package:souqy/view_controller/ads_controller.dart';
+import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
 import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
+import 'package:souqy/view_controller/ads_controller.dart';
 
 class SearchButton extends StatefulWidget {
   @override
@@ -25,9 +30,7 @@ class _SearchButton extends State<StatefulWidget> {
   TextEditingController _engineController;
   TextEditingController _gearController;
   TextEditingController _fuelController;
-  TextEditingController _colorController;
-  TextEditingController _vehicleOriginController;
-  TextEditingController _ownerController;
+
   TextEditingController _typeController;
 
   // focusNode
@@ -46,41 +49,28 @@ class _SearchButton extends State<StatefulWidget> {
     "school"
   ];
 
+  List<Ads> listAds = [];
   int owner = 0;
   Color pickerColor = Colors.white;
   Color currentColor = Colors.white;
-  int rangePriceStart,
-      rangePriceEnd,
-      rangeYearStart,
-      rangeYearEnd,
-      rangeEngStart,
-      rangeEngEnd;
+  int rangePriceStart = 0,
+      rangePriceEnd = 1000000,
+      rangeYearStart = 1965,
+      rangeYearEnd = DateTime.now().year,
+      rangeEngStart = 900,
+      rangeEngEnd = 6500;
   var modelSouqyFormField;
-  var yearSouqyFormField;
-  var carFGroupButton;
-  var engineSouqyFormField;
   var gearSouqyButtonDialog;
   var fuelSouqyButtonDialog;
-  var colorSouqyFormField;
-  var orginSouqyButtonDialog;
   var typeSouqyFormField;
+  var souqySearchForBrand;
   _SearchButton() {
     _makeController = TextEditingController();
     _modelController = TextEditingController();
-    _yearController = TextEditingController();
-    _engineController = TextEditingController();
     _gearController = TextEditingController();
     _fuelController = TextEditingController();
-    _colorController = TextEditingController();
-    _vehicleOriginController = TextEditingController();
-    _ownerController = TextEditingController();
     _typeController = TextEditingController();
 
-    // _gearController.text = "Gear";
-    // _fuelController.text = "Fuel";
-    _colorController.text = Strings.color;
-    // _vehicleOriginController.text = "Origin";
-    _ownerController.text = "0";
     final year = DateTime.now().year;
     for (int i = year; i >= 1965; i--) {
       _yearList.add(i);
@@ -89,24 +79,11 @@ class _SearchButton extends State<StatefulWidget> {
       _engineList.add(i);
     }
 
-    yearSouqyFormField = SouqyFormField(
-      label: Strings.year,
-      controller: _yearController,
-      height: 50,
-      isReadOnly: true,
-      textAlign: TextAlign.center,
-      validator: Validators.required(Strings.requiredFieldo),
-      onTop: () {
-        _openDialog(context: context, list: _yearList, onPress: onPressYear);
-      },
-    );
-
     modelSouqyFormField = SouqyFormField(
       label: Strings.model,
       controller: _modelController,
       focusNode: _modelFoucs,
       height: 50,
-      validator: Validators.required(Strings.requiredFieldo),
     );
 
     typeSouqyFormField = SouqyFormField(
@@ -114,41 +91,33 @@ class _SearchButton extends State<StatefulWidget> {
       controller: _typeController,
       height: 50,
       textAlign: TextAlign.center,
-      validator: Validators.required(Strings.requiredFieldo),
       onTop: () {
         _openDialog(context: context, list: carTypeList, onPress: onPressType);
       },
     );
-    engineSouqyFormField = SouqyFormField(
-      label: Strings.engineSize,
-      controller: _engineController,
-      height: 50,
-      textAlign: TextAlign.center,
-      validator: Validators.required(Strings.requiredFieldo),
-      onTop: () {
-        _openDialog(
-            context: context, list: _engineList, onPress: onPressEngine);
-      },
-    );
+
     gearSouqyButtonDialog = SouqyButtonDialog(
       gearController: _gearController,
       list: _gearList,
       label: Strings.gearType,
-      validator: Validators.required(Strings.requiredFieldo),
     );
     fuelSouqyButtonDialog = SouqyButtonDialog(
       gearController: _fuelController,
       list: _fuelList,
       label: Strings.fuelType,
-      validator: Validators.required(Strings.requiredFieldo),
     );
-    orginSouqyButtonDialog = SouqyButtonDialog(
-      gearController: _vehicleOriginController,
-      list: _vehicleOriginList,
-      label: Strings.origin,
-      // withIcon: false,
-      validator: Validators.required(Strings.requiredFieldo),
+    souqySearchForBrand = SouqySearchForBrand(
+      controller: _makeController,
+      focusNode: _makeFoucs,
+      onChangeSearch: filterSearchType,
+      choose: searchFilter[0],
+      isVisibil: true,
     );
+    _makeController.addListener(searchMethod);
+    _modelController.addListener(searchMethod);
+    _gearController.addListener(searchMethod);
+    _fuelController.addListener(searchMethod);
+    _typeController.addListener(searchMethod);
   }
 
   void _goNext(FocusNode nextNode) {
@@ -164,22 +133,6 @@ class _SearchButton extends State<StatefulWidget> {
     });
     Navigator.of(context).pop();
     _goNext(_modelFoucs);
-  }
-
-  void onPressYear(dynamic value) {
-    setState(() {
-      print("ark" + value.toString());
-      _yearController.text = value?.toString() ?? "${DateTime.now().year}";
-    });
-    Navigator.of(context).pop();
-    _goNext(_modelFoucs);
-  }
-
-  void onPressEngine(dynamic value) {
-    setState(() {
-      _engineController.text = value?.toString() ?? _engineList[0].toString();
-    });
-    Navigator.of(context).pop();
   }
 
   void _openDialog(
@@ -200,19 +153,19 @@ class _SearchButton extends State<StatefulWidget> {
   void onChangeRange(RangeValues values) {
     rangePriceStart = values.start.toInt();
     rangePriceEnd = values.end.toInt();
-    print(rangePriceStart.toString() + '  ' + rangePriceEnd.toString());
+    searchMethod();
   }
 
   void onChangeYear(RangeValues values) {
     rangeYearStart = values.start.toInt();
     rangeYearEnd = values.end.toInt();
-    print(rangeYearStart.toString() + '  ' + rangeYearEnd.toString());
+    searchMethod();
   }
 
   void onChangeEng(RangeValues values) {
     rangeEngStart = values.start.toInt();
     rangeEngEnd = values.end.toInt();
-    print(rangeEngStart.toString() + '  ' + rangeEngEnd.toString());
+    searchMethod();
   }
 
   @override
@@ -221,13 +174,7 @@ class _SearchButton extends State<StatefulWidget> {
       children: [
         searchType == searchFilter[0] || searchType == null
             ? Column(children: [
-                SouqySearchForBrand(
-                  controller: _makeController,
-                  focusNode: _makeFoucs,
-                  onChangeSearch: filterSearchType,
-                  choose: searchFilter[0],
-                  isVisibil: true,
-                ),
+                souqySearchForBrand,
                 Column(
                   children: [
                     Container(
@@ -316,7 +263,7 @@ class _SearchButton extends State<StatefulWidget> {
                     ),
                   ],
                 ),
-                SouqyHomePage(),
+                SouqyHomePage(shrinkWrap: false, list: listAds)
               ])
             : SouqySearchForBrand(
                 controller: _makeController,
@@ -327,5 +274,60 @@ class _SearchButton extends State<StatefulWidget> {
               ),
       ],
     );
+  }
+
+  void searchMethod() {
+    print("------------");
+    locator.get<AdsController>().search().then((value) {
+      listAds = value;
+      if (_makeController.text != null && _makeController.text.isNotEmpty) {
+        listAds = listAds
+            .where((element) => element.make
+                .toLowerCase()
+                .contains(_makeController.text.toLowerCase().trim()))
+            .toList();
+      }
+      listAds = listAds.where((element) {
+        bool x = false;
+        if (element.year >= rangeYearStart && element.year <= rangeYearEnd) {
+          if (element.price >= rangePriceStart &&
+              element.price <= rangePriceEnd) {
+            if (element.engineSize >= rangeEngStart &&
+                element.engineSize <= rangeEngEnd) {
+              x = true;
+            }
+          }
+        }
+        return x;
+      }).toList();
+
+      if (_modelController.text != null && _modelController.text.isNotEmpty) {
+        listAds = listAds
+            .where((element) =>
+                element.model.contains(_modelController.text.trim()))
+            .toList();
+      }
+      if (_gearController.text != null && _gearController.text.isNotEmpty) {
+        print(_gearController.text);
+        listAds = listAds
+            .where(
+                (element) => element.gear.contains(_gearController.text.trim()))
+            .toList();
+      }
+      if (_typeController.text != null && _typeController.text.isNotEmpty) {
+        listAds = listAds
+            .where(
+                (element) => element.type.contains(_typeController.text.trim()))
+            .toList();
+      }
+      if (_fuelController.text != null && _fuelController.text.isNotEmpty) {
+        listAds = listAds
+            .where(
+                (element) => element.fuel.contains(_fuelController.text.trim()))
+            .toList();
+      }
+      // listAds = value;
+      setState(() {});
+    });
   }
 }
