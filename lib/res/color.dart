@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 // const Color alertColor = Color.fromARGB(255, 198, 46, 46);
 // const Color alertColor = Color(0Xffcf4946);
 const Color alertColor = Color(0Xffce4643);
-const List<Color> carColor = [
+const List<Color> carColor1 = [
   Colors.white,
   Colors.grey,
   Colors.blueGrey,
@@ -30,6 +30,56 @@ const List<Color> carColor = [
   Colors.yellow,
   Colors.yellowAccent,
 ];
+
+List<String> nameColor = [
+  "white",
+  "red",
+  "red",
+  "green",
+  "green",
+  "green",
+  "blue",
+  "blue",
+  "blue",
+  "blue",
+  "black",
+  "yellow",
+  "orange",
+  "orange",
+  "purple",
+  "brown",
+  "Beige",
+  "gold",
+  "silver",
+  "silver",
+  "gray",
+  "gray",
+];
+List<Color> carColor = [
+  Colors.white,
+  Colors.red,
+  Colors.red[900],
+  Colors.green,
+  Colors.lightGreen[900],
+  Colors.lime[900],
+  Colors.blue[600],
+  Colors.lightBlue,
+  Colors.blue[900],
+  Colors.indigo[900],
+  Colors.black,
+  Colors.yellow,
+  Colors.orange,
+  Colors.deepOrange[800],
+  Colors.purple,
+  Colors.brown,
+  Colors.brown[50],
+  Color(0xffd4ad37),
+  Colors.grey[700],
+  Colors.grey[350],
+  Colors.grey,
+  Colors.blueGrey[800],
+];
+
 // MaterialColor primeCOLOR = MaterialColor(0xFF212F91, <int, Color>{
 //   50: Color.fromRGBO(136, 14, 79, .1),
 //   100: Color.fromRGBO(136, 14, 79, .2),
