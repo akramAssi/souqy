@@ -222,6 +222,7 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
                   Circleinfocard(
                     icon: "color.png",
                     label: "${currentAds.color}",
+                    isColord: true,
                   ),
                   Circleinfocard(
                     icon: "gear.png",
@@ -454,9 +455,22 @@ class Circleinfocard extends StatelessWidget {
     Key key,
     @required this.icon,
     @required this.label,
-  }) : super(key: key);
+    this.isColord = false,
+  }) : super(key: key) {
+    if (isColord) {
+      String valueString =
+          label.split('(0x')[1].split(')')[0]; // kind of hacky..
+      int value = int.parse(valueString, radix: 16);
+      _otherColor = new Color(value);
+    } else {
+      _otherColor = fontColor;
+    }
+    print(_otherColor);
+  }
   final String icon;
   final String label;
+  final bool isColord;
+  Color _otherColor;
 
   @override
   Widget build(BuildContext context) {
@@ -477,7 +491,7 @@ class Circleinfocard extends StatelessWidget {
             "images/$icon",
             width: 28,
             height: 28,
-            color: fontColor,
+            color: _otherColor,
           ),
           SizedBox(
             height: 3,
@@ -485,7 +499,7 @@ class Circleinfocard extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 12),
             child: AutoSizeText(
-              label,
+              isColord ? nameColor[carColor.indexOf(_otherColor)] : label,
               maxLines: 1,
               minFontSize: 5,
               style: TextStyle(

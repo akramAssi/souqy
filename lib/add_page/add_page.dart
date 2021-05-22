@@ -863,7 +863,9 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                               "images/expect.png",
                               color: fontColor,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              // print(nameColor[carColor.indexOf(currentColor)]);
+                            },
                           ),
                         ],
                       ),
