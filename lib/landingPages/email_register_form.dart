@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
+import 'package:souqy/res/style.dart';
 import 'package:souqy/service/firebase_auth_exceptions_handling.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
@@ -77,9 +78,7 @@ class _EmailRegisterFormState extends State<EmailRegisterForm> {
           child: buildForm(_formKey, context),
           inAsyncCall: _saving,
           color: borderTextfieldColor,
-          progressIndicator: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(primeCOLOR),
-          )),
+          progressIndicator: SouqyStyle.souqyIndicator),
     );
   }
 
