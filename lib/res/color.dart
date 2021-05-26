@@ -55,7 +55,32 @@ List<String> nameColor = [
   "gray",
   "gray",
 ];
+
 List<Color> carColor = [
+  Color(0xffffffff),
+  Color(0xfff44336),
+  Color(0xffb71c1c),
+  Color(0xff4caf50),
+  Color(0xff33691e),
+  Color(0xff827717),
+  Color(0xff1e88e5),
+  Color(0xff03a9f4),
+  Color(0xff0d47a1),
+  Color(0xff1a237e),
+  Color(0xff000000),
+  Color(0xffffeb3b),
+  Color(0xffff9800),
+  Color(0xffd84315),
+  Color(0xff9c27b0),
+  Color(0xff795548),
+  Color(0xffefebe9),
+  Color(0xffd4ad37),
+  Color(0xff616161),
+  Color(0xffd6d6d6),
+  Color(0xff9e9e9e),
+  Color(0xff37474f),
+];
+List<Color> carColor000 = [
   Colors.white,
   Colors.red,
   Colors.red[900],
