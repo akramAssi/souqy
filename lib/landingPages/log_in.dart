@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
+import 'package:souqy/res/style.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/showExceptionDilog.dart';
@@ -50,13 +51,6 @@ class _LoginPageState extends State<LoginPage> {
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
       if (value == AuthResultStatus.successful) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              Strings.success(Strings.login),
-            ),
-          ),
-        );
       } else {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(value);
         showExceptionDialog(context, title: Strings.login, content: errorMsg);
@@ -72,11 +66,10 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: backgroundColor,
       // body: _buildForm(_formKey, context),
       body: ModalProgressHUD(
-          child: _buildForm(_formKey, context),
-          inAsyncCall: _saving,
-          progressIndicator: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(primeCOLOR),
-          )),
+        child: _buildForm(_formKey, context),
+        inAsyncCall: _saving,
+        progressIndicator: SouqyStyle.souqyIndicator,
+      ),
     );
   }
 
