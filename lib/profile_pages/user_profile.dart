@@ -4,14 +4,21 @@ import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/model/ads.dart';
 import 'package:souqy/model/user_model.dart';
 import 'package:souqy/profile_pages/avatar.dart';
+import 'package:souqy/profile_pages/profile_setting.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
+import 'package:souqy/res/style.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/ads_controller.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
-class UserProfile extends StatelessWidget {
+class UserProfile extends StatefulWidget {
+  @override
+  _UserProfileState createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
   void _openPage(BuildContext context, Widget openWidget) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -21,13 +28,34 @@ class UserProfile extends StatelessWidget {
     );
   }
 
+  void _openProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileSetting(),
+        fullscreenDialog: true,
+      ),
+    ).then((value) => setState(() {
+          currentUser = locator.get<UserController>().currentUser;
+          print("asdsadsadasdas");
+          print(currentUser?.avatarUrl);
+        }));
+    // Navigator.of(context).push(
+    //   MaterialPageRoute<void>(
+    //     builder: (context) => UserProfile(),
+    //     fullscreenDialog: true,
+    //   ),
+    // );
+  }
+
   UserModel currentUser = locator.get<UserController>().currentUser;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: souqyAppBar("settings", context),
+      appBar: souqyAppBar("settings", context, soldOnPress: _openProfile),
       body: SingleChildScrollView(
         child: Wrap(
           alignment: WrapAlignment.spaceAround,
@@ -82,6 +110,7 @@ class UserProfile extends StatelessWidget {
                                   .get<AdsController>()
                                   .getUserAds(currentUser.uid),
                               builder: (context, snapshot) {
+                                List<Widget> children;
                                 if (snapshot.hasData) {
                                   QuerySnapshot<Map<String, dynamic>> map =
                                       snapshot.data;
@@ -95,9 +124,20 @@ class UserProfile extends StatelessWidget {
                                     shrinkWrap: false,
                                     list: list,
                                   );
+                                } else if (snapshot.hasError) {
+                                  children =
+                                      SouqyStyle.errorWidget(snapshot.error);
                                 } else {
-                                  return CircularProgressIndicator();
+                                  children = SouqyStyle.waitingWidget();
                                 }
+                                return Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: children,
+                                  ),
+                                );
                               },
                             )
                           ],
@@ -148,29 +188,9 @@ class UserProfile extends StatelessWidget {
                   list: snapshot.data,
                 );
               } else if (snapshot.hasError) {
-                children = <Widget>[
-                  const Icon(
-                    Icons.error_outline,
-                    color: Colors.red,
-                    size: 60,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text('Error: ${snapshot.error}'),
-                  )
-                ];
+                children = SouqyStyle.errorWidget(snapshot.error);
               } else {
-                children = const <Widget>[
-                  SizedBox(
-                    child: CircularProgressIndicator(),
-                    width: 60,
-                    height: 60,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 16),
-                    child: Text('Awaiting result...'),
-                  )
-                ];
+                children = SouqyStyle.waitingWidget();
               }
               return Center(
                 child: Column(

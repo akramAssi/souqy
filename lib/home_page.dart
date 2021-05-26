@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:souqy/add_page/expected_page.dart';
 import 'package:souqy/model/ads.dart';
 import 'package:souqy/res/exhibitions.dart';
+import 'package:souqy/res/style.dart';
 import 'package:souqy/search_page/search.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/color.dart';
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
         StreamBuilder(
           stream: locator.get<AdsController>().readAds(),
           builder: (context, snapshot) {
+            List<Widget> children;
             if (snapshot.hasData) {
               QuerySnapshot<Map<String, dynamic>> map = snapshot.data;
               List<Ads> list = [];
@@ -53,9 +55,18 @@ class _HomePageState extends State<HomePage> {
                 shrinkWrap: false,
                 list: list,
               );
+            } else if (snapshot.hasError) {
+              children = SouqyStyle.errorWidget(snapshot.error.toString());
             } else {
-              return CircularProgressIndicator();
+              children = SouqyStyle.waitingWidget();
             }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: children,
+              ),
+            );
           },
         ),
         SizedBox(
@@ -74,10 +85,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    locator.get<UserController>().refresh().onError((error, stackTrace) {
-      showExceptionDialog(context,
-          title: Strings.userFetchFailed, content: error.toString());
-    });
+    // locator.get<UserController>().refresh().onError((error, stackTrace) {
+    //   showExceptionDialog(context,
+    //       title: Strings.userFetchFailed, content: error.toString());
+    // });
     super.initState();
   }
 
