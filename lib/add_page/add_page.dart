@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:group_button/group_button.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:souqy/add_page/search_brand.dart';
 import 'package:souqy/model/ads.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
@@ -21,6 +22,8 @@ import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
 import 'package:souqy/widget/souqy_submit_button.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
 import 'package:souqy/view_controller/ads_controller.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'car_type.dart';
 
@@ -56,6 +59,8 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   bool showPaymentDetail = false;
   var carType = CarType();
   var souqySearchForBrand;
+
+  bool _saving = false;
 
   // focusNode
   final _makeFoucs = FocusNode();
@@ -415,6 +420,33 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     }
   }
 
+  void expect() async {
+    if (_formKey.currentState.validate()) {
+      setState(() {
+        _saving = true;
+      });
+      List<int> feature = [0, 0, 0, 0, 0, 0, 0, 0];
+      for (var x in _checkedItemList) {
+        feature[allItemList.indexOf(x)] = 1;
+      }
+      String url = "https://2d0df66ae1e9.ngrok.io/?Make=${_makeController.text}&Model=${_modelController.text}" +
+          "&type=${carType.typeSelected}&Color=${nameColor[carColor.indexOf(currentColor)]}" +
+          "&fuel=${_fuelController.text}&history=${_vehicleOriginController.text}" +
+          "&gear=${_gearController.text}&py=${_paymentController.text}&windo=Windm&pass=${_passengerController.text}" +
+          "&year=2018&eng=1600&f1=${feature[0]}&f2=${feature[1]}&f3=${feature[2]}&f4=${feature[3]}&f5=${feature[4]}" +
+          "&f6=${feature[5]}&f7=${feature[6]}&f8=${feature[7]}&day_lif=1234&km=${souqyKilometerTextField.kilometer}&po=$owner";
+
+      var graphResponse = await http.get(Uri.parse(url));
+
+      var profile = json.decode(graphResponse.body);
+      setState(() {
+        _expectedPriceController.text = profile["price"];
+        _saving = false;
+      });
+    }
+    // print(nameColor[carColor.indexOf(currentColor)]);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -454,7 +486,11 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
 
       _passengerController.text = widget.carAds.passenger.toString();
 
-      //  currentColor.toString(),
+      String valueString =
+          widget.carAds.color.split('(0x')[1].split(')')[0]; // kind of hacky..
+      int value = int.parse(valueString, radix: 16);
+      currentColor = new Color(value);
+
       _gearController.text = widget.carAds.gear;
 
       owner = widget.carAds.oldOwner;
@@ -527,393 +563,397 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Form(
-      key: _formKey,
-      child: Container(
-        color: backgroundColor,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              souqySearchForBrand,
-              // first widget have search and brand list
-              carType,
-              // type car widget
-              rowYearAndModel(context, size),
+    return ModalProgressHUD(
+      inAsyncCall: _saving,
+      color: borderTextfieldColor,
+      progressIndicator: SouqyStyle.souqyIndicator,
+      child: Form(
+        key: _formKey,
+        child: Container(
+          color: backgroundColor,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                souqySearchForBrand,
+                // first widget have search and brand list
+                carType,
+                // type car widget
+                rowYearAndModel(context, size),
 
-              ///end 3th row year and model
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                child: Text(
-                  Strings.kilo,
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              souqyKilometerTextField,
-              //kilometer textfield
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: engineSouqyFormField,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: passengerSouqyFormField,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: colorSouqyFormField = SouqyFormField(
-                        label: Strings.color,
-                        controller: _colorController,
-                        height: 50,
-                        isReadOnly: true,
-                        textAlign: TextAlign.center,
-                        color: currentColor,
-                        filled: true,
-                        validator: Validators.required(Strings.requiredFieldo),
-                        onTop: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text(
-                                    Strings.colorDialog,
-                                  ),
-                                  content: SingleChildScrollView(
-                                    child: BlockPicker(
-                                      pickerColor: primeCOLOR,
-                                      onColorChanged: changeColor,
-                                      availableColors: carColor,
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text(
-                                        Strings.colorDialogButton,
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      onPressed: () {
-                                        setState(
-                                            () => currentColor = pickerColor);
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: gearSouqyButtonDialog,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Flexible(flex: 1, child: fuelSouqyButtonDialog),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: orginSouqyButtonDialog,
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(flex: 1, child: Container()),
-                    Flexible(
-                      flex: 1,
-                      child: SouqyLeftRightButtonField(
-                          leftButton: increaseOwner,
-                          rightButton: decreaseOwner,
-                          onChanged: onChangedOwner,
-                          controller: _ownerController),
-                    ),
-                    Flexible(flex: 1, child: Container()),
-                  ],
-                ),
-              ),
-
-              Center(
-                child: _myImages.isEmpty
-                    ? SizedBox(
-                        height: 0,
-                        width: 0,
-                      )
-                    : SouqyImageSlider(
-                        imageList: _myImages,
-                        source: "File",
-                        autoPlay: false,
-                        onLongPress: remove,
-                      ),
-                // : SouqyImageLoader(
-                //     myImages: _myImages,
-                //   ),
-              ),
-              Center(
-                child: Container(
-                  margin: EdgeInsets.only(top: 60, bottom: 40),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: primeCOLOR,
-                  ),
-                  child: IconButton(
-                    splashRadius: 30,
-                    onPressed: () {
-                      _showPicker(context);
-                    },
-                    icon: Icon(
-                      Icons.photo_library_outlined,
-                      color: Colors.white,
-                      size: 30,
-                    ),
+                ///end 3th row year and model
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                  child: Text(
+                    Strings.kilo,
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
-              ),
-
-              Container(
-                margin: EdgeInsets.only(top: 10, left: 15),
-                child: Text(
-                  Strings.carFeatures,
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                ),
-                width: size.width,
-                child: carFGroupButton,
-              ),
-              Container(
-                margin:
-                    EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 7),
-                child: Text(
-                  Strings.additionalInformation,
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-              Container(
-                width: size.width,
-                margin: EdgeInsets.only(left: 10, right: 10),
-                child: TextField(
-                  controller: _addInfoController,
-                  textInputAction: TextInputAction.newline,
-                  maxLines: null,
-                  textAlignVertical: TextAlignVertical.top,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                    enabledBorder: souqyEnableBorder,
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: 'add text ..',
-                    focusedBorder: souqyFocusBorder,
-                    labelStyle: TextStyle(
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        Strings.paymentMethod,
-                        style: TextStyle(fontSize: 20, color: primeCOLOR),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: SouqyButtonDialog(
-                        gearController: _paymentController,
-                        list: _payment,
-                        label: Strings.paymentMethod,
-                        showlabel: false,
-                        height: 50,
-                        // size: size,
-                        validator: Validators.required(
-                            Strings.requiredField(Strings.paymentMethod)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Visibility(
-                visible: showPaymentDetail,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                souqyKilometerTextField,
+                //kilometer textfield
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Flexible(flex: 1, child: downPaymentSouqyFormField),
+                      Flexible(
+                        flex: 1,
+                        child: engineSouqyFormField,
+                      ),
                       SizedBox(
                         width: 10,
                       ),
-                      Flexible(flex: 1, child: monthlyPaymentSouqyFormField),
+                      Flexible(
+                        flex: 1,
+                        child: passengerSouqyFormField,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: colorSouqyFormField = SouqyFormField(
+                          label: Strings.color,
+                          controller: _colorController,
+                          height: 50,
+                          isReadOnly: true,
+                          textAlign: TextAlign.center,
+                          color: currentColor,
+                          filled: true,
+                          validator:
+                              Validators.required(Strings.requiredFieldo),
+                          onTop: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                      Strings.colorDialog,
+                                    ),
+                                    content: SingleChildScrollView(
+                                      child: BlockPicker(
+                                        pickerColor: primeCOLOR,
+                                        onColorChanged: changeColor,
+                                        availableColors: carColor,
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text(
+                                          Strings.colorDialogButton,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        onPressed: () {
+                                          setState(
+                                              () => currentColor = pickerColor);
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              Container(
-                // height: 45,
-                alignment: Alignment.centerRight,
-                margin: EdgeInsets.only(
-                  right: size.width / 3.5,
-                  top: 20,
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 25),
-                decoration: BoxDecoration(
-                    color: alertColor,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                child: Text(
-                  Strings.alartPriceExpected,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: gearSouqyButtonDialog,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(flex: 1, child: fuelSouqyButtonDialog),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: orginSouqyButtonDialog,
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      flex: 4,
-                      child: SouqyFormField(
-                        label: Strings.expectedPrice,
-                        controller: _expectedPriceController,
-                        labelFontSize: 20,
-                        isReadOnly: true,
-                        height: 50,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(flex: 1, child: Container()),
+                      Flexible(
+                        flex: 1,
+                        child: SouqyLeftRightButtonField(
+                            leftButton: increaseOwner,
+                            rightButton: decreaseOwner,
+                            onChanged: onChangedOwner,
+                            controller: _ownerController),
                       ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                onPrimary: primeCOLOR,
-                                shape: CircleBorder(
-                                  side: BorderSide(color: borderColor),
-                                ),
-                                padding: EdgeInsets.all(12)),
-                            child: Image.asset(
-                              "images/expect.png",
-                              color: fontColor,
-                            ),
-                            onPressed: () {
-                              // print(nameColor[carColor.indexOf(currentColor)]);
-                            },
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                      Flexible(flex: 1, child: Container()),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: SouqyFormField(
-                  label: "price",
-                  controller: _priceController,
-                  labelFontSize: 20,
-                  keyboardType: TextInputType.number,
-                  height: 50,
-                  validator:
-                      Validators.required(Strings.requiredField(Strings.price)),
-                ),
-              ),
 
-              SizedBox(
-                height: 40,
-              ),
-              Center(
-                child: SizedBox(
-                  width: size.width / 1.5,
-                  child: SouqySubmitBotton(
-                    label: widget.carAds == null
-                        ? Strings.publishing
-                        : Strings.update,
-                    height: 45,
-                    fontSize: 15,
-                    onPress: () {
-                      // _formKey.currentState.validate();
-                      if (_formKey.currentState.validate()) {
-                        _submit(carType.typeSelected);
-                      }
-                    },
+                Center(
+                  child: _myImages.isEmpty
+                      ? SizedBox(
+                          height: 0,
+                          width: 0,
+                        )
+                      : SouqyImageSlider(
+                          imageList: _myImages,
+                          source: "File",
+                          autoPlay: false,
+                          onLongPress: remove,
+                        ),
+                  // : SouqyImageLoader(
+                  //     myImages: _myImages,
+                  //   ),
+                ),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 60, bottom: 40),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: primeCOLOR,
+                    ),
+                    child: IconButton(
+                      splashRadius: 30,
+                      onPressed: () {
+                        _showPicker(context);
+                      },
+                      icon: Icon(
+                        Icons.photo_library_outlined,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-            ],
+
+                Container(
+                  margin: EdgeInsets.only(top: 10, left: 15),
+                  child: Text(
+                    Strings.carFeatures,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                  ),
+                  width: size.width,
+                  child: carFGroupButton,
+                ),
+                Container(
+                  margin:
+                      EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 7),
+                  child: Text(
+                    Strings.additionalInformation,
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: size.width,
+                  margin: EdgeInsets.only(left: 10, right: 10),
+                  child: TextField(
+                    controller: _addInfoController,
+                    textInputAction: TextInputAction.newline,
+                    maxLines: null,
+                    textAlignVertical: TextAlignVertical.top,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      enabledBorder: souqyEnableBorder,
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'add text ..',
+                      focusedBorder: souqyFocusBorder,
+                      labelStyle: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          Strings.paymentMethod,
+                          style: TextStyle(fontSize: 20, color: primeCOLOR),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: SouqyButtonDialog(
+                          gearController: _paymentController,
+                          list: _payment,
+                          label: Strings.paymentMethod,
+                          showlabel: false,
+                          height: 50,
+                          // size: size,
+                          validator: Validators.required(
+                              Strings.requiredField(Strings.paymentMethod)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Visibility(
+                  visible: showPaymentDetail,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Flexible(flex: 1, child: downPaymentSouqyFormField),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Flexible(flex: 1, child: monthlyPaymentSouqyFormField),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  // height: 45,
+                  alignment: Alignment.centerRight,
+                  margin: EdgeInsets.only(
+                    right: size.width / 3.5,
+                    top: 20,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0, vertical: 25),
+                  decoration: BoxDecoration(
+                      color: alertColor,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  child: Text(
+                    Strings.alartPriceExpected,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        flex: 4,
+                        child: SouqyFormField(
+                          label: Strings.expectedPrice,
+                          controller: _expectedPriceController,
+                          labelFontSize: 20,
+                          isReadOnly: true,
+                          height: 50,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  onPrimary: primeCOLOR,
+                                  shape: CircleBorder(
+                                    side: BorderSide(color: borderColor),
+                                  ),
+                                  padding: EdgeInsets.all(12)),
+                              child: Image.asset(
+                                "images/expect.png",
+                                color: fontColor,
+                              ),
+                              onPressed: expect,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: SouqyFormField(
+                    label: "price",
+                    controller: _priceController,
+                    labelFontSize: 20,
+                    keyboardType: TextInputType.number,
+                    height: 50,
+                    validator: Validators.required(
+                        Strings.requiredField(Strings.price)),
+                  ),
+                ),
+
+                SizedBox(
+                  height: 40,
+                ),
+                Center(
+                  child: SizedBox(
+                    width: size.width / 1.5,
+                    child: SouqySubmitBotton(
+                      label: widget.carAds == null
+                          ? Strings.publishing
+                          : Strings.update,
+                      height: 45,
+                      fontSize: 15,
+                      onPress: () {
+                        // _formKey.currentState.validate();
+                        if (_formKey.currentState.validate()) {
+                          _submit(carType.typeSelected);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+              ],
+            ),
           ),
         ),
       ),
