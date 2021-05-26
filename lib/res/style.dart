@@ -11,6 +11,35 @@ class SouqyStyle {
     bottomLeft: radius,
     bottomRight: radius,
   );
+  static final souqyIndicator = CircularProgressIndicator(
+    valueColor: AlwaysStoppedAnimation<Color>(primeCOLOR),
+  );
+  static List<Widget> waitingWidget() => <Widget>[
+        SizedBox(
+          child: SouqyStyle.souqyIndicator,
+          width: 60,
+          height: 60,
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 16),
+          child: Text('Loading ...'),
+        )
+      ];
+
+  static List<Widget> errorWidget(String msg) => <Widget>[
+        const Icon(
+          Icons.error_outline,
+          color: Colors.red,
+          size: 60,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: Text('Error: $msg'),
+        )
+      ];
 }
 
 mixin SouqyFormFieldStyle {
