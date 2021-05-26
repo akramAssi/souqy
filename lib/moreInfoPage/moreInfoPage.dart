@@ -73,7 +73,6 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
   }
 
   Future<void> onPressUnSaveBookmark() async {
-    print("dsd");
     await locator
         .get<UserController>()
         .deleteBookmarkUser(currentAds.id)
@@ -85,7 +84,6 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("-----------------");
     List<Widget> payment;
     if (currentAds.paymentMethod.contains(Strings.installment)) {
       payment = [
@@ -154,7 +152,8 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
       } else {
         appBar = souqyAppBar("normal", context);
       }
-    } else if (currentUser.bookmark.contains(currentAds.id)) {
+    } else if (currentUser.bookmark != null &&
+        currentUser.bookmark.contains(currentAds.id)) {
       appBar = souqyAppBar("notOwnerBookmark", context,
           soldOnPress: onPressUnSaveBookmark);
     } else {
@@ -347,29 +346,9 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
               ),
             );
           } else if (snapshot.hasError) {
-            children = <Widget>[
-              const Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text('Error: ${snapshot.error}'),
-              )
-            ];
+            children = SouqyStyle.errorWidget(snapshot.error);
           } else {
-            children = const <Widget>[
-              SizedBox(
-                child: CircularProgressIndicator(),
-                width: 60,
-                height: 60,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
-              )
-            ];
+            children = SouqyStyle.waitingWidget();
           }
           return Center(
             child: Column(
@@ -462,10 +441,10 @@ class Circleinfocard extends StatelessWidget {
           label.split('(0x')[1].split(')')[0]; // kind of hacky..
       int value = int.parse(valueString, radix: 16);
       _otherColor = new Color(value);
+      print(_otherColor);
     } else {
       _otherColor = fontColor;
     }
-    print(_otherColor);
   }
   final String icon;
   final String label;
@@ -487,11 +466,26 @@ class Circleinfocard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            "images/$icon",
-            width: 28,
-            height: 28,
-            color: _otherColor,
+          Container(
+            decoration:
+                _otherColor == carColor[0] || _otherColor == Color(0xffefebe9)
+                    ? BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 15,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      )
+                    : null,
+            child: Image.asset(
+              "images/$icon",
+              width: 28,
+              height: 28,
+              color: _otherColor,
+            ),
           ),
           SizedBox(
             height: 3,
