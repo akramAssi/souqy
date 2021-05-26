@@ -13,8 +13,9 @@ import 'package:souqy/widget/showExceptionDilog.dart';
 import '../profile_pages/profile_setting.dart';
 
 void _openProfile(BuildContext context) {
-  Navigator.of(context).push(
-    MaterialPageRoute<void>(
+  Navigator.push(
+    context,
+    MaterialPageRoute(
       builder: (context) => UserProfile(),
       fullscreenDialog: true,
     ),
@@ -73,13 +74,15 @@ AppBar souqyAppBar(
             onPressed: () => _singOut(context),
           ),
           IconButton(
-              padding: EdgeInsets.all(0),
-              icon: Image.asset(
-                "images/settings.png",
-              ),
-              onPressed: () {
-                _openSetting(context);
-              }),
+            padding: EdgeInsets.all(0),
+            icon: Image.asset(
+              "images/settings.png",
+            ),
+            onPressed: soldOnPress,
+            // onPressed: () {
+            //   _openSetting(context);
+            // }
+          ),
         ]);
         break;
       }
