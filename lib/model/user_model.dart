@@ -20,7 +20,7 @@ class UserModel {
       this.phone});
   UserModel.user(User user) {
     this.uid = user.uid;
-    // this.displayName = user.displayName;
+    this.displayName = user.displayName;
     this.email = user.email;
     // if (user.photoURL != null) {
     //   this.avatarUrl = user.photoURL;
@@ -36,7 +36,6 @@ class UserModel {
       displayName: json["name"] ?? currentUser?.displayName,
       phone: json["phone"] ?? currentUser?.phone,
     );
-    print(x.toJson());
     return x;
   }
 

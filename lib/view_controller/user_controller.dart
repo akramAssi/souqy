@@ -1,7 +1,6 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:souqy/model/ads.dart';
@@ -30,14 +29,14 @@ class UserController {
 
   UserModel initUser() {
     _currentUser = _authRepo.currentUserModel();
+
     return _currentUser;
   }
 
   Future<void> refresh() async {
     _currentUser = _authRepo.currentUserModel();
 
-    getDownloadUrl();
-
+    print("USer Url:${_currentUser.avatarUrl}");
     if (_currentUser != null) {
       _currentUser =
           await readUserInfo(_currentUser.uid, currentUser: currentUser);
@@ -64,14 +63,13 @@ class UserController {
       _currentUser = UserModel.user(user);
       _currentUser =
           await readUserInfo(_currentUser.uid, currentUser: currentUser);
-      if (_currentUser.displayName == null ||
-          _currentUser.displayName.isEmpty) {
-        _currentUser.displayName = user.displayName;
-        storeSelf();
+      if (_currentUser == null) {
+        _currentUser = UserModel.user(user);
+        await storeSelf();
+        _currentUser.avatarUrl = await getDownloadUrl();
       }
-      await getDownloadUrl();
     } catch (e) {
-      print(e.toString());
+      print("akram error $e");
     }
   }
 
@@ -81,12 +79,11 @@ class UserController {
       _currentUser = UserModel.user(user);
       _currentUser =
           await readUserInfo(_currentUser.uid, currentUser: currentUser);
-      if (_currentUser.displayName == null ||
-          _currentUser.displayName.isEmpty) {
-        _currentUser.displayName = user.displayName;
-        storeSelf();
+      if (_currentUser == null) {
+        _currentUser = UserModel.user(user);
+        await storeSelf();
+        _currentUser.avatarUrl = await getDownloadUrl();
       }
-      getDownloadUrl();
     } catch (e) {
       print(e.toString());
     }
@@ -101,10 +98,10 @@ class UserController {
         _currentUser = UserModel.user(user);
         _currentUser =
             await readUserInfo(_currentUser.uid, currentUser: currentUser);
-        if (_currentUser.displayName == null ||
-            _currentUser.displayName.isEmpty) {
-          _currentUser.displayName = user.displayName;
-          storeSelf();
+        if (_currentUser == null) {
+          _currentUser = UserModel.user(user);
+          await storeSelf();
+          _currentUser.avatarUrl = await getDownloadUrl();
         }
       } else {
         _status = AuthResultStatus.undefined;
@@ -113,7 +110,6 @@ class UserController {
       _status = AuthExceptionHandler.handleException(e);
     }
     return _status;
-    // _currentUser.avatarUrl = await getDownloadUrl();
   }
 
   Future<AuthResultStatus> creatUserWithEmailAndPassword({
@@ -125,8 +121,8 @@ class UserController {
     try {
       User user =
           await _authRepo.creatUserWithEmailAndPassword(email, password);
-      // user = await _authRepo.updateDisplayName(name);
-      // _currentUser = UserModel.user(user);
+      user = await _authRepo.updateDisplayName(name);
+      _currentUser = UserModel.user(user);
 
       // return false;
       storeAddress(name: name, phone: phone, email: email);
@@ -149,6 +145,7 @@ class UserController {
 
   Future<void> signOut() async {
     await _authRepo.signOut();
+    _currentUser = null;
     // locator.popScope();
     // setupServices();
   }
@@ -160,15 +157,15 @@ class UserController {
         await _storageRepo.uploadFile(File(image.path), path);
   }
 
-  Future<void> getDownloadUrl() async {
+  Future<String> getDownloadUrl() async {
     if (_currentUser?.uid != null) {
       try {
-        _currentUser.avatarUrl =
-            await _storageRepo.getUserProfileImage(currentUser);
+        return await _storageRepo.getUserProfileImage(currentUser);
       } catch (e) {
-        _currentUser.avatarUrl = _authRepo.currentUser.photoURL;
+        return _authRepo.currentUser.photoURL;
       }
     }
+    return null;
   }
 
   //database
@@ -190,10 +187,6 @@ class UserController {
     );
     await _databaseRepo.storeUserInfo(temp).then((value) {
       _currentUser = temp;
-      // _currentUser.email = email ?? "";
-      // _currentUser.phone = phone ?? "";
-      // _currentUser.city = city ?? "";
-      // _currentUser.area = area ?? "";
     });
   }
 
@@ -202,13 +195,20 @@ class UserController {
   }
 
   Future<UserModel> readUserInfo(String userId, {UserModel currentUser}) async {
-    Map<String, dynamic> userJson = await _databaseRepo.readUserInfo(userId);
+    try {
+      Map<String, dynamic> userJson = await _databaseRepo.readUserInfo(userId);
+      if (userJson != null) {
+        var x = UserModel.fromJson(userId, userJson, currentUser: currentUser);
 
-    var x = UserModel.fromJson(userId, userJson, currentUser: currentUser);
-
-    x.bookmark = await _databaseRepo.readUserBookmark(userId);
-
-    return x;
+        x.bookmark = await _databaseRepo.readUserBookmark(userId);
+        x.avatarUrl = await getDownloadUrl();
+        return x;
+      }
+    } catch (e) {
+      print("akram error $e");
+      return null;
+    }
+    return null;
   }
 
   Future<void> updateBookmarkUser() async {
