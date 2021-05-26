@@ -11,6 +11,6 @@ void setupServices() {
   locator.registerSingleton<Auth>(Auth());
   locator.registerSingleton<StorageRepo>(StorageRepo());
   locator.registerSingleton<FirestoreDatabase>(FirestoreDatabase());
-  locator.registerSingleton<UserController>(UserController());
+  locator.registerSingleton<UserController>(UserController()..refresh());
   locator.registerSingleton<AdsController>(AdsController());
 }
