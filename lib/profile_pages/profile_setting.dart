@@ -4,6 +4,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:souqy/model/user_model.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
+import 'package:souqy/res/style.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
@@ -106,12 +107,11 @@ class _ProfileSettingState extends State<ProfileSetting> {
       backgroundColor: backgroundColor,
       appBar: souqyAppBar("profileSettin", context),
       body: ModalProgressHUD(
-          child: buildForm(context, _formKey),
-          inAsyncCall: _saving,
-          color: borderTextfieldColor,
-          progressIndicator: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(primeCOLOR),
-          )),
+        child: buildForm(context, _formKey),
+        inAsyncCall: _saving,
+        color: borderTextfieldColor,
+        progressIndicator: SouqyStyle.souqyIndicator,
+      ),
     );
   }
 
@@ -224,7 +224,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                               padding: EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 15)),
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Navigator.pop(context, null);
                           },
                           child: Text("Cancel"),
                         ),
@@ -255,7 +255,8 @@ class _ProfileSettingState extends State<ProfileSetting> {
                               setState(() {
                                 _saving = false;
                               });
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
+                              Navigator.pop(context, null);
                             }
                           },
                           child: Text("Save"),
@@ -278,6 +279,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
   void setDefalut() {
     currentUser = locator.get<UserController>().currentUser;
     // locator.get<UserController>().readAddres();
+    print("USer Url:${currentUser.avatarUrl}");
     _nameController.text = currentUser?.displayName ?? "";
     _emailController.text = currentUser?.email ?? "";
     _phoneController.text = currentUser?.phone ?? "";
