@@ -57,7 +57,9 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   // var souqyKilometerTextField = SouqyKilometerTextField();
   var souqyKilometerTextField;
   bool showPaymentDetail = false;
-  var carType = CarType();
+  bool selected = false;
+  bool showCarTypeRec = false;
+  var carType;
   var souqySearchForBrand;
 
   bool _saving = false;
@@ -126,7 +128,9 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     for (int i = 1; i <= 55; i += 1) {
       _passengerList.add(i);
     }
-
+    carType = CarType(
+      onChangeSearch: carTypeSelected,
+    );
     yearSouqyFormField = SouqyFormField(
       label: Strings.year,
       controller: _yearController,
@@ -379,6 +383,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
       _myImages.add(
           "https://firebasestorage.googleapis.com/v0/b/souqy-9b821.appspot.com/o/ads%2Fno_image.png?alt=media&token=1ab0b2bc-782d-4189-afed-78dc0422bd0f");
     }
+
     var x = Ads.fromJson({
       "make": _makeController.text,
       "model": _modelController.text,
@@ -558,11 +563,27 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     }
   }
 
+  void carTypeSelected(bool flag) {
+    setState(() {
+      selected = flag;
+      if (selected) {
+        setState(() {
+          showCarTypeRec = false;
+        });
+      } else {
+        setState(() {
+          showCarTypeRec = true;
+        });
+      }
+    });
+  }
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
+<<<<<<< Updated upstream
     return ModalProgressHUD(
       inAsyncCall: _saving,
       color: borderTextfieldColor,
@@ -589,6 +610,61 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                     Strings.kilo,
                     style: TextStyle(fontSize: 20),
                   ),
+=======
+    return Form(
+      key: _formKey,
+      child: Container(
+        color: backgroundColor,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              souqySearchForBrand,
+              // first widget have search and brand list
+              carType,
+              Visibility(
+                  visible: showCarTypeRec,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 1,
+                          color: alertColor,
+                        ),
+                        SizedBox(
+                          height: 3,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              Strings.requiredField(Strings.type),
+                              style: TextStyle(
+                                color: alertColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  )),
+
+              // type car widget
+              rowYearAndModel(context, size),
+
+              ///end 3th row year and model
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                child: Text(
+                  Strings.kilo,
+                  style: TextStyle(fontSize: 20),
+>>>>>>> Stashed changes
                 ),
                 souqyKilometerTextField,
                 //kilometer textfield
@@ -928,6 +1004,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                   ),
                 ),
 
+<<<<<<< Updated upstream
                 SizedBox(
                   height: 40,
                 ),
@@ -947,6 +1024,35 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                         }
                       },
                     ),
+=======
+              SizedBox(
+                height: 40,
+              ),
+              Center(
+                child: SizedBox(
+                  width: size.width / 1.5,
+                  child: SouqySubmitBotton(
+                    label: widget.carAds == null
+                        ? Strings.publishing
+                        : Strings.update,
+                    height: 45,
+                    fontSize: 15,
+                    onPress: () {
+                      if (selected) {
+                        setState(() {
+                          showCarTypeRec = false;
+                        });
+                      } else {
+                        setState(() {
+                          showCarTypeRec = true;
+                        });
+                      }
+                      // _formKey.currentState.validate();
+                      if (_formKey.currentState.validate()) {
+                        _submit(carType.typeSelected);
+                      }
+                    },
+>>>>>>> Stashed changes
                   ),
                 ),
                 SizedBox(
