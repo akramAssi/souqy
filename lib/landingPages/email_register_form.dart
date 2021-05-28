@@ -73,7 +73,7 @@ class _EmailRegisterFormState extends State<EmailRegisterForm> {
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: souqyAppBar("setttings", context),
+      appBar: souqyAppBar("setttings", "SOUQY", context),
       body: ModalProgressHUD(
           child: buildForm(_formKey, context),
           inAsyncCall: _saving,
