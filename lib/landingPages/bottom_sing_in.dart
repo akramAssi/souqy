@@ -8,8 +8,9 @@ import 'email_register_form.dart';
 
 class BottomSingIn extends StatelessWidget {
   final bool isLogin;
-
-  const BottomSingIn({Key key, @required this.isLogin}) : super(key: key);
+  final isDialog;
+  const BottomSingIn({Key key, @required this.isLogin, this.isDialog})
+      : super(key: key);
 
   void _signInWithEmail(BuildContext context) {
     Navigator.of(context).push(
@@ -25,10 +26,20 @@ class BottomSingIn extends StatelessWidget {
   }
 
   void _signInWithGoogle(BuildContext context) =>
-      locator.get<UserController>().signInWithGoogle(context);
+      locator.get<UserController>().signInWithGoogle(context).then((value) => {
+            if (isDialog)
+              {
+                Navigator.of(context).pop(),
+              }
+          });
 
-  Future<void> _signInWithFacebook() =>
-      locator.get<UserController>().signInWithFacebook();
+  Future<void> _signInWithFacebook(BuildContext context) =>
+      locator.get<UserController>().signInWithFacebook().then((value) => {
+            if (isDialog)
+              {
+                Navigator.of(context).pop(),
+              }
+          });
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +62,7 @@ class BottomSingIn extends StatelessWidget {
           ),
           IconButton(
             icon: Image.asset("images/facebook.png"),
-            onPressed: _signInWithFacebook,
+            onPressed: () => _signInWithFacebook(context),
           ),
         ],
       ),
