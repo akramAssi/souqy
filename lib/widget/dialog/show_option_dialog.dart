@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 
-Future<bool> showOptionDialog(BuildContext context,
-    {Future<bool> Function({String phone, String city, String area}) yesFunc,
-    String phone,
-    String city,
-    String area}) async {
+import '../souqy_app_bar.dart';
+
+Future<bool> showOptionDialog(
+  BuildContext context,
+) async {
   showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -23,7 +23,7 @@ Future<bool> showOptionDialog(BuildContext context,
           content: Text(Strings.contantAlartDialog),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(Strings.noDialog),
+              child: Text(Strings.cancelDialog),
               onPressed: () {
                 Navigator.of(context).pop();
                 return false;
@@ -33,7 +33,7 @@ Future<bool> showOptionDialog(BuildContext context,
               child: Text(Strings.saveDialog),
               onPressed: () {
                 Navigator.of(context).pop();
-                return yesFunc(phone: phone, area: area, city: city);
+                openLogIn(context);
               },
             ),
           ],
@@ -47,7 +47,7 @@ Future<bool> showOptionDialog(BuildContext context,
         content: Text(Strings.contantAlartDialog),
         actions: <Widget>[
           TextButton(
-            child: Text(Strings.noDialog),
+            child: Text(Strings.cancelDialog),
             onPressed: () {
               Navigator.of(context).pop();
               return false;
@@ -56,8 +56,7 @@ Future<bool> showOptionDialog(BuildContext context,
           TextButton(
             child: Text(Strings.saveDialog),
             onPressed: () {
-              Navigator.of(context).pop();
-              return yesFunc(phone: phone, area: area, city: city);
+              openLogIn(context);
             },
           ),
         ],
