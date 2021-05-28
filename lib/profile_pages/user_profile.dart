@@ -55,7 +55,11 @@ class _UserProfileState extends State<UserProfile> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: backgroundColor,
+<<<<<<< Updated upstream
       appBar: souqyAppBar("settings", context, soldOnPress: _openProfile),
+=======
+      appBar: souqyAppBar("settings", "SOUQY", context),
+>>>>>>> Stashed changes
       body: SingleChildScrollView(
         child: Wrap(
           alignment: WrapAlignment.spaceAround,
@@ -102,7 +106,7 @@ class _UserProfileState extends State<UserProfile> {
                     _openPage(
                       context,
                       Scaffold(
-                        appBar: souqyAppBar("normal", context),
+                        appBar: souqyAppBar("normal", "SOUQY", context),
                         body: ListView(
                           children: [
                             StreamBuilder(
@@ -175,7 +179,7 @@ class _UserProfileState extends State<UserProfile> {
 
   Scaffold buildBookmarkPage(BuildContext context) {
     return Scaffold(
-      appBar: souqyAppBar("normal", context),
+      appBar: souqyAppBar("normal", "SOUQY", context),
       body: ListView(
         children: [
           FutureBuilder<List<Ads>>(
