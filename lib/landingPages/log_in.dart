@@ -52,8 +52,6 @@ class _LoginPageState extends State<LoginPage> {
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
       if (value == AuthResultStatus.successful) {
-<<<<<<< Updated upstream
-=======
         if (widget.isDialog) {
           Navigator.of(context).pop();
         }
@@ -64,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         );
->>>>>>> Stashed changes
       } else {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(value);
         showExceptionDialog(context, title: Strings.login, content: errorMsg);

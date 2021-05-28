@@ -8,11 +8,8 @@ import 'package:souqy/landingPages/log_in.dart';
 import 'package:souqy/res/style.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
-<<<<<<< Updated upstream
 import 'package:souqy/widget/souqy_app_bar.dart';
-=======
 import 'package:spreadsheet_decoder/spreadsheet_decoder.dart';
->>>>>>> Stashed changes
 
 class LandingPage extends StatelessWidget {
   const LandingPage({Key key}) : super(key: key);
@@ -50,7 +47,7 @@ class LandingPage extends StatelessWidget {
           children = SouqyStyle.waitingWidget();
         }
         return Scaffold(
-          appBar: souqyAppBar("normal", context),
+          appBar: souqyAppBar("normal", 'SOUQY', context),
           body: Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

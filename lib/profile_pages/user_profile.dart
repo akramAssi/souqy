@@ -55,11 +55,8 @@ class _UserProfileState extends State<UserProfile> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: backgroundColor,
-<<<<<<< Updated upstream
-      appBar: souqyAppBar("settings", context, soldOnPress: _openProfile),
-=======
-      appBar: souqyAppBar("settings", "SOUQY", context),
->>>>>>> Stashed changes
+      appBar:
+          souqyAppBar("settings", "SOUQY", context, soldOnPress: _openProfile),
       body: SingleChildScrollView(
         child: Wrap(
           alignment: WrapAlignment.spaceAround,

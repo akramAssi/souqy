@@ -583,7 +583,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-<<<<<<< Updated upstream
     return ModalProgressHUD(
       inAsyncCall: _saving,
       color: borderTextfieldColor,
@@ -599,6 +598,37 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                 souqySearchForBrand,
                 // first widget have search and brand list
                 carType,
+                Visibility(
+                    visible: showCarTypeRec,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 1,
+                            color: alertColor,
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                Strings.requiredField(Strings.type),
+                                style: TextStyle(
+                                  color: alertColor,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    )),
                 // type car widget
                 rowYearAndModel(context, size),
 
@@ -610,61 +640,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                     Strings.kilo,
                     style: TextStyle(fontSize: 20),
                   ),
-=======
-    return Form(
-      key: _formKey,
-      child: Container(
-        color: backgroundColor,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              souqySearchForBrand,
-              // first widget have search and brand list
-              carType,
-              Visibility(
-                  visible: showCarTypeRec,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 1,
-                          color: alertColor,
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              Strings.requiredField(Strings.type),
-                              style: TextStyle(
-                                color: alertColor,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                  )),
-
-              // type car widget
-              rowYearAndModel(context, size),
-
-              ///end 3th row year and model
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                child: Text(
-                  Strings.kilo,
-                  style: TextStyle(fontSize: 20),
->>>>>>> Stashed changes
                 ),
                 souqyKilometerTextField,
                 //kilometer textfield
@@ -1004,7 +979,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                   ),
                 ),
 
-<<<<<<< Updated upstream
                 SizedBox(
                   height: 40,
                 ),
@@ -1018,41 +992,21 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                       height: 45,
                       fontSize: 15,
                       onPress: () {
+                        if (selected) {
+                          setState(() {
+                            showCarTypeRec = false;
+                          });
+                        } else {
+                          setState(() {
+                            showCarTypeRec = true;
+                          });
+                        }
                         // _formKey.currentState.validate();
                         if (_formKey.currentState.validate()) {
                           _submit(carType.typeSelected);
                         }
                       },
                     ),
-=======
-              SizedBox(
-                height: 40,
-              ),
-              Center(
-                child: SizedBox(
-                  width: size.width / 1.5,
-                  child: SouqySubmitBotton(
-                    label: widget.carAds == null
-                        ? Strings.publishing
-                        : Strings.update,
-                    height: 45,
-                    fontSize: 15,
-                    onPress: () {
-                      if (selected) {
-                        setState(() {
-                          showCarTypeRec = false;
-                        });
-                      } else {
-                        setState(() {
-                          showCarTypeRec = true;
-                        });
-                      }
-                      // _formKey.currentState.validate();
-                      if (_formKey.currentState.validate()) {
-                        _submit(carType.typeSelected);
-                      }
-                    },
->>>>>>> Stashed changes
                   ),
                 ),
                 SizedBox(

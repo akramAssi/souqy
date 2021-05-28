@@ -164,13 +164,10 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
           soldOnPress: onPressSaveBookmark,
         );
       }
-<<<<<<< Updated upstream
     } else if (currentUser.bookmark != null &&
         currentUser.bookmark.contains(currentAds.id)) {
-      appBar = souqyAppBar("notOwnerBookmark", context,
+      appBar = souqyAppBar("notOwnerBookmark", "SOUQY", context,
           soldOnPress: onPressUnSaveBookmark);
-=======
->>>>>>> Stashed changes
     } else {
       appBar = souqyAppBar(
         "BookMark",
