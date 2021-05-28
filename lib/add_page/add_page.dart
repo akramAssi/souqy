@@ -1,3 +1,4 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,6 +55,8 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   TextEditingController _paymentController = TextEditingController();
   TextEditingController _downPaymentController = TextEditingController();
   TextEditingController _monthlyPaymentController = TextEditingController();
+  SimpleAutoCompleteTextField textField;
+  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
   // var souqyKilometerTextField = SouqyKilometerTextField();
   var souqyKilometerTextField;
   bool showPaymentDetail = false;
@@ -85,6 +88,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   Color currentColor = Colors.white;
   List<String> _myImages = [];
   List<String> _checkedItemList = [];
+  bool showErrorText = false;
   List<String> allItemList = [
     "Alarm device",
     "Air conditioner",
@@ -138,12 +142,54 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
         _openDialog(context: context, list: _yearList, onPress: onPressYear);
       },
     );
-    modelSouqyFormField = SouqyFormField(
-      label: Strings.model,
+    // modelSouqyFormField = SouqyFormField(
+    //   label: Strings.model,
+    //   controller: _modelController,
+    //   focusNode: _modelFoucs,
+    //   height: 50,
+    //   validator: Validators.required(Strings.requiredFieldo),
+    // );
+    textField = SimpleAutoCompleteTextField(
       controller: _modelController,
       focusNode: _modelFoucs,
-      height: 50,
-      validator: Validators.required(Strings.requiredFieldo),
+      key: key,
+      suggestions: ["akrma", "naser", "hamza"],
+      clearOnSubmit: false,
+      textChanged: (text) {
+        text.isEmpty ? showErrorText = true : showErrorText = false;
+        valid();
+      },
+      textSubmitted: (text) {
+        text.isEmpty ? showErrorText = true : showErrorText = false;
+        valid();
+      },
+      decoration: InputDecoration(
+          fillColor: primeCOLOR,
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(vertical: 3, horizontal: 13),
+          enabledBorder: souqyEnableBorder,
+          focusedErrorBorder: souqyErrorBorder,
+          errorBorder: souqyErrorBorder,
+          focusedBorder: souqyFocusBorder),
+    );
+    modelSouqyFormField = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          Strings.model,
+          style: TextStyle(
+            color: primeCOLOR,
+            fontSize: 14.0,
+          ),
+        ),
+        SizedBox(
+          height: 3,
+        ),
+        Container(
+          constraints: BoxConstraints(minHeight: 50),
+          child: textField,
+        ),
+      ],
     );
 
     engineSouqyFormField = SouqyFormField(
@@ -444,7 +490,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
         _saving = false;
       });
     }
-    // print(nameColor[carColor.indexOf(currentColor)]);
   }
 
   @override
@@ -562,6 +607,8 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    // valid();
 
     return ModalProgressHUD(
       inAsyncCall: _saving,
@@ -942,8 +989,21 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                       fontSize: 15,
                       onPress: () {
                         // _formKey.currentState.validate();
-                        if (_formKey.currentState.validate()) {
-                          _submit(carType.typeSelected);
+                        if (_modelController.text.isEmpty) {
+                          setState(() {
+                            showErrorText = true;
+                            _formKey.currentState.validate();
+                            valid();
+                          });
+                        } else {
+                          setState(() {
+                            showErrorText = false;
+                            valid();
+                          });
+
+                          if (_formKey.currentState.validate()) {
+                            _submit(carType.typeSelected);
+                          }
                         }
                       },
                     ),
@@ -1004,5 +1064,34 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
         ],
       ),
     );
+  }
+
+  void valid() {
+    setState(() {
+      if (showErrorText) {
+        textField.updateDecoration(
+            decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 3, horizontal: 13),
+                errorText:
+                    showErrorText ? Strings.requiredField(Strings.model) : null,
+                enabledBorder: souqyEnableBorder,
+                focusedErrorBorder: souqyErrorBorder,
+                errorBorder: souqyErrorBorder,
+                focusedBorder: souqyFocusBorder));
+      } else {
+        if (textField == null) return;
+        textField?.updateDecoration(
+            decoration: InputDecoration(
+                fillColor: primeCOLOR,
+                filled: false,
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 3, horizontal: 13),
+                enabledBorder: souqyEnableBorder,
+                focusedErrorBorder: souqyErrorBorder,
+                errorBorder: souqyErrorBorder,
+                focusedBorder: souqyFocusBorder));
+      }
+    });
   }
 }
