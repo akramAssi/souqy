@@ -105,7 +105,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: souqyAppBar("profileSettin", context),
+      appBar: souqyAppBar("profileSettin","SOUQY", context),
       body: ModalProgressHUD(
         child: buildForm(context, _formKey),
         inAsyncCall: _saving,
