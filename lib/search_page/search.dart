@@ -1,3 +1,4 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:souqy/add_page/search_brand.dart';
@@ -9,28 +10,27 @@ import 'package:souqy/res/string.dart';
 import 'package:souqy/search_page/price_range.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/ads_controller.dart';
-import 'package:souqy/view_controller/user_controller.dart';
+
 import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
 import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
-import 'package:wc_form_validators/wc_form_validators.dart';
-import 'package:souqy/view_controller/ads_controller.dart';
+import 'package:souqy/res/style.dart';
 
 class SearchButton extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SearchButton();
 }
 
-class _SearchButton extends State<StatefulWidget> {
+class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
   String searchType;
 //Textfor all field Controller
   TextEditingController _makeController;
   TextEditingController _modelController;
-  TextEditingController _yearController;
-  TextEditingController _engineController;
   TextEditingController _gearController;
   TextEditingController _fuelController;
-
+  bool showErrorText = false;
+  SimpleAutoCompleteTextField textField;
+  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
   TextEditingController _typeController;
 
   // focusNode
@@ -79,13 +79,49 @@ class _SearchButton extends State<StatefulWidget> {
       _engineList.add(i);
     }
 
-    modelSouqyFormField = SouqyFormField(
-      label: Strings.model,
+    // modelSouqyFormField = SouqyFormField(
+    //   label: Strings.model,
+    //   controller: _modelController,
+    //   focusNode: _modelFoucs,
+    //   height: 50,
+    // );
+
+    textField = SimpleAutoCompleteTextField(
       controller: _modelController,
       focusNode: _modelFoucs,
-      height: 50,
+      key: key,
+      suggestions: ["akrma", "naser", "hamza"],
+      clearOnSubmit: false,
+      textChanged: (text) {},
+      textSubmitted: (text) {},
+      decoration: InputDecoration(
+          fillColor: primeCOLOR,
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(vertical: 3, horizontal: 13),
+          enabledBorder: souqyEnableBorder,
+          focusedErrorBorder: souqyErrorBorder,
+          errorBorder: souqyErrorBorder,
+          focusedBorder: souqyFocusBorder),
     );
-
+    modelSouqyFormField = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          Strings.model,
+          style: TextStyle(
+            color: primeCOLOR,
+            fontSize: 14.0,
+          ),
+        ),
+        SizedBox(
+          height: 3,
+        ),
+        Container(
+          constraints: BoxConstraints(minHeight: 50),
+          child: textField,
+        ),
+      ],
+    );
     typeSouqyFormField = SouqyFormField(
       label: Strings.type,
       controller: _typeController,

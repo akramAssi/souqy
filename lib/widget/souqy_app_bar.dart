@@ -1,22 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:souqy/add_page/add_page.dart';
+import 'package:souqy/landingPages/log_in.dart';
 import 'package:souqy/model/ads.dart';
 import 'package:souqy/profile_pages/user_profile.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/service/locator.dart';
-import 'package:souqy/trash/1.dart';
-import 'package:souqy/view_controller/ads_controller.dart';
 import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/showExceptionDilog.dart';
 
 import '../profile_pages/profile_setting.dart';
+import 'dialog/show_option_dialog.dart';
 
 void _openProfile(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) => UserProfile(),
+      fullscreenDialog: true,
+    ),
+  );
+}
+
+void openLogIn(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (context) => Scaffold(
+        appBar: souqyAppBar('normal', "Login", context),
+        body: LoginPage(
+          isDialog: true,
+        ),
+      ),
       fullscreenDialog: true,
     ),
   );
@@ -45,6 +58,7 @@ Future<void> _singOut(BuildContext context) async {
 
 AppBar souqyAppBar(
   String type,
+  String title,
   BuildContext context, {
   VoidCallback soldOnPress,
   VoidCallback editOnPress,
@@ -62,6 +76,31 @@ AppBar souqyAppBar(
             ),
             onPressed: () => _openProfile(context),
           ),
+        );
+        break;
+      }
+    case "Login":
+      {
+        actions.add(
+          IconButton(
+            icon: Icon(
+              Icons.login,
+            ),
+            onPressed: () => openLogIn(context),
+          ),
+        );
+        break;
+      }
+    case "BookMark":
+      {
+        actions.add(
+          IconButton(
+              icon: Icon(
+                Icons.bookmark_border_outlined,
+              ),
+              onPressed: () {
+                showOptionDialog(context);
+              }),
         );
         break;
       }
@@ -147,16 +186,16 @@ AppBar souqyAppBar(
   return AppBar(
     iconTheme: IconThemeData(color: primeCOLOR),
     backgroundColor: backgroundColor,
-    elevation: .7,
-    title: buildTitleText(),
+    elevation: 0,
+    title: buildTitleText(title),
     centerTitle: true,
     actions: actions,
   );
 }
 
-Text buildTitleText() {
+Text buildTitleText(String title) {
   return Text(
-    "SOUQY",
+    title,
     style: TextStyle(
       color: primeCOLOR,
       fontSize: 25,

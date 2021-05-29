@@ -16,6 +16,7 @@ import 'package:souqy/statistic/statistic_page.dart';
 import 'package:souqy/trash/1.dart';
 import 'package:souqy/view_controller/ads_controller.dart';
 import 'package:souqy/view_controller/user_controller.dart';
+import 'package:souqy/widget/dialog/show_option_dialog.dart';
 import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
 
@@ -102,8 +103,8 @@ class _HomePageState extends State<HomePage> {
     Ads res = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            Scaffold(appBar: souqyAppBar("normal", context), body: AddPage()),
+        builder: (context) => Scaffold(
+            appBar: souqyAppBar("normal", "SOUQY", context), body: AddPage()),
         fullscreenDialog: true,
       ),
     );
@@ -115,13 +116,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final ss = Scaffold(
-      appBar: souqyAppBar("profile", context),
+      appBar: locator.get<UserController>().isAnonymous()
+          ? souqyAppBar("Login", "SOUQY", context)
+          : souqyAppBar("profile", "SOUQY", context),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _openEditPage(context);
+          if (locator.get<UserController>().isAnonymous()) {
+            showOptionDialog(context);
+          } else {
+            _openEditPage(context);
+          }
         },
         child: const Icon(Icons.add),
         backgroundColor: statisticColor,

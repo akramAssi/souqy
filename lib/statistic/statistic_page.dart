@@ -12,7 +12,9 @@ class StatisticPage extends StatefulWidget {
 
 class _StatisticPageState extends State<StatisticPage> {
   String searchType;
-  int chartData = 0;
+  String make;
+  String model;
+  int flag = 0;
 
   TextEditingController _makeController;
   TextEditingController _modelController;
@@ -21,9 +23,9 @@ class _StatisticPageState extends State<StatisticPage> {
   final _makeFoucs = FocusNode();
   _StatisticPageState() {
     _makeController = TextEditingController();
-
+    _makeController.addListener(onChangeMake);
     _modelController = TextEditingController();
-    _modelController.addListener(changeFlag);
+    _modelController.addListener(onChangeModel);
     modelSouqyFormField = SouqyFormField(
       label: Strings.model,
       controller: _modelController,
@@ -36,21 +38,13 @@ class _StatisticPageState extends State<StatisticPage> {
       isVisibil: false,
     );
   }
-
-  void onChangeModel(String value) {
-    setState(() {
-      print(value);
-    });
+  void onChangeMake() {
+    make = _makeController.text;
   }
 
-  void changeFlag() {
-    setState(() {
-      if (_modelController.text == '') {
-        chartData = 0;
-      } else if (_modelController.text.isNotEmpty) {
-        chartData = 1;
-      }
-    });
+  void onChangeModel() {
+    flag = 1;
+    model = _modelController.text;
   }
 
   @override
@@ -61,11 +55,35 @@ class _StatisticPageState extends State<StatisticPage> {
         SizedBox(
           height: 20,
         ),
-        Container(
-          margin: EdgeInsets.all(10),
-          child: modelSouqyFormField,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Flexible(
+              flex: 3,
+              child: modelSouqyFormField,
+            ),
+            Flexible(
+              child: Container(
+                margin: EdgeInsets.only(top: 10),
+                child: IconButton(
+                    splashRadius: 30,
+                    iconSize: 40,
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    icon: Image.asset("images/statisticsButton.png")),
+              ),
+            )
+          ],
         ),
-        StatisticCard(flag: chartData),
+        StatisticCard(
+          flag: flag,
+          make: make,
+          model: model,
+        ),
+        SizedBox(
+          height: 60,
+        )
       ],
     );
   }

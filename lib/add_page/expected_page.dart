@@ -358,7 +358,7 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
       for (var x in _checkedItemList) {
         feature[allItemList.indexOf(x)] = 1;
       }
-      String url = "https://2d0df66ae1e9.ngrok.io/?Make=${_makeController.text.toLowerCase()}&Model=${_modelController.text.toLowerCase()}" +
+      String url = "https://3ef465cda69c.ngrok.io/?Make=${_makeController.text.toLowerCase()}&Model=${_modelController.text.toLowerCase()}" +
           "&type=${carType.typeSelected.toLowerCase()}&Color=${nameColor[carColor.indexOf(currentColor)].toLowerCase()}" +
           "&fuel=${_fuelController.text.toLowerCase()}&history=${_vehicleOriginController.text.toLowerCase()}" +
           "&gear=${_gearController.text.toLowerCase()}&py=${_paymentController.text.toLowerCase()}&windo=electric" +
@@ -367,7 +367,6 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
           "&f6=${feature[5]}&f7=${feature[6]}&f8=${feature[7]}&km=${souqyKilometerTextField.kilometer}&po=$owner";
 
       var graphResponse = await http.get(Uri.parse(url));
-
       var profile = json.decode(graphResponse.body);
       setState(() {
         _expectedPriceController.text = profile["price"];

@@ -37,11 +37,12 @@ class Strings {
   static const String phoneInValidPrefix = "should be start 05";
   static const String phoneInValidNotString = "should be diget number";
   static const String acceptExceptionDialog = "ok";
-  static const String saveDialog = "yes";
+  static const String saveDialog = "Login";
   static const String cancelDialog = "Cancel";
-  static const String noDialog = "no";
+
   static const String alartDialog = "Alart";
-  static const String contantAlartDialog = "are you sure ?";
+  static const String contantAlartDialog =
+      "Please log in to access this feature";
   static const String passwordInValidRequired = "$password is required";
   static const String installment = "installment";
   static const String passwordInValidLength =

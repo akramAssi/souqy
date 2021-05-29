@@ -14,8 +14,10 @@ import 'package:wc_form_validators/wc_form_validators.dart';
 import 'bottom_sing_in.dart';
 
 class LoginPage extends StatefulWidget {
+  final bool isDialog;
   LoginPage({
     Key key,
+    this.isDialog,
   }) : super(key: key);
 
   @override
@@ -41,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
       showExceptionDialog(context,
           title: Strings.signInAnonmymous, content: error.toString());
     });
-    ;
   }
 
   Future<void> _signInWithEmailAndPassword(
@@ -51,6 +52,16 @@ class _LoginPageState extends State<LoginPage> {
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
       if (value == AuthResultStatus.successful) {
+        if (widget.isDialog) {
+          Navigator.of(context).pop();
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              Strings.success(Strings.login),
+            ),
+          ),
+        );
       } else {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(value);
         showExceptionDialog(context, title: Strings.login, content: errorMsg);
@@ -150,34 +161,38 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  TextButton buildTextButton() {
-    return TextButton(
-      onPressed: singInAnonmymous,
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              Strings.visitor,
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: primeCOLOR,
-              size: 30,
-            ),
-            // Image.asset(
-            //   "images/leftarrow.png",
-            //   height: 30,
-            // )
-          ],
+  Widget buildTextButton() {
+    if (locator.get<UserController>().currentUser != null) {
+      return SizedBox();
+    } else {
+      return TextButton(
+        onPressed: singInAnonmymous,
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                Strings.visitor,
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: primeCOLOR,
+                size: 30,
+              ),
+              // Image.asset(
+              //   "images/leftarrow.png",
+              //   height: 30,
+              // )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   Text buildTitleText() {

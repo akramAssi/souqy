@@ -16,7 +16,7 @@ class SellerProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: souqyAppBar("none", context),
+      appBar: souqyAppBar("none", "SOUQY", context),
       body: ListView(
         children: [
           Directionality(

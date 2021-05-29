@@ -48,7 +48,7 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
-            appBar: souqyAppBar("normal", context),
+            appBar: souqyAppBar("normal", "SOUQY", context),
             body: AddPage(
               carAds: currentAds,
             )),
@@ -143,24 +143,36 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
       payment = [SizedBox()];
     }
     Widget appBar;
-    if (currentAds.userId == locator.get<UserController>().currentUser.uid) {
-      if (currentAds.avaliable == true) {
-        appBar = souqyAppBar("owner", context, soldOnPress: onPress,
-            editOnPress: () {
-          _openEditPage(context, currentAds);
-        }, ads: currentAds);
+    if (locator.get<UserController>().isAnonymous() == false) {
+      if (currentAds.userId == locator.get<UserController>().currentUser.uid) {
+        if (currentAds.avaliable == true) {
+          appBar = souqyAppBar("owner", "SOUQY", context, soldOnPress: onPress,
+              editOnPress: () {
+            _openEditPage(context, currentAds);
+          }, ads: currentAds);
+        } else {
+          appBar = souqyAppBar("normal", "SOUQY", context);
+        }
+      } else if (currentUser.bookmark.contains(currentAds.id)) {
+        appBar = souqyAppBar("notOwnerBookmark", "SOUQY", context,
+            soldOnPress: onPressUnSaveBookmark);
       } else {
-        appBar = souqyAppBar("normal", context);
+        appBar = souqyAppBar(
+          "notOwner",
+          "SOUQY",
+          context,
+          soldOnPress: onPressSaveBookmark,
+        );
       }
     } else if (currentUser.bookmark != null &&
         currentUser.bookmark.contains(currentAds.id)) {
-      appBar = souqyAppBar("notOwnerBookmark", context,
+      appBar = souqyAppBar("notOwnerBookmark", "SOUQY", context,
           soldOnPress: onPressUnSaveBookmark);
     } else {
       appBar = souqyAppBar(
-        "notOwner",
+        "BookMark",
+        "SOUQY",
         context,
-        soldOnPress: onPressSaveBookmark,
       );
     }
     final size = MediaQuery.of(context).size;

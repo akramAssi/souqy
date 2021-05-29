@@ -1,23 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:souqy/data_folder_tester/brand_list.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:intl/intl.dart';
+
+import '../data_folder_tester/data_reader.dart';
 
 class StatisticCard extends StatefulWidget {
   final int flag;
-
-  const StatisticCard({Key key, this.flag}) : super(key: key);
+  final String make;
+  final String model;
+  const StatisticCard({
+    Key key,
+    this.flag = 0,
+    this.make,
+    this.model,
+  }) : super(key: key);
   @override
   _StatisticCardState createState() => _StatisticCardState();
 }
 
 class _StatisticCardState extends State<StatisticCard> {
   TooltipBehavior _tooltipBehavior;
+  List<Mylist> list;
+  List<SalesData> list1 = [];
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: true, header: 'brand');
 
     super.initState();
+  }
+
+  finder() {
+    list = [];
+    list = dataFromFile.where((element) {
+      return element.getMake() == widget.make.toLowerCase() &&
+          element.getModel() == widget.model.toLowerCase();
+    }).toList();
+    if (list.length != 0) {
+      list.sort((a, b) => a.getDate().compareTo(b.getDate()));
+      print("make000=${list.length}");
+    } else
+      list = [];
+    print("make=${list.length}");
+  }
+
+  finder11() {
+    if (widget.make.isNotEmpty && widget.model.isNotEmpty) {
+      finder();
+      list1 = [];
+      if (list.length != 0) {
+        for (Mylist x in list) list1.add(SalesData(x.getDate(), x.getPrice()));
+      }
+
+      // print("make=${list[0].getDate()}");
+    }
   }
 
   @override
@@ -48,6 +85,7 @@ class _StatisticCardState extends State<StatisticCard> {
 
     final LinearGradient gradientColors =
         LinearGradient(colors: color, stops: stops);
+    if ((widget.make != null && widget.model != null)) finder11();
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -67,8 +105,13 @@ class _StatisticCardState extends State<StatisticCard> {
             textStyle: TextStyle(color: statisticFontColor),
           ),
           tooltipBehavior: _tooltipBehavior,
-          series: <ChartSeries>[
-            AreaSeries<SalesData, double>(
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePinching: true,
+            enablePanning: true,
+          ),
+          enableSideBySideSeriesPlacement: false,
+          series: <ChartSeries<SalesData, DateTime>>[
+            AreaSeries<SalesData, DateTime>(
               gradient: gradientColors,
               borderColor: Colors.black,
               isVisibleInLegend: false,
@@ -78,57 +121,42 @@ class _StatisticCardState extends State<StatisticCard> {
               dataLabelSettings: DataLabelSettings(isVisible: false),
               enableTooltip: true,
               animationDuration: 5000,
-            )
+            ),
           ],
-          primaryXAxis: NumericAxis(
-            edgeLabelPlacement: EdgeLabelPlacement.shift,
-            labelStyle: TextStyle(color: statisticFontColor),
-          ),
           primaryYAxis: NumericAxis(
             numberFormat:
                 NumberFormat.simpleCurrency(decimalDigits: 0, name: 'ILS'),
             labelStyle: TextStyle(color: statisticFontColor),
+            labelFormat: '{value}k',
           ),
+          primaryXAxis: DateTimeAxis(
+            dateFormat: DateFormat.yMd(),
+            isInversed: false,
+            edgeLabelPlacement: EdgeLabelPlacement.shift,
+            labelStyle: TextStyle(color: statisticFontColor),
+          ),
+          // primaryXAxis: NumericAxis(
+          //   edgeLabelPlacement: EdgeLabelPlacement.shift,
+          //   labelStyle: TextStyle(color: statisticFontColor),
+          // ),
         ));
   }
 
   List<SalesData> getChartData() {
     if (widget.flag == 0) {
       final List<SalesData> chartData = [
-        SalesData(2011, 2),
-        SalesData(2012, 2),
-        SalesData(2013, 2),
-        SalesData(2014, 2),
-        SalesData(2015, 2),
-        SalesData(2016, 2),
-        SalesData(2017, 2),
-        SalesData(2018, 2),
-        SalesData(2019, 2),
-        SalesData(2020, 2),
-        SalesData(2021, 2),
+        SalesData(DateTime(DateTime.now().year - 3, 1), 2),
+        SalesData(DateTime.now(), 2),
       ];
       return chartData;
     } else {
-      final List<SalesData> chartData = [
-        SalesData(2011, 5000000),
-        SalesData(2012, 4800000),
-        SalesData(2013, 4000000),
-        SalesData(2014, 4300000),
-        SalesData(2015, 3400000),
-        SalesData(2016, 3000000),
-        SalesData(2017, 2800000),
-        SalesData(2018, 2900000),
-        SalesData(2019, 3800000),
-        SalesData(2020, 3600000),
-        SalesData(2021, 5000000),
-      ];
-      return chartData;
+      final List<SalesData> chartData = list1;
+      if (chartData.isNotEmpty) return chartData;
     }
-  }
-}
 
-class SalesData {
-  SalesData(this.year, this.sales);
-  final double year;
-  final double sales;
+    return [
+      SalesData(DateTime(DateTime.now().year - 3, 1), 2),
+      SalesData(DateTime.now(), 2),
+    ];
+  }
 }
