@@ -145,8 +145,8 @@ class _StatisticCardState extends State<StatisticCard> {
   List<SalesData> getChartData() {
     if (widget.flag == 0) {
       final List<SalesData> chartData = [
-        SalesData(DateTime(DateTime.now().year - 3, 1), 2),
-        SalesData(DateTime.now(), 2),
+        SalesData(DateTime(DateTime.now().year - 3, 1), 0),
+        SalesData(DateTime.now(), 0),
       ];
       return chartData;
     } else {
@@ -155,8 +155,8 @@ class _StatisticCardState extends State<StatisticCard> {
     }
 
     return [
-      SalesData(DateTime(DateTime.now().year - 3, 1), 2),
-      SalesData(DateTime.now(), 2),
+      SalesData(DateTime(DateTime.now().year - 3, 1), 0),
+      SalesData(DateTime.now(), 0),
     ];
   }
 }

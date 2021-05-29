@@ -56,8 +56,8 @@ dev_dependencies:
   
 
 flutter_native_splash:
-  color: "#08535d"
-  image: images/Logo_1_1.png
+  color: "#358682"
+  image: images/LogoOfSouqy.png
   android: true
   ios: true
   android_gravity: center
