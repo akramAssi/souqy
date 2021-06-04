@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
@@ -9,14 +10,14 @@
         <option name="gradleJvm" value="1.8" />
         <option name="modules">
           <set>
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-2.1.0/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_auth-1.1.4/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.1.1/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_storage-8.0.5/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-2.2.0/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_auth-1.2.0/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.2.0/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_storage-8.1.0/android" />
             <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/flutter_login_facebook-1.0.1/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.1/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/google_sign_in-5.0.2/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/image_picker-0.7.4/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.2/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/google_sign_in-5.0.4/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/image_picker-0.7.5+3/android" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
           </set>
