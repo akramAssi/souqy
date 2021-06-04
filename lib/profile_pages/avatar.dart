@@ -52,32 +52,32 @@ class Avatar extends StatelessWidget {
                     ),
                   ),
                 ),
-      Positioned(
-        right: 4,
-        top: 42,
-        child: SizedBox(
-          width: 73,
-          height: 21,
-          child: ElevatedButton(
-            onPressed: () {
-              print("sd");
-            },
-            child: Text(
-              "ترقيه",
-              style: TextStyle(color: primeCOLOR, fontSize: 16),
-            ),
-            style: ElevatedButton.styleFrom(
-              primary: annotationColor,
-              onPrimary: backgroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10)),
-              ),
-            ),
-          ),
-        ),
-      ),
+      // Positioned(
+      //   right: 4,
+      //   top: 42,
+      //   child: SizedBox(
+      //     width: 73,
+      //     height: 21,
+      //     child: ElevatedButton(
+      //       onPressed: () {
+      //         print("sd");
+      //       },
+      //       child: Text(
+      //         "ترقيه",
+      //         style: TextStyle(color: primeCOLOR, fontSize: 16),
+      //       ),
+      //       style: ElevatedButton.styleFrom(
+      //         primary: annotationColor,
+      //         onPrimary: backgroundColor,
+      //         shape: RoundedRectangleBorder(
+      //           borderRadius: BorderRadius.only(
+      //               topLeft: Radius.circular(10),
+      //               bottomLeft: Radius.circular(10)),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
     ];
     if (isSetting) {
       widget.add(

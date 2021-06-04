@@ -6,11 +6,11 @@ class Mylist {
 
   Mylist(this._make, this._model, this._price, this._date);
   String getMake() {
-    return this._make.toLowerCase();
+    return this._make.toLowerCase().trim();
   }
 
   String getModel() {
-    return this._model.toLowerCase();
+    return this._model.toLowerCase().trim();
   }
 
   double getPrice() {

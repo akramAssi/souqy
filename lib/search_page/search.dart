@@ -1,7 +1,9 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:souqy/add_page/search_brand.dart';
+import 'package:souqy/data_folder_tester/brand_list.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/model/ads.dart';
 import 'package:souqy/res/car.dart';
@@ -10,6 +12,7 @@ import 'package:souqy/res/string.dart';
 import 'package:souqy/search_page/price_range.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/ads_controller.dart';
+import 'package:souqy/widget/auto.dart';
 
 import 'package:souqy/widget/dialog/dialog_with_one_column.dart';
 import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
@@ -29,7 +32,7 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
   TextEditingController _gearController;
   TextEditingController _fuelController;
   bool showErrorText = false;
-  SimpleAutoCompleteTextField textField;
+  SouqyAutoCompleteTextField textField;
   GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
   TextEditingController _typeController;
 
@@ -39,14 +42,13 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
 
   List<int> _yearList = [];
   List<int> _engineList = [];
-  final List<String> _gearList = ["Manual", "Automatic"];
-  final List<String> _fuelList = ["Patrol", "Diesel", "Hybrid", "Electric"];
-  final List<String> _vehicleOriginList = [
-    "private",
-    "taxi",
-    "governmental",
-    "commercial",
-    "school"
+  final List<String> _gearList = ["All", "Manual", "Automatic"];
+  final List<String> _fuelList = [
+    "All",
+    "Patrol",
+    "Diesel",
+    "Hybrid",
+    "Electric"
   ];
 
   List<Ads> listAds = [];
@@ -85,12 +87,12 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
     //   focusNode: _modelFoucs,
     //   height: 50,
     // );
-
-    textField = SimpleAutoCompleteTextField(
+    _modelController.addListener(chageSugt);
+    textField = SouqyAutoCompleteTextField(
       controller: _modelController,
       focusNode: _modelFoucs,
       key: key,
-      suggestions: ["akrma", "naser", "hamza"],
+      suggestions: list12,
       clearOnSubmit: false,
       textChanged: (text) {},
       textSubmitted: (text) {},
@@ -128,7 +130,8 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
       height: 50,
       textAlign: TextAlign.center,
       onTop: () {
-        _openDialog(context: context, list: carTypeList, onPress: onPressType);
+        _openDialog(
+            context: context, list: carTypeListForDialog, onPress: onPressType);
       },
     );
 
@@ -147,10 +150,9 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
       focusNode: _makeFoucs,
       onChangeSearch: filterSearchType,
       choose: searchFilter[0],
-      isVisibil: true,
+      isVisibil: false,
     );
     _makeController.addListener(searchMethod);
-    _modelController.addListener(searchMethod);
     _gearController.addListener(searchMethod);
     _fuelController.addListener(searchMethod);
     _typeController.addListener(searchMethod);
@@ -165,7 +167,8 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
   void onPressType(dynamic value) {
     setState(() {
       print("ark" + value.toString());
-      _typeController.text = value?.toString() ?? carTypeList[0].toString();
+      _typeController.text =
+          value?.toString() ?? carTypeListForDialog[0].toString();
     });
     Navigator.of(context).pop();
     _goNext(_modelFoucs);
@@ -201,6 +204,23 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
   void onChangeEng(RangeValues values) {
     rangeEngStart = values.start.toInt();
     rangeEngEnd = values.end.toInt();
+    searchMethod();
+  }
+
+  List<String> list12 = [];
+  void chageSugt() {
+    list12 = [];
+    if (_makeController.text.isEmpty) {
+      return;
+    }
+    dataFromFile.forEach((element) {
+      if (_makeController.text.toLowerCase() == element.getMake() &&
+          element.getModel().contains(_modelController.text.toLowerCase())) {
+        list12.add(element.getModel());
+      }
+    });
+    list12 = list12.toSet().toList();
+    textField.updateSuggestions(list12);
     searchMethod();
   }
 
@@ -306,14 +326,13 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
                 focusNode: _makeFoucs,
                 onChangeSearch: filterSearchType,
                 choose: searchFilter[1],
-                isVisibil: true,
+                isVisibil: false,
               ),
       ],
     );
   }
 
   void searchMethod() {
-    print("------------");
     locator.get<AdsController>().search().then((value) {
       listAds = value;
       if (_makeController.text != null && _makeController.text.isNotEmpty) {
@@ -345,22 +364,34 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
       }
       if (_gearController.text != null && _gearController.text.isNotEmpty) {
         print(_gearController.text);
-        listAds = listAds
-            .where(
-                (element) => element.gear.contains(_gearController.text.trim()))
-            .toList();
+        if (_gearController.text == "All") {
+          listAds = listAds;
+        } else {
+          listAds = listAds
+              .where((element) =>
+                  element.gear.contains(_gearController.text.trim()))
+              .toList();
+        }
       }
       if (_typeController.text != null && _typeController.text.isNotEmpty) {
-        listAds = listAds
-            .where(
-                (element) => element.type.contains(_typeController.text.trim()))
-            .toList();
+        if (_typeController.text == "All") {
+          listAds = listAds;
+        } else {
+          listAds = listAds
+              .where((element) =>
+                  element.type.contains(_typeController.text.trim()))
+              .toList();
+        }
       }
       if (_fuelController.text != null && _fuelController.text.isNotEmpty) {
-        listAds = listAds
-            .where(
-                (element) => element.fuel.contains(_fuelController.text.trim()))
-            .toList();
+        if (_fuelController.text == "All") {
+          listAds = listAds;
+        } else {
+          listAds = listAds
+              .where((element) =>
+                  element.fuel.contains(_fuelController.text.trim()))
+              .toList();
+        }
       }
       // listAds = value;
       setState(() {});

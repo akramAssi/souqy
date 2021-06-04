@@ -37,7 +37,6 @@ class _UserProfileState extends State<UserProfile> {
       ),
     ).then((value) => setState(() {
           currentUser = locator.get<UserController>().currentUser;
-          print("asdsadsadasdas");
           print(currentUser?.avatarUrl);
         }));
     // Navigator.of(context).push(

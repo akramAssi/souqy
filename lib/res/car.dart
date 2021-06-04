@@ -115,6 +115,18 @@ List<String> brands = [
 // 'Volkswagen',
 // 'Volvo',
 // 'Zotye',
+List<String> carTypeListForDialog = [
+  "All",
+  'Hatch',
+  'Sedan',
+  'Coupe',
+  'Pickup',
+  'SUV',
+  'Minivan',
+  'Van',
+  'Truck',
+  'Other'
+];
 List<String> carTypeList = [
   'Hatch',
   'Sedan',

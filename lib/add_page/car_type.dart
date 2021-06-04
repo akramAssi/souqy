@@ -8,7 +8,7 @@ class CarType extends StatefulWidget {
   List<String> myProducts;
   int loc;
   int setSelected;
-  final void Function(bool) onChangeSearch;
+  final void Function(bool, String) onChangeSearch;
   List<String> onchangeList = [];
   CarType({
     key,
@@ -87,16 +87,17 @@ class _CarType extends State<CarType> {
               selected: widget.setSelected == index,
               selectedColor: Colors.grey,
               onSelected: (bool selected) {
-                widget.onChangeSearch(selected);
                 if (selected) {
                   widget.typeSelected = carTypeList[index];
                   widget.loc = index;
+                  widget.onChangeSearch(selected, widget.typeSelected);
                   filterType(widget.typeSelected);
                   widget.setSelected = 0;
                 } else if (!selected) {
                   widget.setSelected = null;
                   filterType('');
                   widget.typeSelected = "";
+                  widget.onChangeSearch(selected, '');
                 }
               },
               backgroundColor: backgroundColor,

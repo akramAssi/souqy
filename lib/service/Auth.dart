@@ -174,10 +174,10 @@ class Auth implements AuthBase {
       }
 
       final User user = userCredential.user;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-            'welcome to souqy .\nSign In ${user.displayName} with Google.'),
-      ));
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text(
+      //       'welcome to souqy .\nSign In ${user.displayName} with Google.'),
+      // ));
       return user;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

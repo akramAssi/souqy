@@ -11,11 +11,13 @@ class StatisticCard extends StatefulWidget {
   final int flag;
   final String make;
   final String model;
+  final String year;
   const StatisticCard({
     Key key,
     this.flag = 0,
     this.make,
     this.model,
+    this.year,
   }) : super(key: key);
   @override
   _StatisticCardState createState() => _StatisticCardState();
@@ -35,14 +37,13 @@ class _StatisticCardState extends State<StatisticCard> {
     list = [];
     list = dataFromFile.where((element) {
       return element.getMake() == widget.make.toLowerCase() &&
-          element.getModel() == widget.model.toLowerCase();
+          element.getModel() == widget.model.toLowerCase() &&
+          element.getDate().year == int.parse(widget.year);
     }).toList();
     if (list.length != 0) {
       list.sort((a, b) => a.getDate().compareTo(b.getDate()));
-      print("make000=${list.length}");
     } else
       list = [];
-    print("make=${list.length}");
   }
 
   finder11() {

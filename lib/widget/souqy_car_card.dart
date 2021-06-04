@@ -96,8 +96,8 @@ class SouqyCarCard extends StatelessWidget {
                         height: 5,
                       ),
                       SouqyInfoCircleCard(
-                        value: "${carAdsInfo.origin}",
-                        path: "images/mini_car.png",
+                        value: "${carAdsInfo.gear}",
+                        path: "images/gear.png",
                         size: size,
                       ),
                       SizedBox(

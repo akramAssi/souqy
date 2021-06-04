@@ -35,7 +35,7 @@ void openLogIn(BuildContext context) {
   );
 }
 
-void _openSetting(BuildContext context) {
+void openSetting(BuildContext context) {
   Navigator.of(context).push(
     MaterialPageRoute<void>(
       builder: (context) => ProfileSetting(),

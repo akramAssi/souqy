@@ -19,11 +19,10 @@ class LandingPage extends StatelessWidget {
     ByteData data = await rootBundle.load("DEE8A010.xlsx");
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     var decoder = SpreadsheetDecoder.decodeBytes(bytes);
-
-    for (var row in decoder.tables['Sheet1'].rows) {
-      dataFromFile
-          .add(Mylist('${row[0]}', '${row[1]}', '${row[2]}', '${row[3]}'));
-    }
+    decoder.tables['Sheet1'].rows.forEach((element) {
+      dataFromFile.add(Mylist(
+          '${element[0]}', '${element[1]}', '${element[2]}', '${element[3]}'));
+    });
     dataFromFile.removeAt(0);
   }
 

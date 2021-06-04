@@ -17,61 +17,65 @@ class RowMainInfo extends StatelessWidget {
   final int price;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 4,
-        ),
-        SizedBox(
-          width: size.width * .62,
-          child: AutoSizeText(
-            "$make $model",
-            maxFontSize: 20,
-            minFontSize: 10,
-            maxLines: 3,
-            style: TextStyle(
-              fontSize: 20,
-              color: primeCOLOR,
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 4,
+          ),
+          SizedBox(
+            width: size.width * .62,
+            child: AutoSizeText(
+              "$make $model",
+              maxFontSize: 20,
+              minFontSize: 10,
+              maxLines: 3,
+              style: TextStyle(
+                fontSize: 20,
+                color: primeCOLOR,
+              ),
             ),
           ),
-        ),
-        Spacer(),
-        Container(
-          alignment: Alignment(-5, 0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25), bottomLeft: Radius.circular(25)),
-            color: alertColor,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 22,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                child: Text(
+          Spacer(),
+          Container(
+            alignment: Alignment(-5, 0),
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  bottomLeft: Radius.circular(25)),
+              color: alertColor,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 22,
+                ),
+                Text(
                   "$price",
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
                   ),
                 ),
-              ),
-              Image.asset(
-                'images/shekel.png',
-                width: 15,
-              ),
-              SizedBox(
-                width: 15,
-              ),
-            ],
-          ),
-        )
-      ],
+                SizedBox(
+                  width: 10,
+                ),
+                Image.asset(
+                  'images/shekel.png',
+                  width: 15,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

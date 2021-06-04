@@ -1,3 +1,4 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,10 +7,12 @@ import 'package:group_button/group_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import 'package:souqy/add_page/search_brand.dart';
+import 'package:souqy/data_folder_tester/brand_list.dart';
 
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/res/style.dart';
+import 'package:souqy/widget/auto.dart';
 import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
 import 'package:souqy/widget/souqy_kilometer_textFiled.dart';
 import 'package:souqy/widget/souqy_text_filed.dart';
@@ -29,6 +32,9 @@ class ExpectedPage extends StatefulWidget {
 
 class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
   //Textfor all field Controller
+  bool showErrorText = false;
+  bool selected = false;
+  bool showCarTypeRec = false;
   TextEditingController _makeController;
 
   TextEditingController _modelController;
@@ -54,12 +60,14 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
   TextEditingController _expectedPriceController;
 
   TextEditingController _paymentController;
+  SouqyAutoCompleteTextField textField;
+  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
 
   var souqyKilometerTextField = SouqyKilometerTextField();
 
   bool _saving = false;
 
-  var carType = CarType();
+  var carType;
 
   var souqySearchForBrand;
 
@@ -148,7 +156,9 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
     for (int i = 1; i <= 55; i += 1) {
       _passengerList.add(i);
     }
-
+    carType = CarType(
+      onChangeSearch: carTypeSelected,
+    );
     yearSouqyFormField = SouqyFormField(
       label: Strings.year,
       controller: _yearController,
@@ -160,12 +170,48 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
         _openDialog(context: context, list: _yearList, onPress: onPressYear);
       },
     );
-    modelSouqyFormField = SouqyFormField(
-      label: Strings.model,
+    _modelController.addListener(chageSugt);
+    textField = SouqyAutoCompleteTextField(
       controller: _modelController,
       focusNode: _modelFoucs,
-      height: 50,
-      validator: Validators.required(Strings.requiredFieldo),
+      key: key,
+      suggestions: list12,
+      clearOnSubmit: false,
+      textChanged: (text) {
+        text.isEmpty ? showErrorText = true : showErrorText = false;
+        valid();
+      },
+      textSubmitted: (text) {
+        text.isEmpty ? showErrorText = true : showErrorText = false;
+        valid();
+      },
+      decoration: InputDecoration(
+          fillColor: primeCOLOR,
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(vertical: 3, horizontal: 13),
+          enabledBorder: souqyEnableBorder,
+          focusedErrorBorder: souqyErrorBorder,
+          errorBorder: souqyErrorBorder,
+          focusedBorder: souqyFocusBorder),
+    );
+    modelSouqyFormField = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          Strings.model,
+          style: TextStyle(
+            color: primeCOLOR,
+            fontSize: 14.0,
+          ),
+        ),
+        SizedBox(
+          height: 3,
+        ),
+        Container(
+          constraints: BoxConstraints(minHeight: 50),
+          child: textField,
+        ),
+      ],
     );
 
     engineSouqyFormField = SouqyFormField(
@@ -272,6 +318,21 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
       buttons: allItemList,
     );
   }
+  List<String> list12 = [];
+  void chageSugt() {
+    list12 = [];
+    if (_makeController.text.isEmpty) {
+      return;
+    }
+    dataFromFile.forEach((element) {
+      if (_makeController.text.toLowerCase() == element.getMake() &&
+          element.getModel().contains(_modelController.text.toLowerCase())) {
+        list12.add(element.getModel());
+      }
+    });
+    list12 = list12.toSet().toList();
+    textField.updateSuggestions(list12);
+  }
 
   void _goNext(FocusNode nextNode) {
     // FocusNode newNode =
@@ -296,7 +357,8 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
 
   void onPressPassenger(dynamic value) {
     setState(() {
-      _passengerController.text = value.toString();
+      _passengerController.text =
+          value?.toString() ?? _passengerList[0].toString();
     });
     Navigator.of(context).pop();
   }
@@ -350,6 +412,15 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
   }
 
   void expect() async {
+    if (selected) {
+      setState(() {
+        showCarTypeRec = false;
+      });
+    } else {
+      setState(() {
+        showCarTypeRec = true;
+      });
+    }
     if (_formKey.currentState.validate()) {
       setState(() {
         _saving = true;
@@ -358,7 +429,7 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
       for (var x in _checkedItemList) {
         feature[allItemList.indexOf(x)] = 1;
       }
-      String url = "https://3ef465cda69c.ngrok.io/?Make=${_makeController.text.toLowerCase()}&Model=${_modelController.text.toLowerCase()}" +
+      String url = "https://c202a4c07cfd.ngrok.io/?Make=${_makeController.text.toLowerCase()}&Model=${_modelController.text.toLowerCase()}" +
           "&type=${carType.typeSelected.toLowerCase()}&Color=${nameColor[carColor.indexOf(currentColor)].toLowerCase()}" +
           "&fuel=${_fuelController.text.toLowerCase()}&history=${_vehicleOriginController.text.toLowerCase()}" +
           "&gear=${_gearController.text.toLowerCase()}&py=${_paymentController.text.toLowerCase()}&windo=electric" +
@@ -374,6 +445,51 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
       });
     }
     // print(nameColor[carColor.indexOf(currentColor)]);
+  }
+
+  void carTypeSelected(bool flag, String myType) {
+    setState(() {
+      _passengerController.text = '';
+      passengerCount(myType);
+      selected = flag;
+      if (selected) {
+        showCarTypeRec = false;
+      } else {
+        showCarTypeRec = true;
+      }
+    });
+  }
+
+  void passengerCount(String type) {
+    _passengerList = [];
+    if (type == null || type == '' || type == 'Other' || type == 'Van') {
+      for (int i = 1; i <= 55; i += 1) {
+        _passengerList.add(i);
+      }
+    } else if (type == 'Hatch' || type == 'Sedan') {
+      _passengerList = [5];
+    } else if (type == 'Coupe') {
+      _passengerList = [4];
+    } else if (type == 'Pickup') {
+      _passengerList = [2, 5];
+    } else if (type == 'SUV') {
+      _passengerList = [5, 6, 7, 8];
+    } else if (type == 'Minivan') {
+      _passengerList = [5, 6, 7];
+    } else if (type == 'Truck') {
+      _passengerList = [2, 3, 5, 6, 7];
+    }
+    passengerSouqyFormField = SouqyFormField(
+      label: Strings.passenger,
+      controller: _passengerController,
+      height: 50,
+      textAlign: TextAlign.center,
+      validator: Validators.required(Strings.requiredFieldo),
+      onTop: () {
+        _openDialog(
+            context: context, list: _passengerList, onPress: onPressPassenger);
+      },
+    );
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -397,6 +513,37 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
                 souqySearchForBrand,
                 // first widget have search and brand list
                 carType,
+                Visibility(
+                    visible: showCarTypeRec,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 1,
+                            color: alertColor,
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                Strings.requiredField(Strings.type),
+                                style: TextStyle(
+                                  color: alertColor,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    )),
                 // type car widget
                 rowYearAndModel(context, size),
 
@@ -684,5 +831,34 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
         ],
       ),
     );
+  }
+
+  void valid() {
+    setState(() {
+      if (showErrorText) {
+        textField.updateDecoration(
+            decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 3, horizontal: 13),
+                errorText:
+                    showErrorText ? Strings.requiredField(Strings.model) : null,
+                enabledBorder: souqyEnableBorder,
+                focusedErrorBorder: souqyErrorBorder,
+                errorBorder: souqyErrorBorder,
+                focusedBorder: souqyFocusBorder));
+      } else {
+        if (textField == null) return;
+        textField?.updateDecoration(
+            decoration: InputDecoration(
+                fillColor: primeCOLOR,
+                filled: false,
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 3, horizontal: 13),
+                enabledBorder: souqyEnableBorder,
+                focusedErrorBorder: souqyErrorBorder,
+                errorBorder: souqyErrorBorder,
+                focusedBorder: souqyFocusBorder));
+      }
+    });
   }
 }

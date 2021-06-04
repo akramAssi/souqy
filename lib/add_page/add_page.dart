@@ -7,6 +7,7 @@ import 'package:group_button/group_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:souqy/add_page/search_brand.dart';
+import 'package:souqy/data_folder_tester/brand_list.dart';
 import 'package:souqy/model/ads.dart';
 import 'package:souqy/moreInfoPage/souqy_imge_slider.dart';
 import 'package:souqy/res/car.dart';
@@ -15,6 +16,7 @@ import 'package:souqy/res/string.dart';
 import 'package:souqy/res/style.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/view_controller/user_controller.dart';
+import 'package:souqy/widget/auto.dart';
 import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
 import 'package:souqy/widget/souqy_kilometer_textFiled.dart';
 import 'package:souqy/widget/souqy_left_right_button_feild.dart';
@@ -31,8 +33,8 @@ import 'car_type.dart';
 // ignore: must_be_immutable
 class AddPage extends StatefulWidget {
   Ads carAds;
-
-  AddPage({Key key, this.carAds}) : super(key: key);
+  final context;
+  AddPage({Key key, this.carAds, this.context}) : super(key: key);
   @override
   _AddPageState createState() => _AddPageState();
 }
@@ -55,7 +57,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   TextEditingController _paymentController = TextEditingController();
   TextEditingController _downPaymentController = TextEditingController();
   TextEditingController _monthlyPaymentController = TextEditingController();
-  SimpleAutoCompleteTextField textField;
+  SouqyAutoCompleteTextField textField;
   GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
   // var souqyKilometerTextField = SouqyKilometerTextField();
   var souqyKilometerTextField;
@@ -84,7 +86,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     "commercial",
     "school"
   ];
-
   int owner = 0;
   Color pickerColor = Colors.white;
   Color currentColor = Colors.white;
@@ -112,7 +113,15 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   var downPaymentSouqyFormField;
   var monthlyPaymentSouqyFormField;
   var orginSouqyButtonDialog;
+  // getListOfModel(){
+  //   List<>list = dataFromFile.where((element) {
+  //     return element.getMake() == widget.make.toLowerCase() &&
+  //         element.getModel() == widget.model.toLowerCase();
+  //   }).toList();
+  // }
+
   _AddPageState() {
+    chageSugt();
     souqySearchForBrand = SouqySearchForBrand(
       controller: _makeController,
       focusNode: _makeFoucs,
@@ -146,18 +155,13 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
         _openDialog(context: context, list: _yearList, onPress: onPressYear);
       },
     );
-    // modelSouqyFormField = SouqyFormField(
-    //   label: Strings.model,
-    //   controller: _modelController,
-    //   focusNode: _modelFoucs,
-    //   height: 50,
-    //   validator: Validators.required(Strings.requiredFieldo),
-    // );
-    textField = SimpleAutoCompleteTextField(
+
+    _modelController.addListener(chageSugt);
+    textField = SouqyAutoCompleteTextField(
       controller: _modelController,
       focusNode: _modelFoucs,
       key: key,
-      suggestions: ["akrma", "naser", "hamza"],
+      suggestions: list12,
       clearOnSubmit: false,
       textChanged: (text) {
         text.isEmpty ? showErrorText = true : showErrorText = false;
@@ -300,6 +304,22 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     _paymentController.addListener(onchangedPyment);
   }
 
+  List<String> list12 = [];
+  void chageSugt() {
+    list12 = [];
+    if (_makeController.text.isEmpty) {
+      return;
+    }
+    dataFromFile.forEach((element) {
+      if (_makeController.text.toLowerCase() == element.getMake() &&
+          element.getModel().contains(_modelController.text.toLowerCase())) {
+        list12.add(element.getModel());
+      }
+    });
+    list12 = list12.toSet().toList();
+    textField.updateSuggestions(list12);
+  }
+
   void _goNext(FocusNode nextNode) {
     // FocusNode newNode =
     //     widget.emailVAlidator.isValid(_email) ? _passwordFoucs : _emailFoucs;
@@ -323,7 +343,8 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
 
   void onPressPassenger(dynamic value) {
     setState(() {
-      _passengerController.text = value.toString();
+      _passengerController.text =
+          value?.toString() ?? _passengerList[0].toString();
     });
     Navigator.of(context).pop();
   }
@@ -500,6 +521,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   @override
   void initState() {
     super.initState();
+
     if (widget.carAds != null) {
       _makeController.text = widget.carAds.make;
 
@@ -608,28 +630,57 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
     }
   }
 
-  void carTypeSelected(bool flag) {
+//-------------------------------------------------------------------------------------------
+  void carTypeSelected(bool flag, String myType) {
     setState(() {
+      _passengerController.text = '';
+      passengerCount(myType);
       selected = flag;
       if (selected) {
-        setState(() {
-          showCarTypeRec = false;
-        });
+        showCarTypeRec = false;
       } else {
-        setState(() {
-          showCarTypeRec = true;
-        });
+        showCarTypeRec = true;
       }
     });
+  }
+
+  void passengerCount(String type) {
+    _passengerList = [];
+    if (type == null || type == '' || type == 'Other' || type == 'Van') {
+      for (int i = 1; i <= 55; i += 1) {
+        _passengerList.add(i);
+      }
+    } else if (type == 'Hatch' || type == 'Sedan') {
+      _passengerList = [5];
+    } else if (type == 'Coupe') {
+      _passengerList = [4];
+    } else if (type == 'Pickup') {
+      _passengerList = [2, 5];
+    } else if (type == 'SUV') {
+      _passengerList = [5, 6, 7, 8];
+    } else if (type == 'Minivan') {
+      _passengerList = [5, 6, 7];
+    } else if (type == 'Truck') {
+      _passengerList = [2, 3, 5, 6, 7];
+    }
+    passengerSouqyFormField = SouqyFormField(
+      label: Strings.passenger,
+      controller: _passengerController,
+      height: 50,
+      textAlign: TextAlign.center,
+      validator: Validators.required(Strings.requiredFieldo),
+      onTop: () {
+        _openDialog(
+            context: context, list: _passengerList, onPress: onPressPassenger);
+      },
+    );
   }
 
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     // valid();
-
     return ModalProgressHUD(
       inAsyncCall: _saving,
       color: borderTextfieldColor,
@@ -939,6 +990,23 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: SouqyFormField(
+                    label: "price",
+                    controller: _priceController,
+                    labelFontSize: 20,
+                    keyboardType: TextInputType.number,
+                    height: 50,
+                    validator: Validators.required(
+                        Strings.requiredField(Strings.price)),
+                  ),
+                ),
+
+                ///----------------slknflksdnnsdvkjnskdvnlsdkmlksndkvnskfvd
                 Container(
                   // height: 45,
                   alignment: Alignment.centerRight,
@@ -1008,21 +1076,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
                         ),
                       )
                     ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: SouqyFormField(
-                    label: "price",
-                    controller: _priceController,
-                    labelFontSize: 20,
-                    keyboardType: TextInputType.number,
-                    height: 50,
-                    validator: Validators.required(
-                        Strings.requiredField(Strings.price)),
                   ),
                 ),
 

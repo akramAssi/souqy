@@ -8,18 +8,14 @@ import 'package:souqy/res/style.dart';
 import 'package:souqy/search_page/search.dart';
 import 'package:souqy/home_pages/souqy_home_page.dart';
 import 'package:souqy/res/color.dart';
-import 'package:souqy/res/string.dart';
 import 'package:souqy/seller_pages/seller_page.dart';
-import 'package:souqy/service/database_repo.dart';
 import 'package:souqy/service/locator.dart';
 import 'package:souqy/statistic/statistic_page.dart';
-import 'package:souqy/trash/1.dart';
 import 'package:souqy/view_controller/ads_controller.dart';
 import 'package:souqy/view_controller/user_controller.dart';
+import 'package:souqy/widget/dialog/show_option_dialog%20copy.dart';
 import 'package:souqy/widget/dialog/show_option_dialog.dart';
-import 'package:souqy/widget/showExceptionDilog.dart';
 import 'package:souqy/widget/souqy_app_bar.dart';
-
 import 'add_page/add_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -79,6 +75,7 @@ class _HomePageState extends State<HomePage> {
   ];
 
   void _onItemTapped(int index) {
+    if (index == 2) return;
     setState(() {
       _selectedIndex = index;
     });
@@ -104,7 +101,8 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
-            appBar: souqyAppBar("normal", "SOUQY", context), body: AddPage()),
+            appBar: souqyAppBar("normal", "SOUQY", context),
+            body: AddPage(context: context)),
         fullscreenDialog: true,
       ),
     );
@@ -122,10 +120,16 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (locator.get<UserController>().isAnonymous()) {
             showOptionDialog(context);
+          } else if (locator.get<UserController>().currentUser.city == null ||
+              locator.get<UserController>().currentUser.area == null ||
+              locator.get<UserController>().currentUser.phone == null) {
+            showOptionDialogSetting(context);
           } else {
             _openEditPage(context);
           }
@@ -159,15 +163,15 @@ class _HomePageState extends State<HomePage> {
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.add),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage("images/expect.png")),
+                icon: Icon(null),
                 label: '',
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(AssetImage("images/statistic.png")),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage("images/expect.png")),
                 label: '',
               ),
             ],

@@ -38,11 +38,14 @@ class Strings {
   static const String phoneInValidNotString = "should be diget number";
   static const String acceptExceptionDialog = "ok";
   static const String saveDialog = "Login";
+  static const String add = "Setting";
   static const String cancelDialog = "Cancel";
 
   static const String alartDialog = "Alart";
   static const String contantAlartDialog =
       "Please log in to access this feature";
+  static const String contantAlartDialogSetting =
+      "Please enter the missing data to add new ads";
   static const String passwordInValidRequired = "$password is required";
   static const String installment = "installment";
   static const String passwordInValidLength =

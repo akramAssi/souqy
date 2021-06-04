@@ -28,7 +28,7 @@ class SouqySearchForBrand extends StatefulWidget {
     this.choose,
   }) : super(key: key) {
     onchangeList = brands;
-    controller.text = count;
+    controller.text = count.toLowerCase();
     exhibitionsList = exhibitions;
   }
   @override
@@ -43,8 +43,8 @@ class _SouqySearchForBrandState extends State<SouqySearchForBrand>
 
   void filterBrand(String query) {
     if (query.isNotEmpty) {
-      query = '${query[0].toUpperCase()}${query.substring(1)}';
-      widget.controller.text = query;
+      // query = '${query[0].toUpperCase()}${query.substring(1)}';
+      widget.controller.text = query.toLowerCase();
     }
 
     final se = brands.where((element) {
