@@ -29,6 +29,7 @@ class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     readFileAndSaveInList();
+
     return StreamBuilder<User>(
       stream: locator.get<UserController>().authStateChanges(),
       builder: (context, snapshot) {

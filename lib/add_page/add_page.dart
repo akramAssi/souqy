@@ -121,7 +121,6 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
   // }
 
   _AddPageState() {
-    chageSugt();
     souqySearchForBrand = SouqySearchForBrand(
       controller: _makeController,
       focusNode: _makeFoucs,
@@ -302,6 +301,7 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
               RegExp(r"^[0-9]\d*(\.\d+)?$"), Strings.phoneInValidNotString),
         ]));
     _paymentController.addListener(onchangedPyment);
+    // chageSugt();
   }
 
   List<String> list12 = [];
@@ -317,7 +317,8 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
       }
     });
     list12 = list12.toSet().toList();
-    textField.updateSuggestions(list12);
+    if (textField.textSubmitted != null && list12.length > 0)
+      textField.updateSuggestions(list12);
   }
 
   void _goNext(FocusNode nextNode) {
