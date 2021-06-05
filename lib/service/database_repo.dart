@@ -80,6 +80,18 @@ class FirestoreDatabase {
     return tempList;
   }
 
+  Future<String> readUrl() async {
+    final String path = "/res/con";
+    final firestoreRef = _firestore.doc(path);
+    return await firestoreRef.get().then((document) {
+      var data = document.data();
+
+      return data["url"];
+    });
+
+    return "";
+  }
+
   Future<void> deleteUserBookmark(String userId, String adsId) async {
     // try {
     // throw IntegerDivisionByZeroException;

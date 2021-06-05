@@ -501,20 +501,33 @@ class _AddPageState extends State<AddPage> with SouqyFormFieldStyle {
       for (var x in _checkedItemList) {
         feature[allItemList.indexOf(x)] = 1;
       }
-      String url = "https://2d0df66ae1e9.ngrok.io/?Make=${_makeController.text}&Model=${_modelController.text}" +
+      String urlValue = await locator.get<UserController>().readUrl();
+      String url = "https://$urlValue.ngrok.io/?Make=${_makeController.text}&Model=${_modelController.text}" +
           "&type=${carType.typeSelected}&Color=${nameColor[carColor.indexOf(currentColor)]}" +
           "&fuel=${_fuelController.text}&history=${_vehicleOriginController.text}" +
           "&gear=${_gearController.text}&py=${_paymentController.text}&windo=Windm&pass=${_passengerController.text}" +
           "&year=2018&eng=1600&f1=${feature[0]}&f2=${feature[1]}&f3=${feature[2]}&f4=${feature[3]}&f5=${feature[4]}" +
           "&f6=${feature[5]}&f7=${feature[6]}&f8=${feature[7]}&day_lif=1234&km=${souqyKilometerTextField.kilometer}&po=$owner";
+      try {
+        var graphResponse = await http.get(Uri.parse(url));
 
-      var graphResponse = await http.get(Uri.parse(url));
-
-      var profile = json.decode(graphResponse.body);
-      setState(() {
-        _expectedPriceController.text = profile["price"];
-        _saving = false;
-      });
+        var profile = json.decode(graphResponse.body);
+        setState(() {
+          _expectedPriceController.text = profile["price"];
+          _saving = false;
+        });
+      } catch (e) {
+        setState(() {
+          _saving = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                Strings.noConection,
+              ),
+            ),
+          );
+        });
+      }
     }
   }
 

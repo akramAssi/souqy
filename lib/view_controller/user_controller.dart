@@ -73,6 +73,11 @@ class UserController {
     }
   }
 
+  Future<String> readUrl() async {
+    var s = await _databaseRepo.readUrl();
+    return s;
+  }
+
   Future<void> signInWithFacebook() async {
     try {
       User user = await _authRepo.signInWithFacebook();

@@ -12,6 +12,8 @@ import 'package:souqy/data_folder_tester/brand_list.dart';
 import 'package:souqy/res/color.dart';
 import 'package:souqy/res/string.dart';
 import 'package:souqy/res/style.dart';
+import 'package:souqy/service/locator.dart';
+import 'package:souqy/view_controller/user_controller.dart';
 import 'package:souqy/widget/auto.dart';
 import 'package:souqy/widget/dialog/souqy_button_dialog.dart';
 import 'package:souqy/widget/souqy_kilometer_textFiled.dart';
@@ -429,20 +431,33 @@ class _ExpectedPageState extends State<ExpectedPage> with SouqyFormFieldStyle {
       for (var x in _checkedItemList) {
         feature[allItemList.indexOf(x)] = 1;
       }
-      String url = "https://c202a4c07cfd.ngrok.io/?Make=${_makeController.text.toLowerCase()}&Model=${_modelController.text.toLowerCase()}" +
+      String urlValue = await locator.get<UserController>().readUrl();
+      String url = "https://$urlValue.ngrok.io/?Make=${_makeController.text.toLowerCase()}&Model=${_modelController.text.toLowerCase()}" +
           "&type=${carType.typeSelected.toLowerCase()}&Color=${nameColor[carColor.indexOf(currentColor)].toLowerCase()}" +
           "&fuel=${_fuelController.text.toLowerCase()}&history=${_vehicleOriginController.text.toLowerCase()}" +
           "&gear=${_gearController.text.toLowerCase()}&py=${_paymentController.text.toLowerCase()}&windo=electric" +
           "&pass=${_passengerController.text.toLowerCase()}&year=${_yearController.text}&eng=${_engineController.text}" +
           "&f1=${feature[0]}&f2=${feature[1]}&f3=${feature[2]}&f4=${feature[3]}&f5=${feature[4]}" +
           "&f6=${feature[5]}&f7=${feature[6]}&f8=${feature[7]}&km=${souqyKilometerTextField.kilometer}&po=$owner";
-
-      var graphResponse = await http.get(Uri.parse(url));
-      var profile = json.decode(graphResponse.body);
-      setState(() {
-        _expectedPriceController.text = profile["price"];
-        _saving = false;
-      });
+      try {
+        var graphResponse = await http.get(Uri.parse(url));
+        var profile = json.decode(graphResponse.body);
+        setState(() {
+          _expectedPriceController.text = profile["price"];
+          _saving = false;
+        });
+      } catch (e) {
+        setState(() {
+          _saving = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                Strings.noConection,
+              ),
+            ),
+          );
+        });
+      }
     }
     // print(nameColor[carColor.indexOf(currentColor)]);
   }

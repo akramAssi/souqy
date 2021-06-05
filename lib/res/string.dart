@@ -40,6 +40,7 @@ class Strings {
   static const String saveDialog = "Login";
   static const String add = "Setting";
   static const String cancelDialog = "Cancel";
+  static const String noConection = "no server connection";
 
   static const String alartDialog = "Alart";
   static const String contantAlartDialog =
