@@ -20,8 +20,8 @@ class LandingPage extends StatelessWidget {
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     var decoder = SpreadsheetDecoder.decodeBytes(bytes);
     decoder.tables['Sheet1'].rows.forEach((element) {
-      dataFromFile.add(Mylist(
-          '${element[0]}', '${element[1]}', '${element[2]}', '${element[3]}'));
+      dataFromFile.add(Mylist('${element[0]}', '${element[1]}', '${element[2]}',
+          '${element[3]}', '${element[4]}'));
     });
     dataFromFile.removeAt(0);
   }
