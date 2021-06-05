@@ -59,7 +59,7 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
       rangePriceEnd = 1000000,
       rangeYearStart = 1965,
       rangeYearEnd = DateTime.now().year,
-      rangeEngStart = 900,
+      rangeEngStart = 0,
       rangeEngEnd = 6500;
   var modelSouqyFormField;
   var gearSouqyButtonDialog;
@@ -166,7 +166,6 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
 
   void onPressType(dynamic value) {
     setState(() {
-      print("ark" + value.toString());
       _typeController.text =
           value?.toString() ?? carTypeListForDialog[0].toString();
     });
@@ -264,9 +263,9 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
                           ),
                           PriceRaing(
                             rangeType: Strings.engineSize,
-                            min: 900,
+                            min: 0,
                             max: 6500,
-                            step: 112,
+                            step: 130,
                             onChange: onChangeEng,
                           ),
                         ],
@@ -358,12 +357,12 @@ class _SearchButton extends State<StatefulWidget> with SouqyFormFieldStyle {
 
       if (_modelController.text != null && _modelController.text.isNotEmpty) {
         listAds = listAds
-            .where((element) =>
-                element.model.contains(_modelController.text.trim()))
+            .where((element) => element.model
+                .toLowerCase()
+                .contains(_modelController.text.toLowerCase().trim()))
             .toList();
       }
       if (_gearController.text != null && _gearController.text.isNotEmpty) {
-        print(_gearController.text);
         if (_gearController.text == "All") {
           listAds = listAds;
         } else {
