@@ -38,7 +38,7 @@ class _StatisticCardState extends State<StatisticCard> {
     list = dataFromFile.where((element) {
       return element.getMake() == widget.make.toLowerCase() &&
           element.getModel() == widget.model.toLowerCase() &&
-          element.getDate().year == int.parse(widget.year);
+          element.getYear() == double.parse(widget.year);
     }).toList();
     if (list.length != 0) {
       list.sort((a, b) => a.getDate().compareTo(b.getDate()));
@@ -47,7 +47,9 @@ class _StatisticCardState extends State<StatisticCard> {
   }
 
   finder11() {
-    if (widget.make.isNotEmpty && widget.model.isNotEmpty) {
+    if (widget.make.isNotEmpty &&
+        widget.model.isNotEmpty &&
+        widget.year.isNotEmpty) {
       finder();
       list1 = [];
       if (list.length != 0) {

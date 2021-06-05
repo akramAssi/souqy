@@ -1,16 +1,21 @@
 class Mylist {
   final String _make;
   final String _model;
+  final String _year;
   final String _price;
   final String _date;
 
-  Mylist(this._make, this._model, this._price, this._date);
+  Mylist(this._make, this._model, this._year, this._price, this._date);
   String getMake() {
     return this._make.toLowerCase().trim();
   }
 
   String getModel() {
     return this._model.toLowerCase().trim();
+  }
+
+  double getYear() {
+    return double.parse(this._year.trim());
   }
 
   double getPrice() {

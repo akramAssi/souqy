@@ -164,6 +164,8 @@ class _MoreInfoPageState extends State<MoreInfoPage> {
           soldOnPress: onPressSaveBookmark,
         );
       }
+    } else if (locator.get<UserController>().isAnonymous()) {
+      appBar = souqyAppBar("Login", "SOUQY", context);
     } else if (currentUser.bookmark != null &&
         currentUser.bookmark.contains(currentAds.id)) {
       appBar = souqyAppBar("notOwnerBookmark", "SOUQY", context,
@@ -453,7 +455,6 @@ class Circleinfocard extends StatelessWidget {
           label.split('(0x')[1].split(')')[0]; // kind of hacky..
       int value = int.parse(valueString, radix: 16);
       _otherColor = new Color(value);
-      print(_otherColor);
     } else {
       _otherColor = fontColor;
     }

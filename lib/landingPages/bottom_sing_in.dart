@@ -8,9 +8,12 @@ import 'email_register_form.dart';
 
 class BottomSingIn extends StatelessWidget {
   final bool isLogin;
-  final isDialog;
-  const BottomSingIn({Key key, @required this.isLogin, this.isDialog})
-      : super(key: key);
+  final bool isDialog;
+  const BottomSingIn({
+    Key key,
+    @required this.isLogin,
+    this.isDialog = false,
+  }) : super(key: key);
 
   void _signInWithEmail(BuildContext context) {
     Navigator.of(context).push(
@@ -29,7 +32,7 @@ class BottomSingIn extends StatelessWidget {
       locator.get<UserController>().signInWithGoogle(context).then((value) => {
             if (isDialog)
               {
-                Navigator.of(context).pop(),
+                Navigator.of(context).popUntil((route) => route.isFirst),
               }
           });
 
@@ -37,7 +40,7 @@ class BottomSingIn extends StatelessWidget {
       locator.get<UserController>().signInWithFacebook().then((value) => {
             if (isDialog)
               {
-                Navigator.of(context).pop(),
+                Navigator.of(context).popUntil((route) => route.isFirst),
               }
           });
 

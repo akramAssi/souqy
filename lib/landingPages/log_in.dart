@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
   final bool isDialog;
   LoginPage({
     Key key,
-    this.isDialog,
+    this.isDialog = false,
   }) : super(key: key);
 
   @override
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
         .then((value) {
       if (value == AuthResultStatus.successful) {
         if (widget.isDialog) {
-          Navigator.of(context).pop();
+          Navigator.of(context).popUntil((route) => route.isFirst);
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -149,6 +149,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               BottomSingIn(
                 isLogin: true,
+                isDialog: true,
               ),
               SizedBox(
                 height: 35,
