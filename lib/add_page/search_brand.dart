@@ -141,19 +141,18 @@ class _SouqySearchForBrandState extends State<SouqySearchForBrand>
                       ),
                       onTap: () {
                         setState(() {
-                          if (widget.onchangeList.length <= 1) {
-                            widget.count = "";
-                            widget.controller.text = widget.count;
-                            widget.onchangeList = brands;
-                          } else {
-                            widget.count =
-                                widget.onchangeList[index].toString();
-                            widget.controller.text = widget.count;
-                            widget.onchangeList = [];
-                            widget.onchangeList.add(widget.count);
-                            widget.controller.selection =
-                                returnToLast(widget.controller);
-                          }
+                          // if (widget.onchangeList.length <= 1) {
+                          //   widget.count = "";
+                          //   widget.controller.text = widget.count;
+                          //   widget.onchangeList = brands;
+                          // } else {
+                          widget.count = widget.onchangeList[index].toString();
+                          widget.controller.text = widget.count;
+                          widget.onchangeList = [];
+                          widget.onchangeList.add(widget.count);
+                          widget.controller.selection =
+                              returnToLast(widget.controller);
+                          // }
                         });
                       },
                     );
