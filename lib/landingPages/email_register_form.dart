@@ -65,7 +65,7 @@ class _EmailRegisterFormState extends State<EmailRegisterForm> {
       }
     });
 
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.of(context).pop();
   }
 
   @override

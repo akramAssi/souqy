@@ -36,7 +36,7 @@ class UserController {
   Future<void> refresh() async {
     _currentUser = _authRepo.currentUserModel();
 
-    print("USer Url:${_currentUser.avatarUrl}");
+    //print("USer Url:${_currentUser.avatarUrl}");
     if (_currentUser != null) {
       _currentUser =
           await readUserInfo(_currentUser.uid, currentUser: currentUser);

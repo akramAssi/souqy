@@ -14,11 +14,18 @@ class SouqyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     if (list == null || list.length <= 0) {
-      return Center(
-        child: Text(
-          Strings.noDataMessage,
-          style: TextStyle(fontSize: 30, color: primeCOLOR),
-        ),
+      return Column(
+        children: [
+          Center(
+            child: Text(
+              Strings.noDataMessage,
+              style: TextStyle(fontSize: 30, color: primeCOLOR),
+            ),
+          ),
+          SizedBox(
+            height: 200,
+          )
+        ],
       );
     }
 

@@ -53,7 +53,8 @@ class _LoginPageState extends State<LoginPage> {
         .then((value) {
       if (value == AuthResultStatus.successful) {
         if (widget.isDialog) {
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          print('3=${widget.isDialog}');
+          Navigator.of(context).pop();
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
